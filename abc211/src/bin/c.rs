@@ -1,7 +1,12 @@
+use proconio::{input, marker::Chars};
+
 const MOD: usize = 1000000007;
 
 fn main() {
-    let s = "chchokudai".chars().collect::<Vec<char>>();
+    input! {
+        s: Chars,
+    };
+
     let t = "chokudai".chars().collect::<Vec<char>>();
     let n = s.len();
 
@@ -15,7 +20,6 @@ fn main() {
             if s[j] == t[i] {
                 dp[i + 1][j + 1] = (dp[i][j] + dp[i + 1][j]) % MOD;
             } else {
-                println!("{} {}", i, j);
                 dp[i + 1][j + 1] = dp[i + 1][j];
             }
         }
