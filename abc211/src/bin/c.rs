@@ -7,23 +7,23 @@ fn main() {
         s: Chars,
     };
 
-    let t = "chokudai".chars().collect::<Vec<char>>();
-    let n = s.len();
+    let chokudai = "chokudai".chars().collect::<Vec<char>>();
+    let input_len = s.len();
+    let chokudai_len = chokudai.len();
 
-    let mut dp = vec![vec![0 as usize; n + 1]; 9];
-    for j in 0..=n {
-        dp[0][j] = 1;
-    }
+    let mut dp = vec![vec![0; input_len + 1]; chokudai_len + 1];
+    // 番兵
+    dp[0] = vec![1; input_len + 1];
 
-    for i in 0..8 {
-        for j in 0..n {
-            if s[j] == t[i] {
-                dp[i + 1][j + 1] = (dp[i][j] + dp[i + 1][j]) % MOD;
-            } else {
+    for i in 0..chokudai_len {
+        for j in 0..input_len {
+            if chokudai[i] != s[j] {
                 dp[i + 1][j + 1] = dp[i + 1][j];
+            } else {
+                dp[i + 1][j + 1] = (dp[i + 1][j] + dp[i][j]) % MOD;
             }
         }
     }
 
-    println!("{}", dp[8][n]);
+    println!("{}", dp[chokudai_len][input_len]);
 }
