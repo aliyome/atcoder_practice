@@ -1,9 +1,14 @@
+use proconio::{input, marker::Chars};
+
 fn main() {
-    let s = "hogehoge".chars().collect::<Vec<char>>();
-    let n = s.len();
+    input! {
+        n: usize,
+        s: Chars
+    };
 
     if n % 2 > 0 {
         println!("No");
+        return;
     }
 
     let x = &s[0..n / 2];
@@ -11,5 +16,7 @@ fn main() {
 
     if x == y {
         println!("Yes");
+    } else {
+        println!("No");
     }
 }
