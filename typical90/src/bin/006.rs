@@ -8,35 +8,50 @@ fn main() {
         s: Chars,
     }
 
-    // 各文字の出現位置を記録
-    let mut pos = vec![vec![false; 10usize.pow(5) + 1]; 26];
-    for i in 0..n {
-        let c = s[i] as usize - 'a' as usize;
-        pos[c][i] = true;
-    }
+    // dp[c][i] = i文字目以降で文字cが最初に出現する位置
+    // 例(sがabaの場合):
+    // dp[a][0] = 0
+    // dp[a][1] = 2
+    // dp[a][2] = 2
+    // dp[b][0] = 1
+    // dp[b][1] = 1
+    // dp[b][2] = -1  // 出現しない
+    let mut dp = vec![vec![std::usize::MAX; n + 1]; 26];
 
-    // 全探索
-    // k文字作れるまで
-    let mut idx = 0;
-    let mut ans = vec![];
-    for j in 0..k {
-        // a から順番に
-        'outer: for c in 0..26 {
-            // その文字の出現位置を順番に見ていく
-            for i in idx..n {
-                if !pos[c][i] {
-                    continue;
-                }
-                // 出現位置が後ろすぎる場合はスキップ
-                if i + k - j > n {
-                    continue;
-                }
-                idx = i + 1;
-                ans.push((c as u8 + 'a' as u8) as char);
-                break 'outer;
+    // 末尾からdpを埋めていく
+    for c in 0..26 {
+        for i in (0..n).rev() {
+            let letter = (c as u8 + b'a') as char;
+            if s[i] == letter {
+                dp[c][i] = i;
+            } else {
+                dp[c][i] = dp[c][i + 1];
             }
         }
     }
 
-    println!("{}", ans.iter().collect::<String>());
+    // 貪欲法
+    let mut idx: usize = 0;
+    let mut l = 0;
+    for _ in 0..k {
+        for c in 0..26 {
+            // idx以降(idxを含む)の最小の出現位置
+            let next_idx = dp[c][idx];
+            // 出現しない文字はスキップ
+            if next_idx == std::usize::MAX {
+                continue;
+            }
+            // 添字が N - K + l より大きい場合はK文字作れないのでスキップ
+            if next_idx > n - k + l {
+                continue;
+            }
+            print!("{}", (c as u8 + b'a') as char);
+            l += 1;
+            // 参照位置を更新
+            idx = next_idx + 1;
+            break;
+        }
+    }
+
+    println!("");
 }
