@@ -39,3 +39,7 @@ let i = v.binary_search_by(|&x| {
 }).unwrap_err();
 // i == 4 となる
 ```
+
+### 組み合わせ
+
+nC2 = n(n-1)/2
