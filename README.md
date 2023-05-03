@@ -25,3 +25,17 @@
 
 - 構築に O(N)
 - 区間に対するクエリに O(logN)
+
+### 二分探索
+
+```rust
+let v = vec![0, 1, 2, 3, 4, 5, 6];
+let i = v.binary_search_by(|&x| {
+    if x <= 3 {
+        std::cmp::Ordering::Less
+    } else {
+        std::cmp::Ordering::Greater
+    }
+}).unwrap_err();
+// i == 4 となる
+```
