@@ -2,8 +2,8 @@ use proconio::input;
 
 fn main() {
     input! {
-        n: usize,
+        x: f64,
     };
 
-    println!("{}", n);
+    println!("{}", x.round());
 }
