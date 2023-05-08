@@ -1,30 +1,32 @@
 use proconio::input;
 
-const MOD: i64 = 1_000_000_007;
+const MOD: i128 = 1_000_000_007;
 
-fn gcd(a: i64, b: i64) -> i64 {
+fn gcd(a: i128, b: i128) -> i128 {
     if b == 0 {
-        a
-    } else {
-        gcd(b, a % b)
+        return a;
     }
+    gcd(b, a % b)
+}
+
+fn lcm(a: i128, b: i128) -> i128 {
+    a * b / gcd(a, b)
 }
 
 fn main() {
     input! {
         n: usize,
-        a: [i64; n],
+        a: [i128; n],
     }
 
-    let mut lcm = a[0];
+    let mut l = a[0];
     for i in 1..n {
-        lcm = lcm * a[i] / gcd(lcm, a[i]);
+        l = lcm(l, a[i]);
     }
 
     let mut ans = 0;
     for i in 0..n {
-        ans = (ans + lcm / a[i]) % MOD;
+        ans += l / a[i];
     }
-
-    println!("{}", ans);
+    println!("{}", ans % MOD);
 }
