@@ -2,6 +2,8 @@ use proconio::input;
 
 const MOD: i64 = 1_000_000_007;
 
+// TODO: 解説見てもよくわからんな…
+// https://www.youtube.com/watch?v=HVuSp_IhNZA
 fn main() {
     input! {
         n: i64,
