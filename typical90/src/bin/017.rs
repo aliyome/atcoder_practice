@@ -34,6 +34,10 @@ fn main() {
             if lb < la && rb < ra && la < rb {
                 ans += 1;
             }
+            // 全く交わらない位置まで来たら走査終了
+            if rb < la {
+                break;
+            }
         }
     }
 
