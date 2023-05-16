@@ -1,53 +1,38 @@
 use proconio::input;
 
+// 区間DP
 fn main() {
     input! {
         n: usize,
-        a: [i64; n * 2]
+       a: [i64; n * 2]
     }
 
-    // 隣り合った値の差が小さいものから取り除く　→　Wrong Answer :sob:
-    let mut ans = 0;
-    let mut del_idx = vec![];
-    for _ in 0..n {
-        // 比較対象のインデックス
-        let mut from = std::usize::MAX;
-        let mut to = std::usize::MAX;
-        // 削除対象
-        let mut del_ids = (std::usize::MAX, std::usize::MAX);
-        // diffの最小値
-        let mut min = 10i64.pow(6) + 5;
-        // 前から順番に取り除かれていない要素を比較していく
-        for j in 0..n * 2 {
-            if del_idx.contains(&j) {
-                continue;
-            }
-            if from == std::usize::MAX {
-                from = j;
-                continue;
-            }
-            to = j;
+    // dp[l][r] := 区間[l, r)の最小コスト
+    // とりあえずデカい値で埋める。 r < l はありえないので埋めなくても良い。
+    let mut dp = vec![vec![10i64.pow(9); n * 2]; n * 2];
 
-            // diffを計算
-            let diff = (a[from] - a[to]).abs();
-            // 削除対象の更新
-            if min > diff {
-                min = diff;
-                del_ids = (from, to);
-            }
+    // 区間の長さが2の場合は2つの要素の差の絶対値が最小コストとなる。他に方法が無いため。
+    for l in 0..n * 2 - 1 {
+        dp[l][l + 1] = (a[l] - a[l + 1]).abs();
+    }
 
-            // 次のループ用にfromを更新
-            from = to;
+    // DP
+    for k in (1..n * 2).step_by(2) {
+        let mut l = 0;
+        let mut r = k;
+        while l < n * 2 && r < n * 2 {
+            // 1. 先に間を取り除いてから両端を取り除く
+            //    (l, r) と [l, r]
+            dp[l][r] = dp[l][r].min(dp[l + 1][r - 1] + (a[l] - a[r]).abs());
+            // 2. 2つの区間に分ける
+            //    [l, l+i) と (l+i+1, r]
+            for i in (1..k).step_by(2) {
+                dp[l][r] = dp[l][r].min(dp[l][l + i] + dp[l + i + 1][r]);
+            }
+            l += 1;
+            r += 1;
         }
-
-        // 削除対象のインデックスを記録
-        del_idx.push(del_ids.0);
-        del_idx.push(del_ids.1);
-
-        // 答えに加算
-        ans += min;
-        // println!("{} - {} = {}", a[del_ids.0], a[del_ids.1], min);
     }
 
-    println!("{}", ans);
+    println!("{}", dp[0][n * 2 - 1]);
 }
