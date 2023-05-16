@@ -1,27 +1,22 @@
 use proconio::input;
 use proconio::marker::Chars;
 
-// WA
 fn main() {
     input! {
         n: usize,
         s: Chars
     };
 
-    let mut ans = -1;
-    let mut temp = 0;
-    for i in 0..n {
-        if s[i] == 'o' {
-            temp += 1;
-            if i < n - 1 && s[i + 1] == '-' {
-                ans = ans.max(temp);
-            }
-        } else {
-            if 0 < i && s[i - 1] == 'o' {
-                ans = ans.max(temp);
-            }
-            temp = 0;
-        }
+    let is_all_dango = s.iter().all(|&c| c == '-');
+    let is_all_stick = s.iter().all(|&c| c == 'o');
+    if is_all_dango || is_all_stick {
+        println!("-1");
+        return;
+    }
+
+    let mut ans = 0;
+    for x in s.iter().collect::<String>().split('-') {
+        ans = ans.max(x.len());
     }
 
     println!("{}", ans);
