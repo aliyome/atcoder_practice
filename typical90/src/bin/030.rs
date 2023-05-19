@@ -1,6 +1,6 @@
 use proconio::input;
 
-// 解答見る
+// 解答見た
 fn main() {
     input! {
         n: usize,
