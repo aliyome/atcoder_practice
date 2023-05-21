@@ -1,45 +1,33 @@
+use itertools::Itertools;
 use proconio::input;
-use proconio::marker::Chars;
-use std::collections::HashMap;
-
-fn dfs(g: &HashMap<usize, Vec<usize>>, vis: &mut Vec<bool>, v: usize) {
-    vis[v] = true;
-    for &next_v in &g[&v] {
-        if !vis[next_v] {
-            dfs(g, vis, next_v);
-        }
-    }
-}
 
 fn main() {
     input! {
         n: usize,
         m: usize,
-        s: [Chars; n],
+        s: [String; n],
     }
-    let mut g = HashMap::new();
-    for i in 0..n {
-        g.insert(i, Vec::new());
-    }
-    for i in 0..n {
-        for j in i + 1..n {
-            let mut diff = 0;
-            for k in 0..m {
-                if s[i][k] != s[j][k] {
-                    diff += 1;
+
+    // 全探索
+    let perm = s.iter().permutations(n).collect_vec();
+    for p in perm {
+        let mut ok = true;
+        for i in 0..p.len() - 1 {
+            let mut count = 0;
+            for j in 0..m {
+                if p[i].chars().nth(j) != p[i + 1].chars().nth(j) {
+                    count += 1;
                 }
             }
-            if diff == 1 {
-                g.get_mut(&i).unwrap().push(j);
-                g.get_mut(&j).unwrap().push(i);
+            if count > 1 {
+                ok = false;
+                break;
             }
         }
+        if ok {
+            println!("Yes");
+            return;
+        }
     }
-    let mut vis = vec![false; n];
-    dfs(&g, &mut vis, 0);
-    if vis.into_iter().all(|x| x) {
-        println!("Yes");
-    } else {
-        println!("No");
-    }
+    println!("No");
 }
