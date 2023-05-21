@@ -7,28 +7,43 @@ fn main() {
         w: usize,
         s: [Chars; h],
     }
-    let dx = [-1, 0, 1, -1, 1, -1, 0, 1];
-    let dy = [-1, -1, -1, 0, 0, 1, 1, 1];
-    let snuke = vec!['s', 'n', 'u', 'k', 'e'];
+    let directions = [
+        (-1, 0),
+        (-1, 1),
+        (0, 1),
+        (1, 1),
+        (1, 0),
+        (1, -1),
+        (0, -1),
+        (-1, -1),
+    ];
+    let snuke = ['s', 'n', 'u', 'k', 'e'];
     for i in 0..h {
         for j in 0..w {
-            if s[i][j] == 's' {
-                'outer: for dir in 0..8 {
-                    let mut v = vec![(i + 1, j + 1)];
-                    let mut x = i;
-                    let mut y = j;
-                    for _ in 0..4 {
-                        x = (x as isize + dx[dir]) as usize;
-                        y = (y as isize + dy[dir]) as usize;
-                        if x < h && y < w && s[x][y] == snuke[v.len()] {
-                            v.push((x + 1, y + 1));
+            // 1文字目 's' を探す
+            if s[i][j] == snuke[0] {
+                // 8方向に探す
+                for &(vy, vx) in &directions {
+                    let mut y = i as i64;
+                    let mut x = j as i64;
+                    let mut ans = vec![];
+                    ans.push((y, x));
+                    // 2文字目以降を探す
+                    for k in 1..snuke.len() {
+                        y = y + vy;
+                        x = x + vx;
+                        if x < 0 || y < 0 || x >= w as i64 || y >= h as i64 {
+                            break;
+                        }
+                        if s[y as usize][x as usize] == snuke[k] {
+                            ans.push((y, x));
                         } else {
-                            continue 'outer;
+                            break;
                         }
                     }
-                    if v.len() == 5 {
-                        for (x, y) in v {
-                            println!("{} {}", x, y);
+                    if ans.len() == snuke.len() {
+                        for &(y, x) in &ans {
+                            println!("{} {}", y + 1, x + 1);
                         }
                         return;
                     }
