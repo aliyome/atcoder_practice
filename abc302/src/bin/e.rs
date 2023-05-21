@@ -2,7 +2,7 @@ use std::collections::HashSet;
 
 use proconio::input;
 
-// O(QN) TLE
+// O(QN)
 fn main() {
     input! {
         n: usize,
@@ -20,7 +20,6 @@ fn main() {
                 u: usize,
                 v: usize,
             }
-            // 追加のときは孤立点の数は単調減少 O(1)
             if connected[u].len() == 0 {
                 ans -= 1;
             }
@@ -33,15 +32,18 @@ fn main() {
             input! {
                 u: usize,
             }
-            // 削除のときは孤立点の数は単調増加 O(N)
-            ans = 0;
-            connected[u] = HashSet::new();
-            for i in 1..=n {
-                connected[i].remove(&u);
-                if connected[i].len() == 0 {
+            let to_remove: Vec<_> = connected[u].iter().copied().collect();
+            for &v in &to_remove {
+                connected[v].remove(&u);
+                if connected[v].len() == 0 {
                     ans += 1;
                 }
             }
+
+            if connected[u].len() != 0 {
+                ans += 1;
+            }
+            connected[u] = HashSet::new();
         }
         println!("{}", ans);
     }
