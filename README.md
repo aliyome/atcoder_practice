@@ -159,3 +159,27 @@ Strongly Connected Components
 
 1. 始点にプラスの、終点にマイナスの重みをつける
 2. 各軸の累積和を取る（これによりマイナスの重みをつけた部分は打ち消される）
+
+### Nim のセオリーと Grundy 数
+
+参考: [組み合わせゲーム理論の基礎と Grundy 数での勝敗判定アルゴリズム | アルゴリズムロジック](https://algo-logic.info/combinatorial-games/#)
+
+Nim のセオリー
+
+- 山ごとに Grundy 数を求める
+- それら Grundy 数すべてを XOR する
+- 結果が 0 なら負け、0 以外なら勝ち
+
+Grundy 数
+
+- ある状態から遷移可能な状態の Grundy 数の集合の最小の非負整数
+- 例えば、ある状態から遷移可能な状態の Grundy 数が {0, 1, 3} なら、その状態の Grundy 数は 2
+
+### 重複組合せ
+
+N-1 箇所の隙間から K-1 個の隙間を選んで仕切りを入れる場合の数は {N-1}_C_{K-1}
+
+> o o o | o | o o o o | o o o
+> N = 11, K = 4 の場合の一例 (10C3 通りある)
+
+[AtCoder ABC 132 D - Blue and Red Balls (緑色, 400 点) - けんちょんの競プロ精進記録](https://drken1215.hatenablog.com/entry/2019/06/30/183400)
