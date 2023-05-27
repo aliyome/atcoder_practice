@@ -32,6 +32,7 @@ fn main() {
         }
         if items_set.contains(&position) && h < k {
             h = k;
+            items_set.remove(&position);
         }
     }
     println!("Yes");
