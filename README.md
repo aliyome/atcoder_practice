@@ -228,6 +228,10 @@ Sliding Window Maximum
 
 (N mod 9) = (N の各桁の和 mod 9)
 
+### mod の性質
+
+- (a + b) mod p = ((a mod p) + (b mod p)) mod p
+
 ### 01-BFS
 
 - 辺の重みが 0 か 1 のグラフの最短経路を求める
