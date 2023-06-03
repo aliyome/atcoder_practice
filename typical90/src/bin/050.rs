@@ -8,15 +8,29 @@ fn main() {
         l: usize
     }
 
-    let x = n / l;
+    // // 組み合わせで解く
+    // // i回L段を登り、残りを1段ずつ登るとすると、上る回数は Y = N - (N/l) * i + i 回
+    // // Y回の上り方は、yCi通りあるため、 i を 0 から N/l まで変化させると全通り網羅できる
+    // let x = n / l;
+    // let mut ans = 0;
+    // for i in 0..=x {
+    //     ans += combination(n - i * l + i, i).value();
+    //     ans %= MOD;
+    // }
+    // println!("{}", ans);
 
-    let mut ans = 0;
-    for i in 0..=x {
-        ans += combination(n - i * l + i, i).value();
-        ans %= MOD;
+    // DPで解く
+    let mut dp = vec![0; n + 1];
+    dp[0] = 1;
+    for i in 1..=n {
+        dp[i] += dp[i - 1];
+        if i >= l {
+            dp[i] += dp[i - l];
+        }
+        dp[i] %= MOD;
     }
 
-    println!("{}", ans);
+    println!("{}", dp[n]);
 }
 
 use std::ops;
