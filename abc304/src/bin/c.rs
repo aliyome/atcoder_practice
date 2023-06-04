@@ -1,16 +1,6 @@
-use proconio::input;
-use proconio::marker::Usize1;
 use std::collections::VecDeque;
 
-#[derive(Debug, Clone, Copy)]
-struct Point {
-    x: i32,
-    y: i32,
-}
-
-fn dist(p1: Point, p2: Point, d: i32) -> bool {
-    (p1.x - p2.x).pow(2) + (p1.y - p2.y).pow(2) <= d.pow(2)
-}
+use proconio::input;
 
 fn main() {
     input! {
@@ -19,34 +9,26 @@ fn main() {
         xy: [(i32, i32); n],
     }
 
-    let points: Vec<Point> = xy.into_iter().map(|(x, y)| Point { x, y }).collect();
-
-    let mut graph: Vec<Vec<usize>> = vec![vec![]; n];
-    for i in 0..n {
-        for j in i + 1..n {
-            if dist(points[i], points[j], d) {
-                graph[i].push(j);
-                graph[j].push(i);
-            }
-        }
-    }
-
-    let mut infected: Vec<bool> = vec![false; n];
-    let mut queue: VecDeque<usize> = VecDeque::new();
+    let mut queue = VecDeque::new();
+    let mut ans = vec![false; n];
+    ans[0] = true;
     queue.push_back(0);
-    infected[0] = true;
 
-    while let Some(i) = queue.pop_front() {
-        for &j in graph[i].iter() {
-            if !infected[j] {
-                infected[j] = true;
-                queue.push_back(j);
+    while let Some(v) = queue.pop_front() {
+        for i in 0..n {
+            if ans[i] {
+                continue;
+            }
+            let x = xy[v].0 - xy[i].0;
+            let y = xy[v].1 - xy[i].1;
+            if x * x + y * y <= d * d {
+                ans[i] = true;
+                queue.push_back(i);
             }
         }
     }
-
     for i in 0..n {
-        if infected[i] {
+        if ans[i] {
             println!("Yes");
         } else {
             println!("No");
