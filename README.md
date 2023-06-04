@@ -277,3 +277,23 @@ if (((bit >> i) & 1) == 1) {
   // i 番目の bit が立っている
 }
 ```
+
+### 約数の個数
+
+n の約数の個数は、n を素因数分解した時の指数の値に 1 を足したもの同士を掛け合わせたものになる
+例: 24 = 2^3 x 3^1 なので、約数の個数は (3 + 1) x (1 + 1) = 8
+
+```rust
+// エラトステネスの篩を利用して n までの各整数の約数の個数を計算
+fn divisor_counts(n: usize) -> Vec<usize> {
+    let mut count = vec![0usize; n + 1];
+    for i in 1..=n {
+        let mut j = i;
+        while j <= n {
+            count[j] += 1;
+            j += i;
+        }
+    }
+    count
+}
+```
