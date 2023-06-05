@@ -2,8 +2,20 @@ use proconio::input;
 
 fn main() {
     input! {
-        n: usize,
+        mut a: usize,
+        mut b: usize,
+        c: usize,
     };
 
-    println!("{}", n);
+    if a < b {
+        println!("Aoki");
+    } else if a > b {
+        println!("Takahashi");
+    } else {
+        if c == 0 {
+            println!("Aoki");
+        } else {
+            println!("Takahashi");
+        }
+    }
 }
