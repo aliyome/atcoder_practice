@@ -5,5 +5,5 @@ fn main() {
       n: usize,
     }
 
-    println!("{}", n);
+    println!("{}", n * n);
 }
