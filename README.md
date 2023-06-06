@@ -162,6 +162,8 @@ Strongly Connected Components
 1. 始点にプラスの、終点にマイナスの重みをつける
 2. 各軸の累積和を取る（これによりマイナスの重みをつけた部分は打ち消される）
 
+![2dacc](./imgs/2d-acc.png)
+
 ### Nim のセオリーと Grundy 数
 
 参考: [組み合わせゲーム理論の基礎と Grundy 数での勝敗判定アルゴリズム | アルゴリズムロジック](https://algo-logic.info/combinatorial-games/#)

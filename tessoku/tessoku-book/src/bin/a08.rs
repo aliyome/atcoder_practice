@@ -16,22 +16,23 @@ fn main() {
         }
     }
 
+    // 縦横2回の累積和 O(HW)
+    let mut sum = grid.clone();
+    // h 方向の累積和
+    for i in 1..=h {
+        for j in 1..=w {
+            sum[i][j] += sum[i - 1][j];
+        }
+    }
+    // w 方向の累積和
+    for j in 1..=w {
+        for i in 1..=h {
+            sum[i][j] += sum[i][j - 1];
+        }
+    }
+
     // O(Q)
     for &(a, b, c, d) in &abcd {
-        // 縦横2回の累積和 O(HW)
-        let mut sum = grid.clone();
-        // h 方向の累積和
-        for i in a..=c {
-            for j in 1..=w {
-                sum[i][j] += sum[i - 1][j];
-            }
-        }
-        // w 方向の累積和
-        for j in b..=d {
-            for i in 1..=h {
-                sum[i][j] += sum[i][j - 1];
-            }
-        }
         // abcd領域の合計
         let ans = sum[a - 1][b - 1] + sum[c][d] - sum[a - 1][d] - sum[c][b - 1];
         println!("{}", ans);
