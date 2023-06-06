@@ -23,7 +23,7 @@ fn main() {
         counts[next_2] = counts[a] + 1;
     }
 
-    // O(N^2)
+    // O(N)
     for k in 1..=2 * n + 1 {
         println!("{}", counts[k]);
     }
