@@ -9,6 +9,7 @@ fn main() {
     };
 
     let mut rev = HashMap::new();
+    let mut counts = vec![0; 2 * n + 3];
 
     // O(N)
     for i in 0..n {
@@ -18,20 +19,12 @@ fn main() {
 
         rev.insert(next_1, a);
         rev.insert(next_2, a);
+        counts[next_1] = counts[a] + 1;
+        counts[next_2] = counts[a] + 1;
     }
 
     // O(N^2)
     for k in 1..=2 * n + 1 {
-        if !rev.contains_key(&k) {
-            println!("0");
-            continue;
-        }
-        let mut count = 0;
-        let mut child = k;
-        while let Some(parent) = rev.get(&child) {
-            count += 1;
-            child = *parent;
-        }
-        println!("{}", count);
+        println!("{}", counts[k]);
     }
 }
