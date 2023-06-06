@@ -7,16 +7,14 @@ fn main() {
       lr: [(usize, usize); n]
     }
 
-    let mut counts = vec![0; t + 1];
+    // いもす法で累積和を計算する
+    let mut counts = vec![0isize; t + 2];
     for &(l, r) in &lr {
-        for i in l..r {
-            counts[i] += 1;
-        }
-        for i in r..t {
-            counts[i] += 0;
-        }
+        counts[l] += 1;
+        counts[r] -= 1;
     }
     for i in 0..t {
+        counts[i + 1] += counts[i];
         println!("{}", counts[i]);
     }
 }
