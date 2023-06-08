@@ -7,11 +7,12 @@ fn main() {
         t: [usize; n]
     };
 
-    let mut prev = t[0];
-    println!("{}", prev);
-    for i in 1..n {
-        let ans = t[i].min(prev + s[i - 1]);
-        println!("{}", ans);
-        prev = ans;
+    let mut ans = vec![10usize.pow(9); n + 1];
+    for i in 0..n * 2 {
+        ans[(i + 1) % n] = ans[(i + 1) % n].min(t[(i + 1) % n]);
+        ans[(i + 1) % n] = ans[(i + 1) % n].min(ans[i % n] + s[i % n]);
+    }
+    for i in 0..n {
+        println!("{}", ans[i]);
     }
 }
