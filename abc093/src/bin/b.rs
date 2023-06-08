@@ -12,7 +12,7 @@ fn main() {
     let mut set = HashSet::new();
     let mut kk = 0;
     for i in a..=b {
-        if kk > k {
+        if kk >= k {
             break;
         }
         set.insert(i);
@@ -21,7 +21,7 @@ fn main() {
 
     let mut kk = 0;
     for i in (a..=b).rev() {
-        if kk > k {
+        if kk >= k {
             break;
         }
         set.insert(i);
