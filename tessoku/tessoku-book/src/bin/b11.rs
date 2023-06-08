@@ -11,16 +11,16 @@ fn main() {
     a.sort();
 
     for x in x {
-        let mut ok = 0;
-        let mut ng = n;
-        while ng - ok > 1 {
-            let mid = (ok + ng) / 2;
+        let mut low = 0;
+        let mut high = n;
+        while low != high {
+            let mid = (low + high) / 2;
             if a[mid] < x {
-                ok = mid;
+                low = mid + 1;
             } else {
-                ng = mid;
+                high = mid;
             }
         }
-        println!("{}", ok + 1);
+        println!("{}", low);
     }
 }
