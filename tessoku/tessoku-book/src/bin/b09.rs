@@ -2,8 +2,8 @@ use proconio::input;
 
 fn main() {
     input! {
-      n: usize,
-      abcd: [(usize, usize, usize, usize); n]
+        n: usize,
+        abcd: [(usize, usize, usize, usize); n]
     }
 
     let mut map = vec![vec![0; 1502]; 1502];
@@ -15,12 +15,12 @@ fn main() {
     }
     // H方向
     for i in 1..=1500 {
-        for j in 1..=1500 {
+        for j in 0..=1500 {
             map[i][j] += map[i - 1][j];
         }
     }
     // W方向
-    for i in 1..=1500 {
+    for i in 0..=1500 {
         for j in 1..=1500 {
             map[i][j] += map[i][j - 1];
         }
@@ -28,8 +28,8 @@ fn main() {
 
     // 面積のカウント
     let mut cnt = 0;
-    for i in 1..=1500 {
-        for j in 1..=1500 {
+    for i in 0..=1500 {
+        for j in 0..=1500 {
             if map[i][j] > 0 {
                 cnt += 1;
             }
