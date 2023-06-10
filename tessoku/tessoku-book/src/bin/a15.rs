@@ -6,8 +6,11 @@ fn main() {
       a: [usize; n]
     }
 
+    // O(N)
     let mut b: Vec<(usize, usize)> = a.clone().into_iter().enumerate().collect();
+    // O(NlogN)
     b.sort_by(|x, y| x.1.cmp(&y.1));
+    // O(N)
     let mut c = vec![];
     let mut prev = 0;
     for i in 0..n {
@@ -25,8 +28,10 @@ fn main() {
         }
     }
 
+    // O(NlogN)
     c.sort_by(|x, y| x.0.cmp(&y.0));
 
+    // O(N)
     println!(
         "{}",
         c.iter()
