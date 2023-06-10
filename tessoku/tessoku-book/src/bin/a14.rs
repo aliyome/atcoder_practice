@@ -12,39 +12,36 @@ fn main() {
       mut d: [isize; n],
     }
 
-    a.sort();
-    b.sort();
-    c.sort();
-    d.sort();
-
-    a.reverse();
-    b.reverse();
-    c.reverse();
-    d.reverse();
-
-    // O(N^3) -> O(10^12) TLE
-    let mut set_d = HashSet::new();
-    for &d in &d {
-        set_d.insert(d);
-    }
-
+    // 半分全列挙
+    let mut ab = Vec::new();
+    let mut cd = Vec::new();
     for &a in &a {
-        if a >= k {
-            continue;
-        }
         for &b in &b {
-            if a + b >= k {
-                continue;
+            ab.push(a + b);
+        }
+    }
+    for &c in &c {
+        for &d in &d {
+            cd.push(c + d);
+        }
+    }
+    ab.sort();
+    cd.sort();
+
+    // O(N^2 logN)
+    for &ab in &ab {
+        let mut ng = 0;
+        let mut ok = cd.len();
+        while ok - ng > 1 {
+            let mid = (ok + ng) / 2;
+            if cd[mid] == k - ab {
+                println!("Yes");
+                return;
             }
-            for &c in &c {
-                if a + b + c >= k {
-                    continue;
-                }
-                let d = k - (a + b + c);
-                if set_d.contains(&d) {
-                    println!("Yes");
-                    return;
-                }
+            if k <= ab + cd[mid] {
+                ok = mid;
+            } else {
+                ng = mid;
             }
         }
     }
