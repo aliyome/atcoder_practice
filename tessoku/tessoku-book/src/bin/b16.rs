@@ -3,16 +3,20 @@ use proconio::input;
 fn main() {
     input! {
       n: usize,
-      h: [isize; n]
+      hh: [isize; n]
     }
 
-    let mut dp = vec![100000000; n];
+    // 1-indexed
+    let mut h = vec![0];
+    h.extend(&hh);
+
+    let mut dp = vec![100000000; n + 1];
     dp[0] = 0;
-    dp[1] = (h[1] - h[0]).abs();
-    for i in 2..n {
-        dp[i] = dp[i].min(dp[i - 1] + (h[i] - h[i - 1]).abs());
-        dp[i] = dp[i].min(dp[i - 2] + (h[i] - h[i - 2]).abs());
+    dp[1] = 0;
+    dp[2] = (h[2] - h[1]).abs();
+    for i in 3..=n {
+        dp[i] = (dp[i - 1] + (h[i] - h[i - 1]).abs()).min(dp[i - 2] + (h[i] - h[i - 2]).abs());
     }
 
-    println!("{}", dp[n - 1]);
+    println!("{}", dp[n]);
 }
