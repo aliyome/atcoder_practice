@@ -12,7 +12,8 @@ fn main() {
     dp[0][0] = true;
 
     for i in 1..=n {
-        for j in 1..=s {
+        dp[i] = dp[i - 1].clone();
+        for j in 0..=s {
             let a = a[i - 1];
             if 0 <= j as isize - a as isize && dp[i - 1][j - a] {
                 dp[i][j] = true;
