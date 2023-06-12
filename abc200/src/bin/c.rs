@@ -23,7 +23,7 @@ fn main() {
         counts[a[i] % 200] += 1;
     }
 
-    let mut ans = 0;
+    let mut ans = 0usize;
     for i in 0..n {
         let mod200 = a[i] % 200;
         counts[mod200] -= 1;
