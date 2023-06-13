@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use proconio::input;
 
 fn main() {
@@ -12,7 +14,7 @@ fn main() {
     // 愚直にやるとO(QN) 10^10 で TLE
     // O(Q) 10^5
     let mut base = 10usize.pow(10);
-    let mut adds = vec![0; n + 1];
+    let mut adds = HashMap::new();
     for _ in 0..q {
         input! {
             t: usize
@@ -26,22 +28,22 @@ fn main() {
             //     a[i] = x;
             // }
             base = x;
-            adds = vec![0; n + 1];
+            adds = HashMap::new();
         } else if t == 2 {
             input! {
                 i: usize,
                 x: usize,
             };
             // a[i] += x;
-            adds[i] += x;
+            *adds.entry(i).or_insert(0) += x;
         } else {
             input! {
                 i: usize,
             }
             if base == 10usize.pow(10) {
-                println!("{}", a[i] + adds[i]);
+                println!("{}", a[i] + adds.get(&i).unwrap_or(&0));
             } else {
-                println!("{}", base + adds[i]);
+                println!("{}", base + adds.get(&i).unwrap_or(&0));
             }
         }
     }
