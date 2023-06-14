@@ -22,9 +22,6 @@ fn main() {
     for len in 2..n {
         for l in 0..n - len {
             let r = l + len;
-            if n <= r {
-                continue;
-            }
             // 回文が拡張されない場合は一文字少ない回文の長さを引き継ぐ
             dp[l][r] = dp[l][r].max(dp[l + 1][r]).max(dp[l][r - 1]);
             // 回分が拡張される場合は回文の長さに2を足す
@@ -32,10 +29,6 @@ fn main() {
                 dp[l][r] = dp[l][r].max(dp[l + 1][r - 1] + 2);
             }
         }
-    }
-
-    for i in 0..n {
-        println!("{:?}", dp[i]);
     }
 
     println!("{:?}", dp[0][n - 1]);
