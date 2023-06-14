@@ -1,39 +1,61 @@
-use proconio::input;
 use std::collections::HashSet;
+
+use proconio::{input, marker::Chars};
 
 fn main() {
     input! {
         n: usize,
         m: usize,
-        mut h: i64,
-        k: i64,
-        s: String,
-        items: [(i64, i64); m],
+        mut h: isize,
+        k: isize,
+        s: Chars,
+        items: [(isize, isize); m],
     }
 
-    let mut items_set = HashSet::new();
-    for item in items {
-        items_set.insert(item);
+    let mut item_set = HashSet::new();
+    for (x, y) in items {
+        item_set.insert((x, y));
     }
 
-    let mut position = (0, 0);
-    for direction in s.chars() {
-        h -= 1;
-        match direction {
-            'R' => position.0 += 1,
-            'L' => position.0 -= 1,
-            'U' => position.1 += 1,
-            'D' => position.1 -= 1,
+    let mut pos = (0isize, 0isize);
+    let mut count = 0usize;
+    for c in s {
+        let mut v = (0, 0);
+        match c {
+            'U' => {
+                v = (0, 1);
+            }
+            'D' => {
+                v = (0, -1);
+            }
+            'L' => {
+                v = (-1, 0);
+            }
+            'R' => {
+                v = (1, 0);
+            }
             _ => unreachable!(),
         }
+
+        pos.0 += v.0;
+        pos.1 += v.1;
+        h -= 1;
+
         if h < 0 {
             println!("No");
             return;
         }
-        if items_set.contains(&position) && h < k {
+
+        if h < k && item_set.contains(&pos) {
             h = k;
-            items_set.remove(&position);
+            item_set.remove(&pos);
+        }
+        count += 1;
+
+        if count == n {
+            println!("Yes");
+            return;
         }
     }
-    println!("Yes");
+    println!("No");
 }
