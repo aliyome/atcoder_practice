@@ -40,6 +40,8 @@
 
 ## 二分探索
 
+O(logN)
+
 ```rust
 let v = vec![0, 1, 2, 3, 4, 5, 6];
 let i = v.binary_search_by(|&x| {
@@ -50,6 +52,28 @@ let i = v.binary_search_by(|&x| {
     }
 }).unwrap_err();
 // i == 4 となる
+```
+
+## 三分探索
+
+たかだか一つしか極値のない関数における極値を探索するアルゴリズム。
+つまり、二次関数のような下に凸な関数の最小値を求めることができる。
+極値が複数ある場合は使えない。
+
+範囲を 3 分することで、最小値がある範囲を狭めていく。
+
+```cpp
+  double left = -5;
+  double right = 5;
+  while(right-left>0.00000001) {
+    double mid_l = left*2.0/3.0+right/3.0;
+    double mid_r = left/3.0+right*2.0/3.0;
+    if(func(mid_l)<func(mid_r)){
+            right = mid_r;
+        }else {
+            left = mid_l;
+        }
+    }
 ```
 
 ## 組み合わせ
@@ -346,6 +370,15 @@ X を 2 進数表記して 1 のくらいから 0 が何回連続しているか
 ```rust
 assert!(32usize.trailing_zeros() == 5);
 ```
+
+## XOR の性質
+
+- a ^ a = 0
+- a ^ 0 = a
+- a ^ b = b ^ a
+- a ^ b ^ c = a ^ (b ^ c) = (a ^ b) ^ c
+- a ^ b = c ならば a ^ c = b かつ b ^ c = a
+- a + b = (a ^ b) + ((a & b) << 1)
 
 ## Rust
 
