@@ -54,6 +54,18 @@ let i = v.binary_search_by(|&x| {
 // i == 4 となる
 ```
 
+### 平衡二分探索木
+
+```rust
+let mut set = BtreeSet::new();
+set.insert(1); // O(logN)
+set.remove(&1); // O(logN)
+// 4以上を探したときの最初の要素を返す
+set.range(4..).next();
+// 7未満を探したときの最後の要素を返す
+set.range(..7).last();
+```
+
 ## 三分探索
 
 たかだか一つしか極値のない関数における極値を探索するアルゴリズム。
@@ -386,4 +398,10 @@ assert!(32usize.trailing_zeros() == 5);
 // 配列の連続した重複要素の除去
 a.sort();
 a.dedup();
+```
+
+```rust
+// BTreeSet
+set.iter().next(); // 最小値
+set.iter().last(); // 最大値
 ```
