@@ -2,8 +2,14 @@ use proconio::input;
 
 fn main() {
     input! {
-        n: usize,
+        a: usize,
+        b: usize,
+        c: usize,
+        d: usize,
     };
-
-    println!("{}", n);
+    if format!("{:02}{:02}", a, b) <= format!("{:02}{:02}", c, d) {
+        println!("Takahashi");
+    } else {
+        println!("Aoki");
+    }
 }
