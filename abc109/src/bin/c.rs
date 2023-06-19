@@ -14,19 +14,21 @@ fn main() {
 
     x.sort();
 
-    // s の最寄りの要素を探す
-    let r = x.lower_bound(s);
-    let l = r - 1;
-
     // 各都市間の距離
     let mut dists = vec![];
-    for i in 0..l {
-        dists.push(x[i + 1] - x[i]);
+    if s < x[0] {
+        dists.push(x[0] - s);
     }
-    dists.push(s - x[l]);
-    dists.push(x[r] - s);
-    for i in r..n - 1 {
-        dists.push(x[i + 1] - x[i]);
+    for i in 0..n - 1 {
+        if x[i] < s && s < x[i + 1] {
+            dists.push(s - x[i]);
+            dists.push(x[i + 1] - s);
+        } else {
+            dists.push(x[i + 1] - x[i]);
+        }
+    }
+    if x[n - 1] < s {
+        dists.push(s - x[n - 1]);
     }
 
     // 各都市に止まるための歩幅は最大公約数
