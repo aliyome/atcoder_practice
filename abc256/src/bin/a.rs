@@ -2,8 +2,8 @@ use proconio::input;
 
 fn main() {
     input! {
-        n: usize,
+        n: u32,
     };
 
-    println!("{}", n);
+    println!("{}", 2usize.pow(n));
 }
