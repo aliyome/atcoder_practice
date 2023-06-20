@@ -9,6 +9,10 @@ fn main() {
     let mut ans = 0;
     for i in 0..n {
         let (t, a) = ta[i];
+
+        // ans -= a で負の数にならないようにする
+        ans += 10000;
+
         match t {
             '+' => ans += a,
             '-' => ans -= a,
@@ -18,10 +22,5 @@ fn main() {
 
         ans %= 10000;
         println!("{}", ans);
-
-        // ans -= a で負の数にならないようにする
-        if ans < 10000 {
-            ans += 10000;
-        }
     }
 }
