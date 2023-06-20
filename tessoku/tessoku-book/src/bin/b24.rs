@@ -6,8 +6,8 @@ fn main() {
       mut xy: [(usize, usize); n]
     }
 
-    // x で昇順ソート
-    xy.sort_by(|a, b| a.0.cmp(&b.0));
+    // x で昇順ソート、x が同じなら y で降順ソート
+    xy.sort_by(|a, b| a.0.cmp(&b.0).then(b.1.cmp(&a.1)));
     xy.insert(0, (0, 0));
 
     // dp[i] := i 番目まで見た時のLIS
