@@ -408,6 +408,10 @@ assert!(32usize.trailing_zeros() == 5);
 - 片方の数が 0 になったら操作終了、もう片方の数が答え
 - 計算量は O(log(a + b))
 
+### 最小公倍数
+
+a と b の最小公倍数は ab / gcd(a, b)
+
 ## Rust
 
 ```rust
