@@ -412,6 +412,13 @@ assert!(32usize.trailing_zeros() == 5);
 
 a と b の最小公倍数は ab / gcd(a, b)
 
+### 繰り返し二乗法
+
+a^1 x a^1 = a^2
+a^2 x a^2 = a^4
+a^4 x a^4 = a^8
+︙
+
 ## Rust
 
 ```rust
