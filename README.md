@@ -227,6 +227,9 @@ Strongly Connected Components
 
 ## Nim のセオリーと Grundy 数
 
+- 山が 2 つの時は、それぞれの山の石の数を同じ状態で手番が回ってきたら負け。つまり最初から山の数が同じ場合は先手が負け。
+- 山が N の場合は、全山の石の数を XOR した値が 0 なら先手負け、0 以外なら先手勝ち。
+
 参考: [組み合わせゲーム理論の基礎と Grundy 数での勝敗判定アルゴリズム | アルゴリズムロジック](https://algo-logic.info/combinatorial-games/#)
 
 Nim のセオリー
