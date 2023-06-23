@@ -2,8 +2,17 @@ use proconio::input;
 
 fn main() {
     input! {
-        n: usize,
+        x: usize,
+        k: u32,
     };
 
-    println!("{}", n);
+    let mut ans = x;
+    for i in 1..=k {
+        let tmp = ans % 10usize.pow(i);
+        ans -= tmp;
+        if 5 <= tmp / 10usize.pow(i - 1) {
+            ans += 10usize.pow(i);
+        }
+    }
+    println!("{}", ans);
 }
