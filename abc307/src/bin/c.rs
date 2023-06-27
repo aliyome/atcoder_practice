@@ -38,7 +38,7 @@ fn main() {
             for (y, x) in grid {
                 let y = *y as isize + i;
                 let x = *x as isize + j;
-                if y < 0 || x < 0 {
+                if y < 0 || x < 0 || y >= hx as isize || x >= wx as isize {
                     return HashSet::new();
                 }
                 moved.insert((y as usize, x as usize));
