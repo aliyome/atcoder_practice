@@ -57,7 +57,7 @@ let i = v.binary_search_by(|&x| {
 ### 平衡二分探索木
 
 ```rust
-let mut set = BtreeSet::new();
+let mut set = BTreeSet::new();
 set.insert(1); // O(logN)
 set.remove(&1); // O(logN)
 // 4以上を探したときの最初の要素を返す
