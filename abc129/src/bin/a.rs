@@ -2,8 +2,10 @@ use proconio::input;
 
 fn main() {
     input! {
-        n: usize,
+        p: usize,
+        q: usize,
+        r: usize,
     };
 
-    println!("{}", n);
+    println!("{}", (p + q).min(q + r).min(r + p));
 }
