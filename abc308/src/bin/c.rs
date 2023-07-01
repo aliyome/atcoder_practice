@@ -8,13 +8,12 @@ fn main() {
 
     let mut list = vec![];
     for i in 0..n {
-        let rate = ab[i].0 as f64 / (ab[i].0 as f64 + ab[i].1 as f64);
-        list.push((rate, i + 1));
+        list.push((ab[i].0, ab[i].0 + ab[i].1, i + 1));
     }
 
-    list.sort_by(|a, b| b.0.partial_cmp(&a.0).unwrap().then(a.1.cmp(&b.1)));
+    list.sort_by(|a, b| (b.0 * a.1).cmp(&(a.0 * b.1)).then(a.2.cmp(&b.2)));
 
-    for i in 0..n {
-        print!("{} ", list[i].1);
+    for (_, _, i) in list {
+        print!("{} ", i);
     }
 }
