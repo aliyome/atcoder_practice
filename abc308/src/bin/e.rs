@@ -8,19 +8,16 @@ fn main() {
         s: Chars,
     }
 
-    let mut m = vec![vec![]; n + 1];
-    let mut e = vec![vec![]; n + 1];
-    let mut x = vec![vec![]; n + 1];
+    let mut mex_list = vec![];
+    let mut e = vec![];
+    let mut x = vec![];
     for i in (0..n).rev() {
-        m[i] = m[i + 1].clone();
-        e[i] = e[i + 1].clone();
-        x[i] = x[i + 1].clone();
         if s[i] == 'M' {
-            m[i].push(i);
+            mex_list.push((i, e.clone(), x.clone()));
         } else if s[i] == 'E' {
-            e[i].push(i);
+            e.push(i);
         } else if s[i] == 'X' {
-            x[i].push(i);
+            x.push(i);
         }
     }
 
@@ -35,24 +32,20 @@ fn main() {
     };
 
     let mut ans = 0;
-    for i in 0..n {
-        // 新しいMがあったら
-        if s[i] == 'M' {
-            // println!("{:?} {:?} {:?}", m[i], e[i], x[i]);
-            for &j in &e[i] {
-                if j < i {
+    for (i, js, ks) in mex_list {
+        for &j in &js {
+            if j < i {
+                continue;
+            }
+            for &k in &ks {
+                if k < j {
                     continue;
                 }
-                for &k in &x[i] {
-                    if k < j {
-                        continue;
-                    }
-                    let mut aa = [a[i], a[j], a[k]];
-                    aa.sort();
-                    let mex = get_mex(&aa);
-                    ans += mex;
-                    // println!("{} {} {} {} {}", i, j, k, mex, ans);
-                }
+                let mut aa = [a[i], a[j], a[k]];
+                aa.sort();
+                let mex = get_mex(&aa);
+                ans += mex;
+                // println!("{} {} {} {} {}", i, j, k, mex, ans);
             }
         }
     }
