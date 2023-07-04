@@ -168,6 +168,9 @@ impl UnionFind {
 - 単純な DP を使うと O(V^2) で計算
 - ヒープを使うと O(ElogV) で計算
 - TODO: 負の重みを持つエッジがある場合は適用できない？？？
+- 実装
+  - 最短距離のみ[typical90/src/bin/013.rs](https://github.com/aliyome/atcoder_practice/blob/main/typical90/src/bin/013.rs)
+  - 最短距離と辿った頂点[atcoder_practice/abc252/src/bin/e.rs](https://github.com/aliyome/atcoder_practice/blob/main/abc252/src/bin/e.rs)
 
 BFS O(E)
 
