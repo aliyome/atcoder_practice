@@ -21,6 +21,36 @@ fn main() {
         score
     };
 
+    // 焼き鈍し法
+    let mut rng = rand::thread_rng();
+    let mut ans = (0..n).collect::<Vec<_>>();
+    ans.push(0);
+    let mut current_score = calc_score(&ans);
+    for i in 0..200000 {
+        let l = rng.gen_range(1, n);
+        let r = rng.gen_range(1, n);
+        // l..r の区間を反転させる
+        if l > r {
+            continue;
+        }
+        let mut tmp = ans[l..r].to_vec();
+        tmp.reverse();
+        let mut new_ans = ans[..l].to_vec();
+        new_ans.append(&mut tmp);
+        new_ans.append(&mut ans[r..].to_vec());
+        let new_score = calc_score(&new_ans);
+        // 温度を下げる
+        let t = 30.00 - 28.00 * i as f64 / 200000.0;
+        let prob = ((current_score - new_score) / t).min(0.0).exp();
+        if rng.gen_bool(prob) {
+            ans = new_ans;
+            current_score = new_score;
+        }
+    }
+    for &a in &ans {
+        println!("{} ", a + 1);
+    }
+
     // // 2-opt 局所探索法
     // let mut rng = rand::thread_rng();
     // let mut ans = (0..n).collect::<Vec<_>>();
