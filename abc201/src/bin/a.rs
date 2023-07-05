@@ -2,8 +2,14 @@ use proconio::input;
 
 fn main() {
     input! {
-        n: usize,
+        mut a: [isize; 3],
     };
 
-    println!("{}", n);
+    a.sort();
+
+    if a[2] - a[1] == a[1] - a[0] {
+        println!("Yes");
+    } else {
+        println!("No");
+    }
 }
