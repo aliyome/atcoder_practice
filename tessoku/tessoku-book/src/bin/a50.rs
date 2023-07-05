@@ -32,46 +32,37 @@ fn main() {
         }
     };
 
-    // // 最大1000回 ランダムに試行
-    // // NxNx1000 -> 10^7
-    // let mut grid = vec![vec![0isize; N]; N];
-    // let mut operations = vec![];
-    // let mut scores = vec![];
+    // 最大1000回 ランダムに試行
+    // NxNx1000 -> 10^7
+    let mut grid = vec![vec![0isize; N]; N];
+    let mut operations = vec![];
+    let mut scores = vec![];
     let mut rng = rand::thread_rng();
-    // for _ in 0..1000 {
-    //     let x = rng.gen_range(0, N);
-    //     let y = rng.gen_range(0, N);
-    //     let h = rng.gen_range(0, N / 2);
-    //     let op = (x, y, h);
-    //     exec_op(&mut grid, x, y, h);
-    //     operations.push(op);
-    //     let score = calc_score(&grid);
-    //     scores.push(score);
-    // }
-
-    // let mut min_score = std::isize::MAX;
-    // let mut min_index = 0;
-    // for i in 0..100 {
-    //     if scores[i] < min_score {
-    //         min_score = scores[i];
-    //         min_index = i;
-    //     }
-    // }
-
-    // // println!("{}", min_index + 1);
-    // // for i in 0..min_index {
-    // //     println!(
-    // //         "{} {} {}",
-    // //         operations[i].0, operations[i].1, operations[i].2
-    // //     );
-    // // }
-
-    // ランダムに1000回試行
-    println!("1000");
     for _ in 0..1000 {
         let x = rng.gen_range(0, N);
         let y = rng.gen_range(0, N);
-        let h = 1;
-        println!("{} {} {}", x, y, h);
+        let h = rng.gen_range(1, N);
+        let op = (x, y, h);
+        exec_op(&mut grid, x, y, h);
+        operations.push(op);
+        let score = calc_score(&grid);
+        scores.push(score);
+    }
+
+    let mut min_score = std::isize::MAX;
+    let mut min_index = 0;
+    for i in 0..1000 {
+        if scores[i] < min_score {
+            min_score = scores[i];
+            min_index = i;
+        }
+    }
+
+    println!("{}", min_index);
+    for i in 0..min_index {
+        println!(
+            "{} {} {}",
+            operations[i].0, operations[i].1, operations[i].2
+        );
     }
 }
