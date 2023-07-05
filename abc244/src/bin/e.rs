@@ -11,10 +11,10 @@ fn main() {
     // N頂点 M辺 単純無向グラフ
     // uv[i] := u - v を結ぶ辺
     // edges[u][v] := u - v を結ぶ辺が存在するか
-    let mut edges = vec![vec![false; n + 1]; n + 1];
+    let mut edges = vec![vec![]; n + 1];
     for (u, v) in uv {
-        edges[u][v] = true;
-        edges[v][u] = true;
+        edges[u].push(v);
+        edges[v].push(u);
     }
 
     // a := [a0, a1, ..., ak] は何通りはあるか
@@ -38,21 +38,19 @@ fn main() {
         // j が末尾だったとき
         for j in 1..=n {
             // 次が k になるような辺があるなら
-            for k in 1..=n {
-                if edges[j][k] {
-                    // 1文字前の通り数を足す
-                    if k == x {
-                        // 次の文字が x なら偶奇を反転する
-                        dp[i + 1][k][0] += dp[i][j][1];
-                        dp[i + 1][k][1] += dp[i][j][0];
-                        dp[i + 1][k][0] %= MOD;
-                        dp[i + 1][k][1] %= MOD;
-                    } else {
-                        dp[i + 1][k][0] += dp[i][j][0];
-                        dp[i + 1][k][1] += dp[i][j][1];
-                        dp[i + 1][k][0] %= MOD;
-                        dp[i + 1][k][1] %= MOD;
-                    }
+            for &k in &edges[j] {
+                // 1文字前の通り数を足す
+                if k == x {
+                    // 次の文字が x なら偶奇を反転する
+                    dp[i + 1][k][0] += dp[i][j][1];
+                    dp[i + 1][k][1] += dp[i][j][0];
+                    dp[i + 1][k][0] %= MOD;
+                    dp[i + 1][k][1] %= MOD;
+                } else {
+                    dp[i + 1][k][0] += dp[i][j][0];
+                    dp[i + 1][k][1] += dp[i][j][1];
+                    dp[i + 1][k][0] %= MOD;
+                    dp[i + 1][k][1] %= MOD;
                 }
             }
         }
