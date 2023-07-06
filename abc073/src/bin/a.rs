@@ -1,9 +1,16 @@
-use proconio::input;
+use proconio::{input, marker::Chars};
 
 fn main() {
     input! {
-        n: usize,
+        n: Chars,
     };
 
-    println!("{}", n);
+    for c in n {
+        if c == '9' {
+            println!("Yes");
+            return;
+        }
+    }
+
+    println!("No");
 }
