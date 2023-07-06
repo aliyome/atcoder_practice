@@ -2,8 +2,24 @@ use proconio::input;
 
 fn main() {
     input! {
-      n: usize,
+      q: usize,
     }
 
-    println!("{}", n);
+    let mut stack = vec![];
+
+    for _ in 0..q {
+        input! {
+          t: usize
+        }
+        if t == 1 {
+            input! {
+              x: String
+            }
+            stack.push(x);
+        } else if t == 2 {
+            println!("{}", stack.last().unwrap());
+        } else {
+            stack.pop();
+        }
+    }
 }
