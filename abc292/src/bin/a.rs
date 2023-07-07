@@ -2,8 +2,8 @@ use proconio::input;
 
 fn main() {
     input! {
-        n: usize,
+        s: String,
     };
 
-    println!("{}", n);
+    println!("{}", s.to_uppercase());
 }
