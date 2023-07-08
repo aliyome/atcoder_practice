@@ -1,4 +1,4 @@
-use std::collections::{BTreeMap, BTreeSet};
+use std::collections::BTreeMap;
 
 use proconio::input;
 
@@ -10,16 +10,21 @@ fn main() {
     };
 
     // 全量
-    let mut sum = ab.iter().fold(0, |acc, (a, b)| acc + b);
+    let mut sum = ab.iter().fold(0, |acc, (_, b)| acc + b);
 
-    // 日付でソート
-    ab.sort_by(|a, b| a.0.cmp(&b.0));
+    if sum <= k {
+        println!("1");
+        return;
+    }
 
+    // 日毎にまとめる
+    let mut map = BTreeMap::new();
     for &(a, b) in &ab {
-        if sum <= k {
-            println!("{}", a);
-            return;
-        }
+        *map.entry(a).or_insert(0) += b;
+    }
+
+    // K以下になる日を探す
+    for (a, b) in map {
         sum -= b;
         if sum <= k {
             println!("{}", a + 1);
@@ -27,5 +32,7 @@ fn main() {
         }
     }
 
+    // ここには来ないはず
+    ab.sort_by(|a, b| a.0.cmp(&b.0));
     println!("{}", ab[n - 1].0 + 1);
 }
