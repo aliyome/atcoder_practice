@@ -12,7 +12,7 @@ fn main() {
     }
 
     // s を char から usize に変換
-    let mut s = s
+    let s = s
         .iter()
         .map(|&c| c as usize - 'A' as usize)
         .collect::<Vec<_>>();
@@ -27,14 +27,20 @@ fn main() {
     // hash
     let hash = |s: &[usize]| -> usize {
         let mut h = 0;
-        for i in 0..n {
-            h += b[i - n - 1] * (s[i] as usize);
+        for i in 0..s.len() {
+            h += b[n - i - 1] * (s[i] as usize);
             h %= MOD;
         }
         h
     };
 
-    for (a, b, c, d) in abcd {}
-
-    println!("{}", n);
+    for (a, b, c, d) in abcd {
+        let x = s[a - 1..b].to_vec();
+        let y = s[c - 1..d].to_vec();
+        if hash(&x) == hash(&y) {
+            println!("Yes");
+        } else {
+            println!("No");
+        }
+    }
 }
