@@ -12,32 +12,41 @@ fn main() {
     }
 
     // s を char から usize に変換
-    let s = s
+    let mut s = s
         .iter()
-        .map(|&c| c as usize - 'A' as usize)
+        .map(|&c| c as usize - 'a' as usize + 1)
         .collect::<Vec<_>>();
+    // 1-indexed
+    s.insert(0, 0);
 
-    // b の事前計算
-    let mut b = vec![0; n];
-    for i in 0..n {
-        b[i] = B.pow(i as u32);
-        b[i] %= MOD;
+    // power100 の事前計算
+    let mut power100 = vec![0; n + 1];
+    power100[0] = 1;
+    for i in 1..=n {
+        power100[i] = power100[i - 1] * B;
+        power100[i] %= MOD;
     }
 
-    // hash
-    let hash = |s: &[usize]| -> usize {
-        let mut h = 0;
-        for i in 0..s.len() {
-            h += b[n - i - 1] * (s[i] as usize);
-            h %= MOD;
+    // hash[i] := 文文字列[1,i]のhashの事前計算
+    let mut hash = vec![0; n + 1];
+    for i in 1..=n {
+        hash[i] = B * hash[i - 1] + s[i];
+        hash[i] %= MOD;
+    }
+    // println!("{:?}", hash);
+
+    // ハッシュ値の計算
+    let calc_hash = |l: usize, r: usize| {
+        let val = hash[r] as isize - (hash[l - 1] * power100[r - l + 1] % MOD) as isize;
+        if val < 0 {
+            val + MOD as isize
+        } else {
+            val
         }
-        h
     };
 
     for (a, b, c, d) in abcd {
-        let x = s[a - 1..b].to_vec();
-        let y = s[c - 1..d].to_vec();
-        if hash(&x) == hash(&y) {
+        if calc_hash(a, b) == calc_hash(c, d) {
             println!("Yes");
         } else {
             println!("No");
