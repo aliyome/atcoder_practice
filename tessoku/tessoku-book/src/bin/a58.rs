@@ -6,7 +6,7 @@ fn main() {
       q: usize,
     }
 
-    let mut segtree = SegmentTree::new(n + 1, |x, y| x.max(y));
+    let mut segtree = SegmentTree::new(n, |x, y| x.max(y));
 
     for _ in 0..q {
         input! {
@@ -18,14 +18,14 @@ fn main() {
                   pos: usize,
                   x: usize,
                 }
-                segtree.update(pos, x);
+                segtree.update(pos - 1, x);
             }
             2 => {
                 input! {
                   l: usize,
                   r: usize,
                 }
-                println!("{}", segtree.query(l, r));
+                println!("{}", segtree.query(l - 1, r - 1));
             }
             _ => unreachable!(),
         }
