@@ -414,6 +414,19 @@ hash = B^(n-1) x a[0] + B^(n-2) x a[1] + ... + B^0 x a[n-1]
 
 とても大きな数になるので適当な素数 M で mod を取ることが多い -> ハッシュ衝突の可能性
 
+## 各桁の和
+
+```rust
+fn digit_sum(mut n: usize) -> usize {
+    let mut sum = 0;
+    while n > 0 {
+        sum += n % 10;
+        n /= 10;
+    }
+    sum
+}
+```
+
 ## 数学
 
 ### 素数の求めかた(エラトステネスの篩)
