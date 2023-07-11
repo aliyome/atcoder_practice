@@ -34,6 +34,8 @@
 - 区間に対するクエリに O(logN)
 
 ```rust
+// 二分木を配列で表現するときは 1-indexed で表現したほうが都合が良い
+// 深さと桁数が一致するようになる。 [セグメント木 [いかたこのたこつぼ]](https://ikatakos.com/pot/programming_algorithm/data_structure/segment_tree)
 struct SegmentTree {
     n: usize,
     node: Vec<usize>,
@@ -75,6 +77,12 @@ impl SegmentTree {
             r /= 2;
         }
         res
+    }
+
+    fn _query(&self, l: usize, r: usize, a: usize, b: usize, u: usize) -> usize {
+        if r <= a || b <= l {
+            return 0;
+        }
     }
 
     fn get(&self, pos: usize) -> usize {
