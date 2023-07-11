@@ -17,9 +17,9 @@ fn main() {
             x - y
         }
     };
-    for op1 in ['+', '-'] {
-        for op2 in ['+', '-'] {
-            for op3 in ['+', '-'] {
+    for &op1 in ['+', '-'].iter() {
+        for &op2 in ['+', '-'].iter() {
+            for &op3 in ['+', '-'].iter() {
                 if calc(
                     calc(calc(abcd[0], abcd[1], op1), abcd[2], op2),
                     abcd[3],
