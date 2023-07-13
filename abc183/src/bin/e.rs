@@ -41,6 +41,7 @@ fn main() {
                 z[i][j] %= MOD;
             }
             dp[i][j] += x[i][j] + y[i][j] + z[i][j];
+            dp[i][j] %= MOD;
         }
     }
 
