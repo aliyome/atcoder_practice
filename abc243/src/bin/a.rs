@@ -2,8 +2,29 @@ use proconio::input;
 
 fn main() {
     input! {
-        n: usize,
+        mut v: isize,
+        a: isize,
+        b: isize,
+        c: isize,
     };
 
-    println!("{}", n);
+    while true {
+        v -= a;
+        if v < 0 {
+            println!("F");
+            return;
+        }
+
+        v -= b;
+        if v < 0 {
+            println!("M");
+            return;
+        }
+
+        v -= c;
+        if v < 0 {
+            println!("T");
+            return;
+        }
+    }
 }
