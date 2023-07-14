@@ -6,17 +6,24 @@ fn main() {
       mut a: [usize; n]
     }
 
+    // 1-indexed
     a.insert(0, 0);
 
-    // O(N^2) TLE
+    let mut stack = vec![];
     for i in 1..=n {
-        let mut d = -1isize;
-        for j in (0..i).rev() {
-            if a[i] < a[j] {
-                d = j as isize;
+        while let Some((ad, d)) = stack.pop() {
+            if ad <= a[i] {
+                continue;
+            } else {
+                print!("{} ", d);
+                // もとに戻す
+                stack.push((ad, d));
                 break;
             }
         }
-        print!("{} ", d);
+        if stack.is_empty() {
+            print!("-1 ");
+        }
+        stack.push((a[i], i));
     }
 }
