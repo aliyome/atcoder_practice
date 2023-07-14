@@ -10,9 +10,6 @@ fn main() {
         cy: [(u64, u64); m],
     };
 
-    // // 1-indexed
-    // x.insert(0, 0);
-
     let mut bonus = HashMap::new();
     for (c, y) in cy {
         bonus.insert(c, y);
@@ -30,7 +27,7 @@ fn main() {
                 continue;
             }
             // 裏の場合
-            dp[i + 1][0] = dp[i][j];
+            dp[i + 1][0] = dp[i + 1][0].max(dp[i][j]);
             // 表の場合
             // 通常報酬
             let mut next = dp[i][j] + x[i];
