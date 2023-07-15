@@ -1,5 +1,15 @@
 use proconio::input;
 
+// v 初めて訪問した頂点
+fn dfs(visited: &mut Vec<bool>, graph: &Vec<Vec<usize>>, v: usize) {
+    visited[v] = true;
+    for &u in &graph[v] {
+        if !visited[u] {
+            dfs(visited, graph, u);
+        }
+    }
+}
+
 fn main() {
     input! {
       n: usize,
@@ -13,28 +23,37 @@ fn main() {
         graph[b].push(a);
     }
 
-    let mut stack = vec![];
     let mut visited = vec![false; n + 1];
     visited[0] = true;
-    visited[1] = true;
-
-    stack.push(1);
-
-    while let Some(v) = stack.pop() {
-        for &u in &graph[v] {
-            if visited[u] {
-                continue;
-            }
-            visited[u] = true;
-            stack.push(u);
-        }
-    }
-
+    dfs(&mut visited, &graph, 1);
     if visited.iter().all(|&v| v) {
         println!("The graph is connected.");
     } else {
         println!("The graph is not connected.");
     }
+
+    // let mut stack = vec![];
+    // let mut visited = vec![false; n + 1];
+    // visited[0] = true;
+    // visited[1] = true;
+
+    // stack.push(1);
+
+    // while let Some(v) = stack.pop() {
+    //     for &u in &graph[v] {
+    //         if visited[u] {
+    //             continue;
+    //         }
+    //         visited[u] = true;
+    //         stack.push(u);
+    //     }
+    // }
+
+    // if visited.iter().all(|&v| v) {
+    //     println!("The graph is connected.");
+    // } else {
+    //     println!("The graph is not connected.");
+    // }
 
     // let mut uf = UnionFind::new(n);
     // for &(a, b) in &ab {
