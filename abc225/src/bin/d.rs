@@ -1,3 +1,5 @@
+use std::collections::VecDeque;
+
 use proconio::input;
 
 fn main() {
@@ -6,58 +8,65 @@ fn main() {
         q: usize,
     };
 
+    // 次・前の要素を保持する配列
     let mut next = vec![0; n + 1];
-    let mut back = vec![0; n + 1];
-
-    for i in 1..=n {
+    let mut prev = vec![0; n + 1];
+    for i in 0..=n {
         next[i] = i;
-        back[i] = i;
+        prev[i] = i;
     }
 
+    // クエリ処理
     for _ in 0..q {
         input! {
-            c: usize
-        };
-
-        match c {
+            t: usize
+        }
+        match t {
             1 => {
                 input! {
                     x: usize,
-                    y: usize,
+                    y: usize
                 };
+
                 next[x] = y;
-                back[y] = x;
+                prev[y] = x;
             }
             2 => {
                 input! {
                     x: usize,
-                    y: usize,
+                    y: usize
                 };
+
                 next[x] = x;
-                back[y] = y;
+                prev[y] = y;
             }
             3 => {
                 input! {
-                    mut x: usize,
+                    x: usize
                 };
-                // 先頭にたどる
-                while x != back[x] {
-                    x = back[x];
+                let mut deq = VecDeque::new();
+                deq.push_back(x);
+
+                // 前に辿る
+                let mut cur = x;
+                while cur != prev[cur] {
+                    cur = prev[cur];
+                    deq.push_front(cur);
                 }
-                // 後ろにたどる
-                let mut list = vec![];
-                list.push(x);
-                while x != next[x] {
-                    x = next[x];
-                    list.push(x);
+
+                // 後ろに辿る
+                cur = x;
+                while cur != next[cur] {
+                    cur = next[cur];
+                    deq.push_back(cur);
                 }
+
                 // 出力
-                let str = list
-                    .iter()
-                    .map(|x| x.to_string())
-                    .collect::<Vec<_>>()
-                    .join(" ");
-                println!("{} {}", list.len(), str);
+                print!("{} ", deq.len());
+                for i in deq {
+                    print!("{} ", i);
+                }
+                println!();
             }
             _ => unreachable!(),
         }
