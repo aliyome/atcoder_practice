@@ -23,7 +23,7 @@ fn main() {
             if s[ni][nj] == '#' {
                 continue;
             }
-            if dist[ni][nj] <= dist[i as usize][j as usize] {
+            if dist[ni][nj] <= dist[i as usize][j as usize] + 1 {
                 continue;
             }
             dist[ni][nj] = dist[i as usize][j as usize] + 1;
@@ -47,25 +47,4 @@ fn main() {
 
     let ans = h * w - dist[h - 1][w - 1] - block;
     println!("{}", ans);
-
-    // // 逆順に辿る
-    // let mut ans = vec![];
-    // let mut i = h - 1;
-    // let mut j = w - 1;
-    // ans.push((i, j));
-    // while !(i == 0 && j == 0) {
-    //     for (vi, vj) in [(1, 0), (-1, 0), (0, 1), (0, -1)] {
-    //         let (ni, nj) = (i as isize + vi, j as isize + vj);
-    //         if ni < 0 || ni >= h as isize || nj < 0 || nj >= w as isize {
-    //             continue;
-    //         }
-    //         let (ni, nj) = (ni as usize, nj as usize);
-    //         if dist[ni][nj] == dist[i][j] - 1 {
-    //             i = ni;
-    //             j = nj;
-    //             ans.push((i, j));
-    //             break;
-    //         }
-    //     }
-    // }
 }
