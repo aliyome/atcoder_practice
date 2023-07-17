@@ -287,6 +287,8 @@ impl UnionFind {
 BFS O(E)
 
 - コストが 1 の場合のみ使える
+- 実装
+  - [tessoku/tessoku-book/src/bin/b63.rs](https://github.com/aliyome/atcoder_practice/blob/main/tessoku/tessoku-book/src/bin/b63.rs)
 
 01-BFS O(E)
 
