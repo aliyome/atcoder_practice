@@ -2,8 +2,14 @@ use proconio::input;
 
 fn main() {
     input! {
-        n: usize,
+        a: usize,
+        b: usize,
+        c: usize,
     };
 
-    println!("{}", n);
+    if a == b + c || b == a + c || c == a + b {
+        println!("Yes");
+    } else {
+        println!("No");
+    }
 }
