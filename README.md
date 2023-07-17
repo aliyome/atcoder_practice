@@ -581,6 +581,13 @@ x を a, b いずれかで割り切れるものの個数
 
 ## Rust
 
+タプルは Ord を実装していて、各要素の Ord を前から順番に評価する。これで何が嬉しいかと言うと、BinaryHeap にタプルを入れると、最初の要素でソートされることになる。
+
+```rust
+let mut heap = BinaryHeap::new();
+heap.push((Reverse(1), 4));
+```
+
 ```rust
 // 配列の連続した重複要素の除去
 a.sort();

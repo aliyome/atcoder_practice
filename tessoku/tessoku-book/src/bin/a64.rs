@@ -1,4 +1,7 @@
-use std::collections::HashMap;
+use std::{
+    cmp::Reverse,
+    collections::{BinaryHeap, HashMap},
+};
 
 use proconio::input;
 
@@ -15,18 +18,23 @@ fn main() {
         graph[b].insert(a, c);
     }
 
+    // dist[i] := 頂点iの最短距離
     let mut dist = vec![std::usize::MAX; n + 1];
-    dist[1] = 0;
-    let mut q = std::collections::VecDeque::new();
-    q.push_back((1, 0));
+    // (dist, node)
+    let mut heap = BinaryHeap::new();
 
-    while let Some((v, d)) = q.pop_front() {
-        for (&u, &c) in graph[v].iter() {
-            if dist[u] <= d + c {
-                continue;
+    dist[1] = 0;
+    heap.push((Reverse(0usize), 1));
+
+    while let Some((Reverse(d), node)) = heap.pop() {
+        if dist[node] < d {
+            continue;
+        }
+        for (&next, &cost) in graph[node].iter() {
+            if d + cost < dist[next] {
+                dist[next] = d + cost;
+                heap.push((Reverse(d + cost), next));
             }
-            dist[u] = d + c;
-            q.push_back((u, d + c));
         }
     }
 
