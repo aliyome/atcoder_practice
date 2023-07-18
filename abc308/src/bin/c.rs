@@ -1,19 +1,16 @@
+use itertools::Itertools;
 use proconio::input;
 
 fn main() {
     input! {
         n: usize,
-        ab: [(usize, usize); n]
+        mut ab: [(usize, usize); n]
     };
 
-    let mut list = vec![];
-    for i in 0..n {
-        list.push((ab[i].0, ab[i].0 + ab[i].1, i + 1));
-    }
+    let mut list = ab.into_iter().enumerate().collect_vec();
+    list.sort_by(|(i, a), (j, b)| (b.0 * (a.0 + a.1)).cmp(&(a.0 * (b.0 + b.1))).then(i.cmp(j)));
 
-    list.sort_by(|a, b| (b.0 * a.1).cmp(&(a.0 * b.1)).then(a.2.cmp(&b.2)));
-
-    for (_, _, i) in list {
-        print!("{} ", i);
+    for (i, _) in list {
+        print!("{} ", i + 1);
     }
 }
