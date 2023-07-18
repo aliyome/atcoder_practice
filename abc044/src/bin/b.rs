@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use proconio::{input, marker::Chars};
 
 fn main() {
@@ -5,17 +7,16 @@ fn main() {
         w: Chars,
     };
 
-    let mut m = std::collections::HashMap::new();
-    for s in w {
-        *m.entry(s).or_insert(0) += 1;
+    let mut map = HashMap::new();
+    for &c in &w {
+        *map.entry(c).or_insert(0) += 1usize;
     }
 
-    for (_, v) in m {
+    for (_, &v) in map.iter() {
         if v % 2 != 0 {
             println!("No");
             return;
         }
     }
-
     println!("Yes");
 }
