@@ -582,6 +582,47 @@ x を a, b いずれかで割り切れるものの個数
 - 局所探索法
   - 2-opt: 2 つの辺を交換することでコストを減らす
 
+## ビット全探索と DFS
+
+````rust
+// ビット全探索
+let mut res = 0;
+for bit in 0..1 << n {
+    let mut a = vec![];
+    for i in 0..n {
+        if bit & 1 << i != 0 {
+            a.push(i);
+        }
+    }
+    if is_ok(a) {
+        res += 1;
+    }
+}
+// DFSで実装する
+fn dfs(n: usize, i: usize, a: &mut Vec<usize>) -> usize {
+    // 終端条件
+    if i == n {
+        if is_ok(a) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    // 答えとなる変数
+    let mut res = 0;
+    // a に i を追加しない場合
+    res += dfs(n, i + 1, a);
+    // a に i を追加する場合
+    a.push(i);
+    res += dfs(n, i + 1, a);
+    // もとに戻す（バックトラック）
+    a.pop();
+
+    res
+}
+```
+
 ## Rust
 
 タプルは Ord を実装していて、各要素の Ord を前から順番に評価する。これで何が嬉しいかと言うと、BinaryHeap にタプルを入れると、最初の要素でソートされることになる。
@@ -589,7 +630,7 @@ x を a, b いずれかで割り切れるものの個数
 ```rust
 let mut heap = BinaryHeap::new();
 heap.push((Reverse(1), 4));
-```
+````
 
 ```rust
 // 配列の連続した重複要素の除去

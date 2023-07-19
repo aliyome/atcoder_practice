@@ -1,3 +1,5 @@
+use std::{collections::HashSet, vec};
+
 use proconio::input;
 
 fn main() {
@@ -8,42 +10,59 @@ fn main() {
         ab: [(usize, usize); m],
     }
 
-    // 相性の悪い組み合わせをビットマスクで表す
-    let mut bad = vec![];
+    // 相性の悪いペアをSetで管理する
+    let mut bad_pairs = vec![];
     for &(a, b) in &ab {
-        let mut mask = 0;
-        mask |= 1 << (a - 1);
-        mask |= 1 << (b - 1);
-        bad.push(mask);
+        let mut set = HashSet::new();
+        set.insert(a);
+        set.insert(b);
+        bad_pairs.push(set);
     }
 
-    // 全組み合わせをビットマスクで表す
-    let mut team = vec![];
-    for i in 1..=1 << n {
-        let mut mask = 0;
-        for j in 0..n {
-            if (i >> j) & 1 == 1 {
-                mask |= 1 << j;
-            }
+    // 全チーム分けをDFSで列挙する
+    let ans = dfs(n, t, m, 1, &bad_pairs, &mut vec![]);
+    println!("{}", ans)
+}
+
+fn dfs(
+    n: usize,
+    t: usize,
+    m: usize,
+    member: usize,
+    bad_pairs: &Vec<HashSet<usize>>,
+    teams: &mut Vec<Vec<usize>>,
+) -> usize {
+    // 全チーム分けができたら終了
+    if member > n {
+        return if teams.len() == t { 1 } else { 0 };
+    }
+
+    let mut res = 0;
+
+    // 新しいチームを作る場合
+    teams.push(vec![member]);
+    res += dfs(n, t, m, member + 1, bad_pairs, teams);
+    teams.pop();
+
+    // 既存チームに参加する場合
+    for i in 0..teams.len() {
+        if can_add(member, &teams[i], bad_pairs) {
+            teams[i].push(member);
+            res += dfs(n, t, m, member + 1, bad_pairs, teams);
+            teams[i].pop();
         }
-        team.push(mask);
     }
 
-    for i in 0..t {
-        for j in 0..(1 << n) {
-            if dp[i][j] > 0 {
-                for k in 0..n {
-                    if (j >> k) & 1 == 0 && (j & bad[k]) == 0 {
-                        dp[i + 1][j | (1 << k)] += dp[i][j];
-                    }
-                }
-            }
+    res
+}
+
+fn can_add(new_member: usize, team: &Vec<usize>, bad_pairs: &Vec<HashSet<usize>>) -> bool {
+    let mut team_set = team.iter().map(|&x| x).collect::<HashSet<_>>();
+    team_set.insert(new_member);
+    for bad in bad_pairs {
+        if bad.intersection(&team_set).eq(bad) {
+            return false;
         }
     }
-
-    let mut ans = 0;
-    for &x in &dp[t] {
-        ans += x;
-    }
-    println!("{}", ans);
+    true
 }
