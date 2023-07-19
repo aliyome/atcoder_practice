@@ -20,8 +20,19 @@ fn main() {
     }
 
     // 全チーム分けをDFSで列挙する
-    let ans = dfs(n, t, m, 1, &bad_pairs, &mut vec![]);
-    println!("{}", ans)
+    println!("{}", dfs(n, t, m, 1, &bad_pairs, &mut vec![]));
+}
+
+// 既存のチームに新しいメンバーを加えても大丈夫かどうかを判定する
+fn can_add(new_member: usize, team: &Vec<usize>, bad_pairs: &Vec<HashSet<usize>>) -> bool {
+    let mut team = team.iter().copied().collect::<HashSet<_>>();
+    team.insert(new_member);
+    for bad in bad_pairs.iter() {
+        if bad.is_subset(&team) {
+            return false;
+        }
+    }
+    true
 }
 
 fn dfs(
@@ -32,19 +43,19 @@ fn dfs(
     bad_pairs: &Vec<HashSet<usize>>,
     teams: &mut Vec<Vec<usize>>,
 ) -> usize {
-    // 全チーム分けができたら終了
+    // 全メンバーがいずれかのチームに入ったら終了
     if member > n {
-        return if teams.len() == t { 1 } else { 0 };
+        // 規定のチーム数にならなかったら除外
+        if teams.len() == t {
+            return 1;
+        } else {
+            return 0;
+        }
     }
 
     let mut res = 0;
 
-    // 新しいチームを作る場合
-    teams.push(vec![member]);
-    res += dfs(n, t, m, member + 1, bad_pairs, teams);
-    teams.pop();
-
-    // 既存チームに参加する場合
+    // 既存のチームに加入する
     for i in 0..teams.len() {
         if can_add(member, &teams[i], bad_pairs) {
             teams[i].push(member);
@@ -53,16 +64,10 @@ fn dfs(
         }
     }
 
-    res
-}
+    // 新規チームに加入する
+    teams.push(vec![member]);
+    res += dfs(n, t, m, member + 1, bad_pairs, teams);
+    teams.pop();
 
-fn can_add(new_member: usize, team: &Vec<usize>, bad_pairs: &Vec<HashSet<usize>>) -> bool {
-    let mut team_set = team.iter().map(|&x| x).collect::<HashSet<_>>();
-    team_set.insert(new_member);
-    for bad in bad_pairs {
-        if bad.intersection(&team_set).eq(bad) {
-            return false;
-        }
-    }
-    true
+    res
 }
