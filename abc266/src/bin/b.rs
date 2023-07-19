@@ -1,9 +1,15 @@
 use proconio::input;
 
+const MOD: isize = 998244353;
+
 fn main() {
     input! {
-        n: usize,
+        n: isize,
     };
 
-    println!("{}", n);
+    if n % MOD < 0 {
+        println!("{}", (n % MOD) + MOD);
+    } else {
+        println!("{}", (n % MOD));
+    }
 }
