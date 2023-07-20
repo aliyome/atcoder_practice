@@ -8,13 +8,11 @@ fn main() {
     };
 
     for i in 0..h {
-        for j in 0..w {
-            print!("{}", c[i][j]);
+        for _ in 0..2 {
+            for j in 0..w {
+                print!("{}", c[i][j]);
+            }
+            println!();
         }
-        println!();
-        for j in 0..w {
-            print!("{}", c[i][j]);
-        }
-        println!();
     }
 }
