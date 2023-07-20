@@ -551,6 +551,27 @@ fn digit_sum(mut n: usize) -> usize {
 [2,N]を列挙し、[2,√N]の倍数を除外する
 計算量は O(NloglogN)
 
+### 素因数分解
+
+```rust
+fn prime_factors(mut n: usize) -> Vec<usize> {
+    let mut factors = Vec::new();
+    let mut div = 2;
+
+    while div * div <= n {
+        while (n % div) == 0 {
+            factors.push(div);
+            n /= div;
+        }
+        div += 1;
+    }
+    if n > 1 {
+        factors.push(n);
+    }
+    factors
+}
+```
+
 ### 最大公約数の求めから(ユークリッドの互助法)
 
 - 大きい方の数を「小さい方の数で割った余り」で置き換える
