@@ -659,6 +659,8 @@ Ford-Fulkerson 法
 - 残り容量が 0 の辺は残余グラフには含まない
 - 逆方向の辺を辿ると元のグラフの流量を減らす（戻す）ことに対応する
 
+**最小カット問題**は全く同じアルゴリズムで解けることが知られている。
+
 実装
 
 - [tessoku/tessoku-book/src/bin/a68.rs](https://github.com/aliyome/atcoder_practice/blob/main/tessoku/tessoku-book/src/bin/a68.rs)
