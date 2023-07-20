@@ -605,7 +605,7 @@ x を a, b いずれかで割り切れるものの個数
 
 ## ビット全探索と DFS
 
-````rust
+```rust
 // ビット全探索
 let mut res = 0;
 for bit in 0..1 << n {
@@ -644,6 +644,25 @@ fn dfs(n: usize, i: usize, a: &mut Vec<usize>) -> usize {
 }
 ```
 
+## 最大フロー問題
+
+Ford-Fulkerson 法
+
+1. 残余グラフを作る
+2. 残余グラフで容量が 0 のパスを通らないルートで 1->N のパスを見つける
+3. そのパスに流せるだけ流す
+4. 2.に戻る
+
+※残余グラフ
+
+- 残り容量を順方向の辺、使用済み容量を逆方向の辺として追加したグラフ
+- 残り容量が 0 の辺は残余グラフには含まない
+- 逆方向の辺を辿ると元のグラフの流量を減らす（戻す）ことに対応する
+
+実装
+
+- [tessoku/tessoku-book/src/bin/a68.rs](https://github.com/aliyome/atcoder_practice/blob/main/tessoku/tessoku-book/src/bin/a68.rs)
+
 ## Rust
 
 タプルは Ord を実装していて、各要素の Ord を前から順番に評価する。これで何が嬉しいかと言うと、BinaryHeap にタプルを入れると、最初の要素でソートされることになる。
@@ -651,7 +670,7 @@ fn dfs(n: usize, i: usize, a: &mut Vec<usize>) -> usize {
 ```rust
 let mut heap = BinaryHeap::new();
 heap.push((Reverse(1), 4));
-````
+```
 
 ```rust
 // 配列の連続した重複要素の除去
