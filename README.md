@@ -282,7 +282,7 @@ impl UnionFind {
 - 重み付き有向グラフの単一始点最短経路問題を解くアルゴリズム
 - 単純な DP を使うと O(V^2) で計算
 - ヒープを使うと O(ElogV) で計算
-- TODO: 負の重みを持つエッジがある場合は適用できない？？？
+- **負の重み**を持つエッジがある場合は適用できない -> ベルマンフォード法を使う
 - 実装
   - 最短距離のみ[typical90/src/bin/013.rs](https://github.com/aliyome/atcoder_practice/blob/main/typical90/src/bin/013.rs)
   - 最短距離と辿った頂点[atcoder_practice/abc252/src/bin/e.rs](https://github.com/aliyome/atcoder_practice/blob/main/abc252/src/bin/e.rs)
@@ -308,6 +308,21 @@ for k in 0..n {
         for j in 0..n {
             dis[i][j] = std::cmp::min(dis[i][j], dis[i][k] + dis[k][j]);
         }
+    }
+}
+```
+
+Bellman-Ford 法 O(VE)
+
+```rust
+let mut dist = vec![std::i64::MAX; n + 1];
+dist[1] = 0;
+// N-1 回行うと完全に伝搬し、結果が求まる
+// もし N 回目の伝搬でdist[i]の値が変わった場合は負の閉路が存在する
+for _ in 0..n - 1 {
+    for &(from, to, cost) in &edges {
+        let (from, to, cost) = edges[j];
+        dist[to] = dist[to].min(dist[from] + cost);
     }
 }
 ```
