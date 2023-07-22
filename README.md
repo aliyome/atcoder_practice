@@ -802,6 +802,10 @@ set.iter().next(); // 最小値
 set.iter().last(); // 最大値
 ```
 
+```rust
+7.count_ones(); // 3 (7 = 111)
+```
+
 デカい数の a^b % MOD を計算可能な ModInt
 仕組みは a^b は鉄則本 5.3 を参照
 
