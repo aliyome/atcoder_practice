@@ -1,9 +1,9 @@
-use proconio::input;
+use proconio::{input, marker::Chars};
 
 fn main() {
     input! {
-        n: usize,
+        n: Chars,
     };
 
-    println!("{}", n);
+    println!("{}", n[n.len() - 2..].into_iter().collect::<String>());
 }
