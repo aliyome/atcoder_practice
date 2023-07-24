@@ -24,7 +24,7 @@ fn main() {
         return;
     }
 
-    if s[s.len() - 1].is_uppercase() {
+    if s[1].is_uppercase() || s[s.len() - 1].is_uppercase() {
         println!("WA");
         return;
     }
