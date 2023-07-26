@@ -1,4 +1,4 @@
-use std::collections::{BTreeSet, HashSet};
+use std::collections::{HashMap, HashSet};
 
 use proconio::input;
 
@@ -8,33 +8,41 @@ fn main() {
         st: [(String, String); n],
     };
 
-    let mut names = HashSet::new();
-    let mut rest = BTreeSet::new();
-
-    // 最初はSが入っている
-    for (s, t) in st.iter() {
-        names.insert(s.clone());
-        rest.insert((t.clone(), s.clone()));
+    let mut map = HashMap::new();
+    for (s, t) in st {
+        map.insert(s, t);
     }
 
-    // Tを入れていく
-    while rest.len() > 0 {
-        let mut ok = false;
-        for ts in rest.iter() {
-            let (t, s) = ts;
-            if !names.contains(t) {
-                names.insert(t.clone());
-                names.remove(&s.clone());
-                rest.remove(&ts.clone());
-                ok = true;
-                break;
-            }
+    let mut visited = HashSet::new();
+    for (start, _) in map.iter() {
+        if visited.contains(start) {
+            continue;
         }
-        if !ok {
+        if !dfs(&map, start, &mut visited, &mut HashSet::new()) {
             println!("No");
             return;
         }
     }
 
     println!("Yes");
+}
+
+fn dfs(
+    map: &HashMap<String, String>,
+    start: &str,
+    visited: &mut HashSet<String>,
+    visited_in_this_loop: &mut HashSet<String>,
+) -> bool {
+    if visited_in_this_loop.contains(start) {
+        return false;
+    }
+
+    visited.insert(start.to_string());
+    visited_in_this_loop.insert(start.to_string());
+
+    if let Some(next) = map.get(start) {
+        dfs(map, next, visited, visited_in_this_loop)
+    } else {
+        true
+    }
 }
