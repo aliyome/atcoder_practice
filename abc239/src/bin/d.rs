@@ -7,36 +7,40 @@ fn main() {
         c: usize,
         d: usize,
     }
+    let is_prime = get_primes(200);
 
-    // 2-200までの素数を列挙
-    let mut primes = vec![true; 200 + 1];
-    primes[0] = false;
-    primes[1] = false;
-    for i in 2..=200 {
-        if primes[i] {
-            let mut j = 2 * i;
-            while j <= 200 {
-                primes[j] = false;
-                j += i;
-            }
-        }
-    }
-
-    for takahashi in a..=b {
-        let mut is_aoki_win = false;
-        for aoki in c..=d {
-            if primes[takahashi + aoki] {
-                is_aoki_win = true;
+    for x in a..=b {
+        let mut ok = true;
+        for y in c..=d {
+            if is_prime[x + y] {
+                ok = false;
                 break;
             }
         }
-        if is_aoki_win {
-            continue;
-        } else {
+        if ok {
             println!("Takahashi");
             return;
         }
     }
 
     println!("Aoki");
+}
+
+// エラトステネスの篩
+fn get_primes(n: usize) -> Vec<bool> {
+    let mut primes = vec![true; n + 1];
+    primes[0] = false;
+    primes[1] = false;
+    let mut i = 2;
+    while i * i <= n {
+        if primes[i] {
+            let mut j = 2;
+            while i * j <= n {
+                primes[i * j] = false;
+                j += 1;
+            }
+        }
+        i += 1;
+    }
+    primes
 }
