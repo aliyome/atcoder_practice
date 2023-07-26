@@ -1,4 +1,5 @@
 use proconio::input;
+use superslice::Ext;
 
 const MOD: usize = 1_000_000_007;
 
@@ -15,79 +16,30 @@ fn main() {
     x.insert(0, 0);
     x.push(w);
 
-    // // dp[i] := i番目の足場に来る方法の数
-    // let mut dp = vec![0usize; n + 2];
-    // dp[0] = 1;
-
-    // // 素朴にDPを実装した場合
-    // // O(N^2) -> TLE
-
-    // // O(NlogN)になるように、二分探索を使う
-    // // 配るDP
-    // for i in 0..=n {
-    //     let xl = x.lower_bound(x[i] + l);
-    //     let xr = x.upper_bound(x[i] + r);
-    //     // この部分のループは単純に足しているだけなので高速化できそう -> 累積和
-    //     for j in xl..xr {
-    //         dp[j] += dp[i];
-    //         dp[j] %= MOD;
-    //     }
-    // }
-
-    // 貰うDP (TLE)
-    let l = l as isize;
-    let r = r as isize;
+    // 配るDP
+    // dp[i] := i番目の足場に来る方法の数
     let mut dp = vec![0usize; n + 2];
+    let mut imos = vec![0usize; n + 2];
     dp[0] = 1;
-    for i in 1..=n + 1 {
-        let xi = x[i] as isize;
-        for j in 0..i {
-            let xj = x[j] as isize;
-            if xi - r <= xj && xj <= xi - l {
-                dp[i] += dp[j];
-                dp[i] %= MOD;
-            }
+    for i in 0..=n + 1 {
+        if i > 0 {
+            // 累積和
+            imos[i] = (imos[i] + imos[i - 1]) % MOD;
+            dp[i] = imos[i];
+        }
+
+        // O(NlogN)になるように、二分探索を使う
+        let il = x.lower_bound(&(x[i] + l));
+        let ir = x.upper_bound(&(x[i] + r));
+        println!("{} {} {}", i, il, ir);
+        // いもす法で累積和を求める
+        if il < n + 2 {
+            imos[il] = (imos[il] + dp[i]) % MOD;
+        }
+        if ir < n + 2 {
+            imos[ir] = (imos[ir] + MOD - dp[i]) % MOD;
         }
     }
+
     println!("{}", dp[n + 1]);
-}
-
-pub trait BinarySearch<T> {
-    fn lower_bound(&self, key: T) -> usize;
-    fn upper_bound(&self, key: T) -> usize;
-}
-
-impl<T> BinarySearch<T> for [T]
-where
-    T: Ord,
-{
-    // key以上の値が初めて現れる位置
-    fn lower_bound(&self, key: T) -> usize {
-        let mut ng = -1 as isize;
-        let mut ok = self.len() as isize;
-        while ok - ng > 1 {
-            let mid = (ok + ng) / 2;
-            if key <= self[mid as usize] {
-                ok = mid;
-            } else {
-                ng = mid;
-            }
-        }
-        ok as usize
-    }
-
-    // keyより大きい値が初めて現れる位置
-    fn upper_bound(&self, key: T) -> usize {
-        let mut ng = -1 as isize;
-        let mut ok = self.len() as isize;
-        while ok - ng > 1 {
-            let mid = (ok + ng) / 2;
-            if key < self[mid as usize] {
-                ok = mid;
-            } else {
-                ng = mid;
-            }
-        }
-        ok as usize
-    }
 }
