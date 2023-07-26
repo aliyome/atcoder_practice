@@ -34,31 +34,21 @@ fn main() {
     //     }
     // }
 
-    // 貰うDP, 累積和
+    // 貰うDP (TLE)
     let l = l as isize;
     let r = r as isize;
-    let x = x.into_iter().map(|x| x as isize).collect::<Vec<_>>();
-    let mut dp = vec![0isize; n + 2];
-    let mut sum = vec![0isize; n + 2];
+    let mut dp = vec![0usize; n + 2];
     dp[0] = 1;
-    sum[0] = 1;
-
     for i in 1..=n + 1 {
-        // 範囲外の足場がない場合はスキップ
-        let ir = x.lower_bound(x[i] - l) as isize;
-        let il = x.lower_bound(x[i] - r) as isize;
-
-        println!("{} {} {}", i, il, ir);
-
-        let sumxl = if x[i] <= r { 0 } else { sum[il - 1] };
-
-        dp[i] = (sum[ir] - sumxl) % MOD as isize;
-        sum[i] = (sum[i - 1] + dp[i]) % MOD as isize;
+        let xi = x[i] as isize;
+        for j in 0..i {
+            let xj = x[j] as isize;
+            if xi - r <= xj && xj <= xi - l {
+                dp[i] += dp[j];
+                dp[i] %= MOD;
+            }
+        }
     }
-
-    println!("{:?}", dp);
-    println!("{:?}", sum);
-
     println!("{}", dp[n + 1]);
 }
 
