@@ -31,7 +31,6 @@ fn main() {
         // O(NlogN)になるように、二分探索を使う
         let il = x.lower_bound(&(x[i] + l));
         let ir = x.upper_bound(&(x[i] + r));
-        println!("{} {} {}", i, il, ir);
         // いもす法で累積和を求める
         if il < n + 2 {
             imos[il] = (imos[il] + dp[i]) % MOD;
