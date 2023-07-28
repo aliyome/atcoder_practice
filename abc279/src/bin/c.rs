@@ -1,4 +1,4 @@
-use std::collections::HashSet;
+use std::collections::BTreeMap;
 
 use proconio::{input, marker::Chars};
 
@@ -10,8 +10,8 @@ fn main() {
         t: [Chars; h],
     };
 
-    let mut s_cols = HashSet::new();
-    let mut t_cols = HashSet::new();
+    let mut s_cols = BTreeMap::new();
+    let mut t_cols = BTreeMap::new();
     for j in 0..w {
         let mut s_col = vec![];
         let mut t_col = vec![];
@@ -19,13 +19,23 @@ fn main() {
             s_col.push(s[i][j]);
             t_col.push(t[i][j]);
         }
-        s_cols.insert(s_col);
-        t_cols.insert(t_col);
+        *s_cols.entry(s_col).or_insert(0) += 1;
+        *t_cols.entry(t_col).or_insert(0) += 1;
     }
 
-    if s_cols == t_cols {
-        println!("Yes");
-    } else {
-        println!("No");
+    for (k, s_v) in s_cols.iter() {
+        match t_cols.get(k) {
+            Some(&t_v) => {
+                if *s_v != t_v {
+                    println!("No");
+                    return;
+                }
+            }
+            None => {
+                println!("No");
+                return;
+            }
+        }
     }
+    println!("Yes");
 }
