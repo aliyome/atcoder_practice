@@ -6,4 +6,8 @@ fn main() {
     }
 
     println!("{}", n);
+    for i in 1..n {
+        println!("{} {}", i, i + 1);
+    }
+    println!("{} {}", 1, n);
 }
