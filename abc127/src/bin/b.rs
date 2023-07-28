@@ -2,8 +2,14 @@ use proconio::input;
 
 fn main() {
     input! {
-        n: usize,
+        r: usize,
+        d: usize,
+        mut x: usize
     };
 
-    println!("{}", n);
+    for _ in 1..=10 {
+        let ans = r * x - d;
+        println!("{}", ans);
+        x = ans;
+    }
 }
