@@ -1,4 +1,4 @@
-use std::collections::BTreeSet;
+use std::{cmp::Reverse, collections::BinaryHeap};
 
 use proconio::input;
 
@@ -10,27 +10,25 @@ fn main() {
         b: [usize; m]
     };
 
-    let mut sell = BTreeSet::new();
-    let mut buy = BTreeSet::new();
-    for i in 0..n {
-        sell.insert((a[i], i as isize));
+    let mut heap = BinaryHeap::new();
+    for &a in &a {
+        heap.push((Reverse(a), 'a'));
     }
-    for i in 0..m {
-        buy.insert((b[i], i as isize));
+    for &b in &b {
+        heap.push((Reverse(b + 1), 'b'));
     }
 
-    let mut ng = 0;
-    let mut ok = 1_000_000_000;
-    while ok - ng > 1 {
-        let mid = (ng + ok) / 2;
-        let sell_cnt = sell.range(..=(mid, 1_000_000_000)).count();
-        let buy_cnt = buy.range((mid, -1)..).count();
-        if buy_cnt <= sell_cnt {
-            ok = mid;
-        } else {
-            ng = mid;
+    let mut a = 0;
+    let mut b = b.len();
+    let mut ans = 0;
+    while a < b {
+        let (Reverse(price), ab) = heap.pop().unwrap();
+        match ab {
+            'a' => a += 1,
+            'b' => b -= 1,
+            _ => unreachable!(),
         }
+        ans = price;
     }
-
-    println!("{}", ok);
+    println!("{}", ans);
 }
