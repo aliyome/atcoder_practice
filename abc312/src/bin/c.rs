@@ -1,5 +1,3 @@
-use std::{cmp::Reverse, collections::BinaryHeap};
-
 use proconio::input;
 
 fn main() {
@@ -10,25 +8,27 @@ fn main() {
         b: [usize; m]
     };
 
-    let mut heap = BinaryHeap::new();
-    for &a in &a {
-        heap.push((Reverse(a), 'a'));
-    }
-    for &b in &b {
-        heap.push((Reverse(b + 1), 'b'));
-    }
-
-    let mut a = 0;
-    let mut b = b.len();
-    let mut ans = 0;
-    while a < b {
-        let (Reverse(price), ab) = heap.pop().unwrap();
-        match ab {
-            'a' => a += 1,
-            'b' => b -= 1,
-            _ => unreachable!(),
+    let mut ng = 0usize;
+    let mut ok = 1_000_000_005;
+    while ok - ng > 1 {
+        let mid = (ok + ng) / 2;
+        let mut a_cnt = 0usize;
+        let mut b_cnt = 0usize;
+        for &a in &a {
+            if a <= mid {
+                a_cnt += 1;
+            }
         }
-        ans = price;
+        for &b in &b {
+            if b >= mid {
+                b_cnt += 1;
+            }
+        }
+        if b_cnt <= a_cnt {
+            ok = mid;
+        } else {
+            ng = mid;
+        }
     }
-    println!("{}", ans);
+    println!("{}", ok);
 }
