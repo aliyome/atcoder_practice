@@ -9,7 +9,7 @@ fn main() {
 
     let mut map = BTreeMap::new();
 
-    for i in 1..=q {
+    for _ in 1..=q {
         input! {
             t: usize,
         }
@@ -26,7 +26,7 @@ fn main() {
             }
             if let Some(v) = map.get_mut(&x) {
                 let new_v = *v - (c as isize);
-                if new_v < 0 {
+                if new_v <= 0 {
                     map.remove(&x);
                 } else {
                     map.insert(x, new_v);
