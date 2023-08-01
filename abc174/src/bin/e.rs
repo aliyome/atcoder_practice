@@ -34,18 +34,14 @@ fn main() {
 
     // すべての丸太の長さが x 以内に収まるか
     let is_ok = |x: usize| {
-        let mut heap = heap.clone();
-        // TODO: K <= 10^9
-        for _ in 0..=k {
-            let MinNonNan(max) = heap.pop().unwrap();
-            if max <= x as f64 {
-                return true;
-            } else {
-                heap.push(MinNonNan(max - x as f64));
-                heap.push(MinNonNan(x as f64));
-            }
+        // K回分割を繰り返すのではなく
+        // x以下に分割するには何等分する必要があるかを考えて、それがK以下かどうかを判定する
+        let mut count = 0;
+        for &a in &a {
+            let y = (a as usize - 1) / x;
+            count += y;
         }
-        false
+        count <= k
     };
 
     let mut ng = 0;
