@@ -286,6 +286,9 @@ impl UnionFind {
 - 実装
   - 最短距離のみ[typical90/src/bin/013.rs](https://github.com/aliyome/atcoder_practice/blob/main/typical90/src/bin/013.rs)
   - 最短距離と辿った頂点[atcoder_practice/abc252/src/bin/e.rs](https://github.com/aliyome/atcoder_practice/blob/main/abc252/src/bin/e.rs)
+- Tips
+  - 複数の最短経路がある場合、ダイクストラ方を両端からやって、それらの各要素の和が始点と終点の距離になる場合、それは最短経路の一部になる
+    - dist_from_1[i] + dist_from_n[i] == dist_from_1[n] の時、頂点 i は最短経路の一部
 
 BFS O(E)
 

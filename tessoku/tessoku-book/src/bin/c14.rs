@@ -1,7 +1,4 @@
-use std::{
-    cmp::Reverse,
-    collections::{BinaryHeap, HashSet},
-};
+use std::{cmp::Reverse, collections::BinaryHeap};
 
 use proconio::input;
 
@@ -18,41 +15,44 @@ fn main() {
         edge[b].push((a, c));
     }
 
-    let mut dist = vec![1_000_000_000; n + 1];
+    let mut dist_from_1 = vec![1_000_000_000; n + 1];
     let mut heap = BinaryHeap::new();
     heap.push((Reverse(0), 1));
-    dist[1] = 0;
-
+    dist_from_1[1] = 0;
     while let Some((Reverse(d), v)) = heap.pop() {
-        if d > dist[v] {
+        if d > dist_from_1[v] {
             continue;
         }
         for &(u, c) in &edge[v] {
-            if dist[u] > dist[v] + c {
-                dist[u] = dist[v] + c;
-                heap.push((Reverse(dist[u]), u));
+            if dist_from_1[u] > dist_from_1[v] + c {
+                dist_from_1[u] = dist_from_1[v] + c;
+                heap.push((Reverse(dist_from_1[u]), u));
             }
         }
     }
 
-    // 逆側から辿る
-    let mut stack = vec![];
-    stack.push(n);
-
-    let mut set = HashSet::new();
-    set.insert(n);
-    set.insert(1);
-    while let Some(v) = stack.pop() {
-        if v == 1 {
-            break;
+    let mut dist_from_n = vec![1_000_000_000; n + 1];
+    let mut heap = BinaryHeap::new();
+    heap.push((Reverse(0), n));
+    dist_from_n[n] = 0;
+    while let Some((Reverse(d), v)) = heap.pop() {
+        if d > dist_from_n[v] {
+            continue;
         }
         for &(u, c) in &edge[v] {
-            if dist[u] + c == dist[v] {
-                stack.push(u);
-                set.insert(u);
+            if dist_from_n[u] > dist_from_n[v] + c {
+                dist_from_n[u] = dist_from_n[v] + c;
+                heap.push((Reverse(dist_from_n[u]), u));
             }
         }
     }
 
-    println!("{}", set.len());
+    let mut ans = 0usize;
+    for i in 1..=n {
+        if dist_from_1[i] + dist_from_n[i] == dist_from_1[n] {
+            ans += 1;
+        }
+    }
+
+    println!("{}", ans);
 }
