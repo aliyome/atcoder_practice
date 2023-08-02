@@ -9,21 +9,26 @@ fn main() {
       a: [usize; n] // a[i] <= 10^18
     }
 
-    let a = a.iter().map(|&x| ModInt::new(x)).collect::<Vec<_>>();
-    let mut count = HashMap::new();
+    let mut map = HashMap::new();
+    for &a in &a {
+        let x = ModInt::new(a);
+        *map.entry(x.value()).or_insert(0) += 1usize;
+    }
 
     let mut ans = 0usize;
-    for i in 0..n {
-        let a = a[i];
-        if a.value() == 0 {
-            if p == 0 {
-                ans += i;
-            }
+    for (&a, &a_count) in &map {
+        let b = if a == 0 {
+            ModInt::new(0)
         } else {
-            let b = ModInt::new(p) / a;
-            ans += *count.get(&b.value()).unwrap_or(&0);
+            ModInt::new(p) / ModInt::new(a)
+        };
+        if let Some(&b_count) = map.get(&b.value()) {
+            if a == b.value() {
+                ans += a_count * (a_count - 1) / 2;
+            } else if a > b.value() {
+                ans += a_count * b_count;
+            }
         }
-        *count.entry(a.value()).or_insert(0) += 1;
     }
 
     println!("{}", ans);
