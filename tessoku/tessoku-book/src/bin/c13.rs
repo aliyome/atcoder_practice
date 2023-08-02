@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 use proconio::input;
 
 const MOD: usize = 1000000007;
@@ -12,29 +10,26 @@ fn main() {
     }
 
     let a = a.iter().map(|&x| ModInt::new(x)).collect::<Vec<_>>();
-
-    let mut map = HashMap::new();
-    for &a in &a {
-        *map.entry(a.value()).or_insert(0) += 1;
-    }
+    let mut count = HashMap::new();
 
     let mut ans = 0usize;
-    for &a in &a {
+    for i in 0..n {
+        let a = a[i];
         if a.value() == 0 {
-            continue;
-        }
-        let b = ModInt::new(p) / a;
-        if let Some(&cnt) = map.get(&b.value()) {
-            if cnt > 1 {
-                ans += cnt - 1;
+            if p == 0 {
+                ans += i;
             }
+        } else {
+            let b = ModInt::new(p) / a;
+            ans += *count.get(&b.value()).unwrap_or(&0);
         }
+        *count.entry(a.value()).or_insert(0) += 1;
     }
 
     println!("{}", ans);
 }
 
-use std::ops;
+use std::{collections::HashMap, ops};
 
 #[derive(Copy, Clone)]
 pub struct ModInt {
