@@ -8,30 +8,37 @@ fn main() {
         px: [(usize, usize); q],
     };
 
-    let mut adds = vec![0; n + 1];
+    // sum[i] := 頂点 i の部分木に加算する値
+    let mut sum = vec![0; n + 1];
     for &(p, x) in &px {
-        adds[p] += x;
+        sum[p] += x;
     }
 
-    let mut parent = vec![0; n + 1];
+    // edge[i] := 頂点 i から伸びる辺の先
+    let mut edge = vec![vec![]; n + 1];
     for &(a, b) in &ab {
-        parent[b] = a;
+        edge[a].push(b);
+        edge[b].push(a);
     }
 
-    let mut ancestors = vec![vec![]; n + 1];
-    for i in 1..=n {
-        let mut p = i;
-        while p != 0 {
-            ancestors[i].push(p);
-            p = parent[p];
-        }
-    }
+    // 親から累積和をdfsで計算する
+    let mut visited = vec![false; n + 1];
+    visited[1] = true;
+    dfs(1, &edge, &mut sum, &mut visited);
 
+    // 出力
     for i in 1..=n {
-        let mut ans = 0;
-        for &a in &ancestors[i] {
-            ans += adds[a];
+        print!("{} ", sum[i]);
+    }
+}
+
+fn dfs(v: usize, edge: &Vec<Vec<usize>>, sum: &mut Vec<usize>, visited: &mut Vec<bool>) {
+    for &next in &edge[v] {
+        if visited[next] {
+            continue;
         }
-        print!("{} ", ans);
+        visited[next] = true;
+        sum[next] += sum[v];
+        dfs(next, edge, sum, visited);
     }
 }
