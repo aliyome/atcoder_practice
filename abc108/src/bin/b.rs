@@ -8,31 +8,19 @@ fn main() {
         y2: i64,
     };
 
-    // xy1 -> xy2 のベクトル
-    let vx = x2 - x1;
-    let vy = y2 - y1;
+    // 1->2のベクトル
+    let v = (x2 - x1, y2 - y1);
 
-    // 90度回転させる
-    // | X | = | cos(90) = 0, -sin(90) = -1 | | x |
-    // | Y |   | sin(90) = 1, cos(90) = 0   | | y |
-    // X = -y
-    // Y = x
-    let dx = -vy;
-    let dy = vx;
-    let vx = dx;
-    let vy = dy;
+    // 90度回転
+    let rotate = |(x, y)| (-1 * y, x);
 
-    let x3 = x2 + dx;
-    let y3 = y2 + dy;
+    // 2->3のベクトル
+    let v3 = rotate(v);
+    let xy3 = (x2 + v3.0, y2 + v3.1);
 
-    // 90度回転させる
-    let dx = -vy;
-    let dy = vx;
-    let vx = dx;
-    let vy = dy;
+    // 3->4のベクトル
+    let v4 = rotate(v3);
+    let xy4 = (xy3.0 + v4.0, xy3.1 + v4.1);
 
-    let x4 = x3 + dx;
-    let y4 = y3 + dy;
-
-    println!("{} {} {} {}", x3, y3, x4, y4);
+    println!("{} {} {} {}", xy3.0, xy3.1, xy4.0, xy4.1);
 }
