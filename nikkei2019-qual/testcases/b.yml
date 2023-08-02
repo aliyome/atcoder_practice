@@ -1,0 +1,36 @@
+---
+type: Batch
+timelimit: 2s
+match: Lines
+
+cases:
+  - name: sample1
+    in: |
+      4
+      west
+      east
+      wait
+    out: |
+      3
+  - name: sample2
+    in: |
+      9
+      different
+      different
+      different
+    out: |
+      0
+  - name: sample3
+    in: |
+      7
+      zenkoku
+      touitsu
+      program
+    out: |
+      13
+
+extend:
+  - type: Text
+    path: "./b"
+    in: /in/*.txt
+    out: /out/*.txt
