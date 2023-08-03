@@ -649,6 +649,43 @@ x を a, b いずれかで割り切れるものの個数
 
 => x/a + x/b - x/ab
 
+### 基数変換
+
+X 進数->10 進数
+
+- X 進数 S[0..=4]を 10 進数に直した値は `ans = Σ(S[i] * X^i)`
+
+10 進数->X 進数
+
+- 10 進数 N を X 進数に直した値は `S[i] = N % X; N /= X` を繰り返し、最後に S を逆順にする
+
+実装
+
+[atcoder_practice/typical90/src/bin/067.rs at main · aliyome/atcoder_practice](https://github.com/aliyome/atcoder_practice/blob/main/typical90/src/bin/067.rs)
+
+```rust
+fn base_x_to_base10(mut s: Vec<usize>, base: usize) -> Vec<usize> {
+    let mut x = 1;
+    let mut ans = 0;
+    for i in 0..n.len() {
+        ans += s[i] * x;
+        x *= base;
+    }
+    ans
+}
+
+fn base10_to_base_x(n: usize, base: usize) -> usize {
+    let mut s = vec![];
+    let mut n = n;
+    while n > 0 {
+        s.push(n % base);
+        n /= base;
+    }
+    s.reverse();
+    s
+}
+```
+
 ## 巡回セールスマン問題
 
 - すべての頂点を通る閉路のうち、最短のものを求める問題
