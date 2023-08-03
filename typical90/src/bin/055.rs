@@ -2,7 +2,7 @@ use proconio::input;
 
 fn main() {
     input! {
-        n: usize,
+        n: usize, // <= 100
         p: usize,
         q: usize,
         a: [usize; n]
@@ -16,6 +16,12 @@ fn main() {
     };
 
     let mut ans = 0usize;
+
+    // O(N^5) で全探索
+    // (100^5) = 10^10 なので間に合わない、は間違い
+    // nC5 通りの組み合わせを全探索する
+    // = n(n-1)(n-2)(n-3)(n-4)/5! ≒ 1/120 * N^5 通り
+    // → 10^10 / 120 = 10^8 なので間に合う
     for i in 0..n {
         for j in i + 1..n {
             for k in j + 1..n {
