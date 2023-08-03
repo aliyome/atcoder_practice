@@ -6,6 +6,11 @@ fn main() {
         k: usize
     }
 
+    if n == "0" {
+        println!("0");
+        return;
+    }
+
     let mut d8 = n;
     for _ in 0..k {
         // 8 -> 10
