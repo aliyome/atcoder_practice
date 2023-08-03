@@ -31,9 +31,9 @@ fn main() {
     // 木DP(葉から枝へ配る)
     let mut dp = vec![0usize; n + 1];
     while let Some(i) = queue.pop_front() {
-        if dp[i] != 0 {
-            continue;
-        }
+        // if dp[i] != 0 {
+        //     continue;
+        // }
         // 部下の最大値と最小値を求める
         let mut max = 0;
         let mut min = if edge_to_child[i].len() == 0 {
