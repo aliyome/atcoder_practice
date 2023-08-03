@@ -7,9 +7,8 @@ fn main() {
         c: usize
     }
 
-    let x = gcd(gcd(a, b), c);
-    let ans = a / x + b / x + c / x - 3;
-    println!("{}", ans);
+    let g = gcd(gcd(a, b), c);
+    println!("{}", a / g + b / g + c / g - 3);
 }
 
 fn gcd(a: usize, b: usize) -> usize {
