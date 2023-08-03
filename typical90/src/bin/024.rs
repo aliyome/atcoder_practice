@@ -2,20 +2,22 @@ use proconio::input;
 
 fn main() {
     input! {
-        (n, k): (usize, usize),
-        a: [usize; n],
-        b: [usize; n],
+        (n, k): (usize, isize),
+        a: [isize; n],
+        b: [isize; n],
     }
 
-    let mut diff = 0;
+    let mut count = 0;
     for i in 0..n {
-        diff += (a[i] as isize - b[i] as isize).abs();
+        count += (a[i] - b[i]).abs();
     }
-    if k < diff as usize {
+
+    if k < count {
         println!("No");
         return;
     }
-    if (diff - k as isize) % 2 == 0 {
+
+    if (k - count) % 2 == 0 {
         println!("Yes");
     } else {
         println!("No");
