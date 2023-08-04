@@ -1,24 +1,26 @@
-use proconio::input;
+use proconio::{input, marker::Chars};
 
 fn main() {
     input! {
         n: usize,
         q: usize,
-        s: String,
+        s: Chars,
         lr: [(usize, usize); q]
     };
 
-    let mut ac_counts: Vec<usize> = vec![0; s.len() + 1];
-    for i in 0..(s.len() - 1) {
-        ac_counts[i + 1] = ac_counts[i];
-        if &s[i..=i + 1] == "AC" {
-            ac_counts[i + 1] += 1;
+    // 累積和
+    let mut sum = vec![0; n];
+    for i in 0..n - 1 {
+        sum[i + 1] = sum[i];
+        if s[i] == 'A' && s[i + 1] == 'C' {
+            sum[i + 1] += 1;
         }
     }
+    // println!("{:?}", sum);
 
-    for i in 0..q {
-        let l = lr[i].0 - 1;
-        let r = lr[i].1 - 1;
-        println!("{}", ac_counts[r] - ac_counts[l]);
+    for &(l, r) in &lr {
+        let l = l - 1;
+        let r = r - 1;
+        println!("{}", sum[r] - sum[l]);
     }
 }
