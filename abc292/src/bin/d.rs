@@ -1,4 +1,4 @@
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 
 use proconio::input;
 
@@ -9,27 +9,26 @@ fn main() {
         uv: [(usize, usize); m],
     }
 
-    // 連結成分の統合
+    let mut edges = vec![vec![]; n + 1];
+    for &(u, v) in &uv {
+        edges[u].push(v);
+    }
+
     let mut uf = UnionFind::new(n + 1);
-    for (u, v) in &uv {
-        uf.unite(*u, *v);
+    for &(u, v) in &uv {
+        uf.unite(u, v);
     }
-    // 連結成分の数を数える
-    let mut roots = HashSet::new();
+
+    // root_v -> count
+    let mut map = HashMap::new();
+    let mut map_edge = HashMap::new();
     for i in 1..=n {
-        let root = uf.find(i);
-        roots.insert(root);
+        *map.entry(uf.find(i)).or_insert(0) += 1;
+        *map_edge.entry(uf.find(i)).or_insert(0) += edges[i].len();
     }
-    // 連結成分ごとの辺数を数える
-    for root_v in roots {
-        let vert_count = uf.size[root_v];
-        let mut edge_count = 0;
-        for (u, v) in &uv {
-            if uf.same(root_v, *u) {
-                edge_count += 1;
-            }
-        }
-        if edge_count != vert_count {
+
+    for (root_v, v_count) in map.into_iter() {
+        if v_count != *map_edge.get(&root_v).unwrap() {
             println!("No");
             return;
         }
