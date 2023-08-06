@@ -3,69 +3,34 @@ use proconio::input;
 fn main() {
     input! {
         n: usize,
-        c: [[usize; n]; n],
+        c: [[isize; n]; n],
     };
 
-    if n == 1 {
-        println!("Yes");
-        println!("0");
-        println!("{}", c[0][0]);
-        return;
-    }
+    let mut a = vec![0; n];
+    let mut b = vec![0; n];
 
-    // 行ごとの列の差分を求める
-    let mut diff_row = vec![vec![0; n]; n];
+    // a を決める
+    let mut min = std::isize::MAX;
     for i in 0..n {
-        let mut min = std::usize::MAX;
-        for j in 0..n {
-            min = min.min(c[i][j]);
-        }
-        for j in 0..n {
-            diff_row[i][j] = c[i][j] - min;
-        }
+        a[i] = c[i][0];
+        min = min.min(c[i][0]);
+    }
+    for i in 0..n {
+        a[i] -= min;
     }
 
-    // 列ごとの行の差分を求める
-    let mut diff_col = vec![vec![0; n]; n];
+    // b を決める
     for j in 0..n {
-        let mut min = std::usize::MAX;
-        for i in 0..n {
-            min = min.min(c[i][j]);
-        }
-        for i in 0..n {
-            diff_col[j][i] = c[i][j] - min;
-        }
+        b[j] = c[0][j] - a[0];
     }
 
-    // 判定
-    let mut ok = true;
-    for i in 1..n {
-        if diff_col[i] != diff_col[0] {
-            ok = false;
-            break;
-        }
-        if diff_row[i] != diff_row[0] {
-            ok = false;
-            break;
-        }
-    }
-
-    if !ok {
-        println!("No");
-        return;
-    }
-
-    let mut a = diff_col[0].clone();
-    let mut b = diff_row[0].clone();
-
-    let c = a[0] as isize - b[0] as isize;
-    if c < 0 {
-        for i in 0..n {
-            a[i] += c.abs() as usize;
-        }
-    } else {
-        for i in 0..n {
-            b[i] += c.abs() as usize;
+    // a と b が条件を満たすかチェック
+    for i in 0..n {
+        for j in 0..n {
+            if a[i] + b[j] != c[i][j] {
+                println!("No");
+                return;
+            }
         }
     }
 
