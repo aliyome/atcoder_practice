@@ -1,3 +1,5 @@
+use std::collections::HashSet;
+
 use proconio::input;
 
 fn main() {
@@ -6,30 +8,34 @@ fn main() {
         m: usize,
         ab: [(usize, usize); m],
     }
-    let mut dp = vec![vec![false; n]; n];
-    for (a, b) in ab {
-        dp[a - 1][b - 1] = true;
+
+    let mut edges = vec![vec![]; n + 1];
+    for &(a, b) in &ab {
+        edges[b].push(a);
     }
-    for k in 0..n {
-        for i in 0..n {
-            for j in 0..n {
-                if dp[i][k] && dp[k][j] {
-                    dp[i][j] = true;
+
+    let mut strongest = HashSet::new();
+    for i in 1..=n {
+        let mut stack = vec![];
+        let mut visited = vec![false; n + 1];
+        stack.push(i);
+        visited[i] = true;
+        while let Some(v) = stack.pop() {
+            if edges[v].is_empty() {
+                strongest.insert(v);
+            } else {
+                for &u in &edges[v] {
+                    if !visited[u] {
+                        visited[u] = true;
+                        stack.push(u);
+                    }
                 }
             }
         }
     }
-    let mut strongest = None;
-    for i in 0..n {
-        if (0..n).all(|j| i == j || dp[i][j]) {
-            if strongest.replace(i).is_some() {
-                println!("-1");
-                return;
-            }
-        }
-    }
-    if let Some(i) = strongest {
-        println!("{}", i + 1);
+
+    if strongest.len() == 1 {
+        println!("{}", strongest.iter().next().unwrap());
     } else {
         println!("-1");
     }
