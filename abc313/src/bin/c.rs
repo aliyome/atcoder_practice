@@ -3,21 +3,25 @@ use proconio::input;
 fn main() {
     input! {
         n: usize,
-        a: [i64; n],
+        mut a: [isize; n],
     }
 
-    // 合計値を計算
-    let sum: i64 = a.iter().sum();
-
-    // 平均値（整数部分）を計算
-    let avg = sum / n as i64;
-
-    // 操作回数を初期化
-    let mut ops = 0;
-
-    // 各要素に対して、平均値との差の絶対値を計算し、操作回数に追加
-    for &x in &a {
-        ops += (x - avg).abs();
+    let sum = a.iter().sum::<isize>();
+    let avg = sum / n as isize;
+    let rest = sum - avg * n as isize;
+    let mut b = vec![avg; n];
+    for i in 0..rest {
+        b[i as usize] += 1;
     }
-    println!("{}", ops / 2);
+    a.sort();
+    a.reverse();
+
+    let mut diffs = vec![0; n];
+    let mut diff = 0;
+    for i in 0..n {
+        diffs[i] = (a[i] - b[i]).abs();
+        diff += diffs[i];
+    }
+
+    println!("{}", diff / 2);
 }
