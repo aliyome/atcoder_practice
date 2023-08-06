@@ -3,10 +3,9 @@ use proconio::input;
 fn main() {
     input! {
         n: usize,
-        mut a: [i64; n],
-        mut b: [i64; n],
+        mut a: [isize; n],
+        mut b: [isize; n],
     }
-
     a.sort();
     b.sort();
 
