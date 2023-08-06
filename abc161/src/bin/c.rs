@@ -6,17 +6,8 @@ fn main() {
         k: isize
     };
 
-    // 全探索 O(10^18)
-    // let mut ans = n;
-    // while (ans - k).abs() < ans {
-    //     ans = (ans - k).abs();
-    // }
-
-    let mut ans = n;
-    ans %= k;
-    while (ans - k).abs() < ans {
-        ans = (ans - k).abs();
-    }
-
-    println!("{}", ans);
+    let d = n / k;
+    let a = (n - k * d).abs();
+    let b = (n - k * (d + 1)).abs();
+    println!("{}", a.min(b));
 }
