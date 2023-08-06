@@ -6,16 +6,16 @@ fn main() {
         lr: [(usize, usize); m]
     };
 
-    let mut min = 1;
-    let mut max = 10usize.pow(5);
+    let mut acc = vec![0isize; n + 2];
     for &(l, r) in &lr {
-        min = min.max(l);
-        max = max.min(r);
+        acc[l] += 1;
+        acc[r + 1] -= 1;
     }
 
-    if min > max {
-        println!("0");
-    } else {
-        println!("{}", max as i64 - min as i64 + 1);
+    for i in 1..=n {
+        acc[i] += acc[i - 1];
     }
+
+    let ans = acc.iter().filter(|&&x| x == m as isize).count();
+    println!("{}", ans);
 }
