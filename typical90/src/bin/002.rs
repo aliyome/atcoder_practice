@@ -5,33 +5,34 @@ fn main() {
         n: usize
     };
 
-    // 初期値は空文字列と文字列長
-    solve("", n);
+    // DFS で全探索
+    let mut ans = vec![];
+    dfs(n, 1, &mut vec!['('], &mut ans);
+
+    ans.sort();
+    for s in ans.iter() {
+        println!("{}", s);
+    }
 }
 
-fn solve(s: &str, left: usize) {
-    if left == 0 {
-        if is_ok(s) {
-            println!("{}", s);
+fn dfs(n: usize, open: usize, s: &mut Vec<char>, ans: &mut Vec<String>) {
+    // 終端条件
+    if s.len() == n {
+        if open == 0 {
+            ans.push(s.iter().collect());
         }
         return;
     }
-    // 全探索
-    solve(&format!("{}(", s), left - 1);
-    solve(&format!("{})", s), left - 1);
-}
 
-fn is_ok(s: &str) -> bool {
-    let mut cnt = 0;
-    for c in s.chars() {
-        if c == '(' {
-            cnt += 1;
-        } else {
-            cnt -= 1;
-        }
-        if cnt < 0 {
-            return false;
-        }
+    // ( を追加
+    s.push('(');
+    dfs(n, open + 1, s, ans);
+    s.pop();
+
+    // ) を追加
+    if open > 0 {
+        s.push(')');
+        dfs(n, open - 1, s, ans);
+        s.pop();
     }
-    cnt == 0
 }
