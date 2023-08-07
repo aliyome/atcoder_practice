@@ -10,25 +10,12 @@ fn main() {
         e: [usize; q], // e < t
     }
 
-    for e in e {
-        // 角度を求める
-        let rad = 2.0 * std::f64::consts::PI * e as f64 / t as f64;
-        // let deg = rad * 180.0 / std::f64::consts::PI;
-        // y座標を求める
-        let ey = -(l as f64 / 2.0) * rad.sin();
-        // z座標を求める
-        let ez = -(l as f64 / 2.0) * rad.cos() + (l as f64 / 2.0);
-        // (0, ey, 0) から (x, y, 0) までの距離を求める
-        let a = ((x as f64).powi(2) + (y as f64 - ey).powi(2)).sqrt();
-        // 俯角を求める
-        let rad = ez.atan2(a as f64);
-        // 弧度法に変換
-        let ans = rad * 180.0 / std::f64::consts::PI;
-
-        println!("{}", ans);
-        // println!(
-        //     "rad: {}, deg: {}, ey: {}, ez: {}, a: {}",
-        //     rad, deg, ey, ez, a
-        // );
+    for &e in &e {
+        let rad = 2.0 * std::f64::consts::PI * (e as f64 / t as f64);
+        let yy = -(l as f64 / 2.0) * rad.sin();
+        let zz = (l as f64 / 2.0) - (l as f64 / 2.0) * rad.cos();
+        let u = ((x as f64).powf(2.0) + (y as f64 - yy).powf(2.0)).sqrt();
+        let theta = zz.atan2(u).to_degrees();
+        println!("{}", theta);
     }
 }
