@@ -9,53 +9,37 @@ fn main() {
         mut h: isize,
         k: isize,
         s: Chars,
-        items: [(isize, isize); m],
+        xy: [(isize, isize); m],
     }
 
-    let mut item_set = HashSet::new();
-    for (x, y) in items {
-        item_set.insert((x, y));
+    let mut items = HashSet::new();
+    for &(x, y) in &xy {
+        items.insert((x, y));
     }
 
-    let mut pos = (0isize, 0isize);
-    let mut count = 0usize;
-    for c in s {
-        let mut v = (0, 0);
-        match c {
-            'U' => {
-                v = (0, 1);
-            }
-            'D' => {
-                v = (0, -1);
-            }
-            'L' => {
-                v = (-1, 0);
-            }
-            'R' => {
-                v = (1, 0);
-            }
-            _ => unreachable!(),
-        }
-
-        pos.0 += v.0;
-        pos.1 += v.1;
+    let mut pos = (0, 0);
+    for &c in &s {
         h -= 1;
+        if c == 'R' {
+            pos.0 += 1;
+        } else if c == 'L' {
+            pos.0 -= 1;
+        } else if c == 'U' {
+            pos.1 += 1;
+        } else if c == 'D' {
+            pos.1 -= 1;
+        }
 
         if h < 0 {
             println!("No");
             return;
         }
 
-        if h < k && item_set.contains(&pos) {
+        if items.contains(&pos) && h < k {
             h = k;
-            item_set.remove(&pos);
-        }
-        count += 1;
-
-        if count == n {
-            println!("Yes");
-            return;
+            items.remove(&pos);
         }
     }
-    println!("No");
+
+    println!("Yes");
 }
