@@ -2,8 +2,14 @@ use proconio::input;
 
 fn main() {
     input! {
-        n: usize,
+        x: char,
+        y: char,
     };
-
-    println!("{}", n);
+    if x < y {
+        println!("<");
+    } else if x > y {
+        println!(">");
+    } else {
+        println!("=");
+    }
 }
