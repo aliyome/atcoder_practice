@@ -1,36 +1,32 @@
 use proconio::input;
 use std::collections::HashSet;
 
-// 最大公約数を求める
-fn gcd(a: i64, b: i64) -> i64 {
-    if b == 0 {
-        return a;
-    }
-    gcd(b, a % b)
-}
-
 fn main() {
     input! {
-        n: i64,
-        xy: [(i64, i64); n],
+        n: usize,
+        xy: [(isize, isize); n],
     }
 
-    let mut magic = HashSet::new();
-    for i in 0..n as usize {
-        for j in 0..n as usize {
+    let mut set = HashSet::new();
+
+    for i in 0..n {
+        for j in 0..n {
             if i == j {
                 continue;
             }
-            // 傾きを求める
-            let dx = xy[j].0 - xy[i].0;
-            let dy = xy[j].1 - xy[i].1;
-            // 約分する
-            let gcd = gcd(dx, dy).abs();
-            let dx = dx / gcd;
-            let dy = dy / gcd;
-            magic.insert(format!("{}.{}", dx, dy));
+            let v = (xy[i].0 - xy[j].0, xy[i].1 - xy[j].1);
+            let nv = gcd(v.0, v.1);
+            let v = (v.0 / nv, v.1 / nv);
+            set.insert(v);
         }
     }
+    println!("{}", set.len() * 2);
+}
 
-    println!("{}", magic.len());
+fn gcd(a: isize, b: isize) -> isize {
+    if b == 0 {
+        a
+    } else {
+        gcd(b, a % b)
+    }
 }
