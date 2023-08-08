@@ -6,12 +6,10 @@ fn main() {
         b: usize
     }
 
-    let r = b / gcd(a, b);
-
-    if r > 10usize.pow(18) / a {
+    if b / gcd(a, b) > 10usize.pow(18) / a {
         println!("Large");
     } else {
-        println!("{}", r * a);
+        println!("{}", lcm(a, b));
     }
 }
 
@@ -21,4 +19,8 @@ fn gcd(a: usize, b: usize) -> usize {
     } else {
         gcd(b, a % b)
     }
+}
+
+fn lcm(a: usize, b: usize) -> usize {
+    b / gcd(a, b) * a
 }
