@@ -734,6 +734,89 @@ fn dfs(n: usize, i: usize, a: &mut Vec<usize>) -> usize {
 }
 ```
 
+## DFS による全探索
+
+[DFS（深さ優先探索）の全列挙いろいろ | blog](https://franknyro.github.io/blog/archives/202005031749/)
+
+```rust
+// 重複順列 O(NM^N)
+// 同じ数を何度使っても良い
+// dfs(0, 3, 1, 3, &mut vec![0; 3])
+// [1,1,1] [1,1,2] [1,1,3] [1,2,1] ...
+// [2,1,1] [2,1,2] [2,1,3] [2,2,1] ...
+fn dfs(depth: usize, size: usize, min: usize, max: usize, permutation: &mut Vec<usize>) {
+    if depth == size {
+        println!("{:?}", permutation);
+        return;
+    }
+
+    for i in min..=max {
+        permutation[depth] = i;
+        dfs(depth + 1, size, min, max, permutation);
+    }
+}
+
+// 重複組み合わせ O(N*(M+N-1)C(N))
+// 同じ数を何度使っても良いが、単調増加になるようにする
+// dfs(0, 3, 1, 3, &mut vec![0; 3])
+// [1,1,1] [1,1,2] [1,1,3] [1,2,1] [1,2,2] [1,2,3] [1,3,3] [2,2,2] [2,2,3] [2,3,3] [3,3,3]
+fn dfs(depth: usize, size: usize, min: usize, max: usize, combination: &mut Vec<usize>) {
+    if depth == size {
+        println!("{:?}", combination);
+        return;
+    }
+
+    for i in min..=max {
+        combination[depth] = i;
+        dfs(depth + 1, size, i, max, combination);
+    }
+}
+
+// 組み合わせ O(N*(M)C(N))
+// 同じ数を使ってはいけない。単調増加になるようにする。
+// dfs(0, 3, 1, 4, &mut vec![0; 3])
+// [1,2,3] [1,2,4] [1,3,4] [2,3,4]
+fn dfs(depth: usize, size: usize, min: usize, max: usize, combination: &mut Vec<usize>) {
+    if depth == size {
+        println!("{:?}", combination);
+        return;
+    }
+
+    for i in min..=max {
+        combination[depth] = i;
+        dfs(depth + 1, size, i + 1, max, combination);
+    }
+}
+
+// 順列 O(N*(M)P(N))
+// 同じ数を使ってはいけない。単調増加になるようにする。
+// dfs(0, 3, 1, 3, &mut vec![0; 3], &mut vec![false; 4])
+// [1,2,3] [1,3,2] [2,1,3] [2,3,1] [3,1,2] [3,2,1]
+fn dfs(
+    depth: usize,
+    size: usize,
+    min: usize,
+    max: usize,
+    permutation: &mut Vec<usize>,
+    used: &mut Vec<bool>,
+) {
+    if depth == size {
+        println!("{:?}", permutation);
+        return;
+    }
+
+    for i in min..=max {
+        if !used[i] {
+            permutation[depth] = i;
+            used[i] = true;
+            dfs(depth + 1, size, min, max, permutation, used);
+            used[i] = false;
+        }
+    }
+}
+
+```
+
 ## 最大フロー問題
 
 重み付き有向グラフの 1 つの頂点から別の頂点への最大の流量を求める問題
