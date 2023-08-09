@@ -2,19 +2,16 @@ use proconio::input;
 
 fn main() {
     input! {
-        x: u32,
+        x: usize,
     };
 
-    let mut ans = 0;
-    for i in 1..1000u32 {
-        for j in 2..1000u32 {
-            let a = i.pow(j) as u32;
-            if a > x {
+    let mut ans = 1;
+    for i in 2..=x {
+        for j in 2u32.. {
+            if i.pow(j) > x {
                 break;
             }
-            if a <= x {
-                ans = ans.max(a);
-            }
+            ans = ans.max(i.pow(j));
         }
     }
 
