@@ -5,5 +5,12 @@ fn main() {
         n: usize,
     };
 
-    println!("{}", n);
+    let mut ans = 0;
+    for i in 1usize.. {
+        ans += i;
+        if ans >= n {
+            println!("{}", i);
+            return;
+        }
+    }
 }
