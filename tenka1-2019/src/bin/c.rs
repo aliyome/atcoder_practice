@@ -25,11 +25,6 @@ fn main() {
         }
     }
 
-    if lefts.len() == 0 {
-        println!("0");
-        return;
-    }
-
     let mut ans = std::usize::MAX;
     for black_start in lefts {
         // black_start より左側の黒は白に塗り替える必要がある
@@ -40,6 +35,9 @@ fn main() {
 
         ans = ans.min(black_num + white_num);
     }
+
+    // 全部黒、全部白にする場合を考慮
+    ans = ans.min(white[n]).min(black[n]);
 
     println!("{}", ans);
 }
