@@ -19,7 +19,7 @@ fn main() {
 
     // 黒の始まりの位置
     let mut lefts = vec![];
-    for i in 1..n {
+    for i in 1..=n {
         if s[i] == '#' && s[i - 1] != '#' {
             lefts.push(i);
         }
@@ -33,11 +33,7 @@ fn main() {
     let mut ans = std::usize::MAX;
     for black_start in lefts {
         // black_start より左側の黒は白に塗り替える必要がある
-        let black_num = if black_start == 0 {
-            0
-        } else {
-            black[black_start - 1]
-        };
+        let black_num = black[black_start - 1];
 
         // black_start より右側の白は黒に塗り替える必要がある
         let white_num = white[n] - white[black_start];
