@@ -1109,3 +1109,8 @@ pub fn homogeneous(n: usize, r: usize) -> ModInt {
     combination(n + r - 1, r)
 }
 ```
+
+```rust
+// 数値をアルファベットに変換
+print!("{}", (b'a' + p as u8 - 1) as char);
+```
