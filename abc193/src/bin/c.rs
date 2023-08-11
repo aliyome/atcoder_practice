@@ -4,20 +4,16 @@ use proconio::input;
 
 fn main() {
     input! {
-        n: u64,
+        n: usize,
     };
 
     let mut set = HashSet::new();
-    for i in 2..=10u64.pow(9) {
-        if i > n {
-            break;
-        }
-        let mut x = i * i;
+    for a in 2..=(n as f64).sqrt() as usize {
+        let mut x = a * a;
         while x <= n {
             set.insert(x);
-            x *= i;
+            x *= a;
         }
     }
-
-    println!("{}", n - set.len() as u64);
+    println!("{}", n - set.len());
 }
