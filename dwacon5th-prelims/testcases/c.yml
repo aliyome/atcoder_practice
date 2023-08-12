@@ -1,0 +1,49 @@
+---
+type: Batch
+timelimit: 2s 525ms
+match: Lines
+
+cases:
+  - name: sample1
+    in: |
+      18
+      DWANGOMEDIACLUSTER
+      1
+      18
+    out: |
+      1
+  - name: sample2
+    in: |
+      18
+      DDDDDDMMMMMCCCCCCC
+      1
+      18
+    out: |
+      210
+  - name: sample3
+    in: |
+      54
+      DIALUPWIDEAREANETWORKGAMINGOPERATIONCORPORATIONLIMITED
+      3
+      20 30 40
+    out: |
+      0
+      1
+      2
+  - name: sample4
+    in: |
+      30
+      DMCDMCDMCDMCDMCDMCDMCDMCDMCDMC
+      4
+      5 10 15 20
+    out: |
+      10
+      52
+      110
+      140
+
+extend:
+  - type: Text
+    path: "./c"
+    in: /in/*.txt
+    out: /out/*.txt
