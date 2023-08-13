@@ -14,15 +14,15 @@ fn main() {
             // 0-indexed
             let x = x - 1;
             let y = y - 1;
-            let x = (x + n - shift) % n;
-            let y = (y + n - shift) % n;
+            let x = (n + x - shift) % n;
+            let y = (n + y - shift) % n;
             a.swap(x, y);
         } else if t == 2 {
             shift = (shift + 1) % n;
         } else {
-            // 0-indexed
-            let x = x - 1;
-            println!("{}", a[(x + shift) % n]);
+            let x = (n + (x - 1) - shift) % n;
+            println!("{}", a[x]);
         }
+        // println!("{:?}", a);
     }
 }
