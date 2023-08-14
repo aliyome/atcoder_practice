@@ -6,14 +6,12 @@ fn main() {
         ab: [(usize, usize); n]
     };
 
-    let mut acc = vec![0; 1000001];
-    for i in 1..acc.len() {
-        acc[i] = acc[i - 1] + i;
-    }
-
     let mut ans = 0;
     for &(a, b) in &ab {
-        ans += acc[b] - acc[a - 1];
+        // 1 から N までの総和は (N / 2) x (N + 1) で求められる
+        let bb = b * (b + 1) / 2;
+        let aa = (a - 1) * ((a - 1) + 1) / 2;
+        ans += bb - aa;
     }
 
     println!("{}", ans);
