@@ -18,7 +18,11 @@ fn main() {
         *map.entry(c).or_insert(0) += 1;
     }
 
-    for (_, v) in map {
-        print!("{} ", v);
-    }
+    println!(
+        "{}",
+        map.values()
+            .map(|&v| v.to_string())
+            .collect::<Vec<_>>()
+            .join(" ")
+    );
 }
