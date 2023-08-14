@@ -6,54 +6,53 @@ fn main() {
         a: [Chars; n]
     };
 
-    let mut list = vec![];
+    // 方向
+    let direction = [
+        (0, 1),
+        (1, 0),
+        (0, -1),
+        (-1, 0),
+        (1, 1),
+        (-1, -1),
+        (1, -1),
+        (-1, 1),
+    ];
 
-    let walk = |i: usize, j: usize| -> String {
-        let mut list = vec![];
-        let mut i = i;
-        let mut j = j;
+    let mut ans = String::new();
 
-        let v = [
-            (0isize, 1isize),
-            (1, 0),
-            (0, -1),
-            (-1, 0),
-            (1, 1),
-            (1, -1),
-            (-1, 1),
-            (-1, -1),
-        ];
-
-        for &(di, dj) in v.iter() {
-            let mut str = vec![];
-            for _ in 0..n {
-                let mut jj = j as isize + dj;
-                let mut ii = i as isize + di;
-                if jj < 0 {
-                    jj += n as isize;
-                }
-                if ii < 0 {
-                    ii += n as isize;
-                }
-                j = jj as usize % n;
-                i = ii as usize % n;
-                str.push(a[i][j]);
-            }
-            list.push(str.iter().collect::<String>());
-        }
-        list.sort();
-        list.reverse();
-        list[0].clone()
-    };
-
+    // i,j はスタート地点
     for i in 0..n {
         for j in 0..n {
-            list.push(walk(i, j));
+            // 方向
+            for &(vi, vj) in &direction {
+                let mut sum = String::new();
+                let mut ni = i as i32;
+                let mut nj = j as i32;
+                // 1マスずつNマス進む
+                for _ in 0..n {
+                    ni += vi;
+                    nj += vj;
+                    // 上下左右が繋がっている
+                    if ni < 0 {
+                        ni = n as i32 - 1;
+                    }
+                    if nj < 0 {
+                        nj = n as i32 - 1;
+                    }
+                    if ni >= n as i32 {
+                        ni = 0;
+                    }
+                    if nj >= n as i32 {
+                        nj = 0;
+                    }
+                    let ni = ni as usize;
+                    let nj = nj as usize;
+                    sum.extend(a[ni][nj].to_string().chars());
+                }
+                ans = ans.max(sum);
+            }
         }
     }
 
-    list.sort();
-    list.reverse();
-
-    println!("{}", list[0]);
+    println!("{}", ans);
 }
