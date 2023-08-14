@@ -597,6 +597,19 @@ fn digit_sum(mut n: usize) -> usize {
 }
 ```
 
+## 回文
+
+回文で必要なのは文字列前半の長さ l = (文字列の長さ n + 1) / 2 ※切り上げ
+元の文字列の[0,l)と元の文字列の[0, n - l)を反転させたものを結合すると回文になる
+
+```rust
+    let mut s_rev = s[0..n - l].to_vec();
+    s_rev.reverse();
+
+    let mut kaibun = s[0..l].to_vec();
+    kaibun.extend(s_rev);
+```
+
 ## 数学
 
 ### 素数の求めかた(エラトステネスの篩)
@@ -984,6 +997,7 @@ use std::ops;
 
 const MOD: usize = 1000000007;
 
+use std::ops;
 #[derive(Copy, Clone)]
 pub struct ModInt {
     value: usize,
