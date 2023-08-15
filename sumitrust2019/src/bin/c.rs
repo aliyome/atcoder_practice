@@ -8,13 +8,13 @@ fn main() {
     let mut dp = vec![false; 100001];
     dp[0] = true;
 
-    for i in 0..10000 {
+    for i in 0..100000 {
         if !dp[i] {
             continue;
         }
-        for v in [100, 101, 102, 103, 104] {
+        for &v in &[100, 101, 102, 103, 104, 105] {
             if i + v > 100000 {
-                break;
+                continue;
             }
             dp[i + v] = true;
         }
