@@ -1,6 +1,5 @@
-use std::{cmp::Reverse, collections::BinaryHeap};
-
 use proconio::input;
+use superslice::Ext;
 
 fn main() {
     input! {
@@ -11,23 +10,24 @@ fn main() {
         b: [usize; m],
     };
 
-    let mut heap = BinaryHeap::new();
+    let mut acc_a = vec![0; n + 1];
+    let mut acc_b = vec![0; m + 1];
     for i in 0..n {
-        heap.push(Reverse(a[i]));
+        acc_a[i + 1] = acc_a[i] + a[i];
     }
     for i in 0..m {
-        heap.push(Reverse(b[i]));
+        acc_b[i + 1] = acc_b[i] + b[i];
     }
 
-    let mut time = 0;
-    let mut count = 0;
-    while let Some(Reverse(x)) = heap.pop() {
-        if time + x > k {
+    let mut ans = 0;
+    for i in 0..=n {
+        if acc_a[i] > k {
             break;
         }
-        time += x;
-        count += 1;
+
+        let j = acc_b.upper_bound(&(k - acc_a[i])) - 1;
+        ans = ans.max(i + j);
     }
 
-    println!("{}", count);
+    println!("{}", ans);
 }
