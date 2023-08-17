@@ -1,0 +1,54 @@
+---
+type: Batch
+timelimit: 2s
+match: Lines
+
+cases:
+  - name: sample1
+    in: |
+      7 20
+      Push 2 3
+      Push 4 5
+      Top
+      Size
+      Pop 5
+      Top
+      Size
+    out: |
+      5
+      6
+      3
+      1
+      SAFE
+  - name: sample2
+    in: |
+      1 10
+      Push 40 40
+    out: |
+      FULL
+  - name: sample3
+    in: |
+      5 10
+      Push 1 2
+      Top
+      Pop 1
+      Top
+      Size
+    out: |
+      2
+      EMPTY
+  - name: sample4
+    in: |
+      4 10
+      Top
+      Size
+      Push 1 1
+      Top
+    out: |
+      EMPTY
+
+extend:
+  - type: Text
+    path: "./b"
+    in: /in/*.txt
+    out: /out/*.txt
