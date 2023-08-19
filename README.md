@@ -656,6 +656,21 @@ a^2 x a^2 = a^4
 a^4 x a^4 = a^8
 ︙
 
+```rust
+// a^b
+fn binpower(a: usize, b: usize) {
+    let mut ans = 1usize;
+    while b != 0 {
+        if b % 2 == 1 {
+            ans = (ans * a) % MOD;
+        }
+        a = (a * a) % MOD;
+        b /= 2;
+    }
+    return ans;
+}
+```
+
 ### 包除原理
 
 x を a, b いずれかで割り切れるものの個数
