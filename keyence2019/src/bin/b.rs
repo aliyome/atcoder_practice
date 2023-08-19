@@ -1,46 +1,20 @@
-use proconio::{input, marker::Chars};
+use proconio::input;
 
 fn main() {
     input! {
-        s: Chars,
-    };
+        s: String
+    }
+    let target = "keyence";
+    let n = s.len();
+    let m = target.len();
 
-    let parts = [
-        ["k", "eyence"],
-        ["ke", "yence"],
-        ["key", "ence"],
-        ["keye", "nce"],
-        ["keyen", "ce"],
-        ["keyenc", "e"],
-        ["keyence", ""],
-    ];
-    let mut list = vec![];
-    for i in 0..s.len() {
-        for j in i..=s.len() {
-            for &[p1, p2] in &parts {
-                if s[i..j] == p1.chars().collect::<Vec<char>>() {
-                    list.push((i, j, p2));
-                }
-            }
+    for i in 0..=m {
+        let pre = &target[0..i];
+        let suf = &target[i..m];
+        if s.starts_with(pre) && s[(n - m + i)..].ends_with(suf) {
+            println!("YES");
+            return;
         }
     }
-    // println!("{:?}", list);
-
-    for i in 0..s.len() {
-        for j in i..=s.len() {
-            for &(_, jj, p2) in &list {
-                if i < jj {
-                    continue;
-                }
-
-                // println!("{} {} {}", i, j, s[i..j].iter().collect::<String>());
-                if s[i..j] == p2.chars().collect::<Vec<char>>() {
-                    println!("YES");
-                    return;
-                }
-            }
-        }
-    }
-
     println!("NO");
 }
