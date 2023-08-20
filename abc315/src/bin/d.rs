@@ -1,4 +1,4 @@
-use std::collections::{HashMap, HashSet};
+use std::collections::{BTreeSet, HashSet};
 
 use proconio::{input, marker::Chars};
 
@@ -9,71 +9,64 @@ fn main() {
         c: [Chars; h]
     };
 
-    // 愚直実装
-    let mut marked = vec![vec![false; w]; h];
+    let mut rows = BTreeSet::new();
+    let mut cols = BTreeSet::new();
+    for i in 0..h {
+        rows.insert(i);
+    }
+    for j in 0..w {
+        cols.insert(j);
+    }
     loop {
         let mut updated = false;
-        // 各行・列が1種類のクッキーで構成されているかを確認する
-        for j in 0..w {
+
+        let mut cols_to_remove = HashSet::new();
+        for &j in cols.iter() {
             let mut set = HashSet::new();
-            let mut count = 0;
-            for i in 0..h {
-                if marked[i][j] {
-                    continue;
-                }
+            let mut count = 0usize;
+            for &i in rows.iter() {
                 set.insert(c[i][j]);
                 count += 1;
             }
             if set.len() == 1 && count > 1 {
-                for i in 0..h {
-                    marked[i][j] = true;
-                }
                 updated = true;
+                cols_to_remove.insert(j);
             }
         }
-        for i in 0..h {
+        for &j in cols_to_remove.iter() {
+            cols.remove(&j);
+        }
+
+        let mut rows_to_remove = HashSet::new();
+        for &i in rows.iter() {
             let mut set = HashSet::new();
-            let mut count = 0;
-            for j in 0..w {
-                if marked[i][j] {
-                    continue;
-                }
+            let mut count = 0usize;
+            for &j in cols.iter() {
                 set.insert(c[i][j]);
                 count += 1;
             }
             if set.len() == 1 && count > 1 {
-                for j in 0..w {
-                    marked[i][j] = true;
-                }
                 updated = true;
+                rows_to_remove.insert(i);
             }
         }
+        for &i in rows_to_remove.iter() {
+            rows.remove(&i);
+        }
+
         if !updated {
             break;
         }
     }
 
     // 残ったクッキーの数を数える
-    let mut ans = 0;
-    for i in 0..h {
-        for j in 0..w {
-            if !marked[i][j] {
-                ans += 1;
-            }
-        }
-    }
+    println!("{}", rows.len() * cols.len());
 
     // // DEBUG
-    // for i in 0..h {
-    //     for j in 0..w {
-    //         if !marked[i][j] {
-    //             ans += 1;
-    //             print!("{}", c[i][j]);
-    //         } else {
-    //             print!(".");
-    //         }
+    // for &i in rows.iter() {
+    //     for &j in cols.iter() {
+    //         print!("{}", c[i][j]);
     //     }
     //     println!();
     // }
-    println!("{}", ans);
 }
