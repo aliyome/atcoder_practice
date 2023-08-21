@@ -541,13 +541,14 @@ fn divisor_counts(n: usize) -> Vec<usize> {
 }
 ```
 
-## 和の公式
+## 頻出の数列の和
 
 - 1 から N までの総和は (N / 2) x (N + 1) で求められる
   - たとえば、1 から 50 の場合は 25 x 51 = 1275
   - これは、1 + 50 = 51, 2 + 49 = 51, 3 + 48 = 51, ... となるので、25 個の 51 で構成されるため
 - a^0 + a^1 + a^2 + ... = 1/(1-a) | 0 < a < 1
   - 例えば、a = 0.5 の時、 1 + 0.5 + 0.25 + ... = 2
+- 2^0 + 2^1 + 2^2 + ...2^(N-1) = 2^N - 1
 
 ## 半分全列挙
 
@@ -658,7 +659,9 @@ a^4 x a^4 = a^8
 
 ```rust
 // a^b
-fn binpower(a: usize, b: usize) {
+fn binpower(a: usize, b: usize) -> usize {
+    let mut a = a;
+    let mut b = b;
     let mut ans = 1usize;
     while b != 0 {
         if b % 2 == 1 {
