@@ -6,13 +6,12 @@ fn main() {
         h: [usize; n]
     };
 
-    let mut ans = 0;
-    for hh in h {
-        if hh > ans {
-            ans = ans.max(hh);
-        } else {
-            break;
+    for i in 0..n - 1 {
+        if h[i] >= h[i + 1] {
+            println!("{}", h[i]);
+            return;
         }
     }
-    println!("{}", ans);
+
+    println!("{}", h[n - 1]);
 }
