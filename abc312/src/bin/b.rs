@@ -18,15 +18,16 @@ fn main() {
         ['?', '?', '?', '?', '?', '.', '#', '#', '#'],
     ];
 
-    for i in 0..=n - 9 {
-        for j in 0..=m - 9 {
+    for i in 0..n {
+        for j in 0..m {
             let mut ok = true;
-            for ti in 0..9 {
-                for tj in 0..9 {
-                    if tak[ti][tj] == '?' {
+            for ii in 0..9 {
+                for jj in 0..9 {
+                    if i + ii >= n || j + jj >= m {
+                        ok = false;
                         continue;
                     }
-                    if s[i + ti][j + tj] != tak[ti][tj] {
+                    if s[i + ii][j + jj] != tak[ii][jj] && tak[ii][jj] != '?' {
                         ok = false;
                     }
                 }
