@@ -1003,6 +1003,10 @@ impl MaximumFlow {
 - {1,2,3,5,4}の転倒数は 1 // 5 が 4 より大きいので 1 つ
 - {5,1,2,3,4}の転倒数は 4 // 5 が 1,2,3,4 より大きいので 4 つ
 
+## ダブリング
+
+https://github.com/aliyome/atcoder_practice/blob/main/tessoku/tessoku-book/src/bin/b57.rs
+
 ## Rust
 
 タプルは Ord を実装していて、各要素の Ord を前から順番に評価する。これで何が嬉しいかと言うと、BinaryHeap にタプルを入れると、最初の要素でソートされることになる。
