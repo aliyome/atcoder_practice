@@ -1,65 +1,46 @@
-use std::collections::HashMap;
-
 use proconio::input;
-
-// 026 - Independent Set on a Tree（★4）
-// https://atcoder.jp/contests/typical90/tasks/typical90_z
-// 解説が意味不明だったけど何も考えずにDFSで良かった
 
 fn main() {
     input! {
         n: usize,
-        ab: [(usize, usize); n - 1],
+        ab: [(usize, usize); n - 1]
     }
 
-    // 無向グラフ
-    let mut graph = HashMap::new();
-    for (a, b) in ab.iter() {
-        graph.entry(*a).or_insert(vec![]).push(*b);
-        graph.entry(*b).or_insert(vec![]).push(*a);
+    let mut edge = vec![vec![]; n];
+    for &(a, b) in &ab {
+        edge[a - 1].push(b - 1);
+        edge[b - 1].push(a - 1);
     }
 
-    // スタックを使った DFS
-    let mut stack = vec![];
-    let mut visited = vec![false; n + 1];
-    let mut groups = vec![0; n + 1];
-    let mut group_count = [0, 0];
+    let mut color = vec![0; n];
+    color[0] = 1;
+    dfs(&edge, 0, &mut color, 1);
 
-    stack.push((1, 1)); // (node, group)
-    while let Some((node, group)) = stack.pop() {
-        if visited[node] {
+    let c1 = color.iter().filter(|&&c| c == 1).count();
+    if c1 >= n / 2 {
+        color
+            .iter()
+            .enumerate()
+            .filter(|&(i, &c)| c == 1)
+            .take(n / 2)
+            .for_each(|(i, _)| print!("{} ", i + 1));
+    } else {
+        color
+            .iter()
+            .enumerate()
+            .filter(|&(i, &c)| c == 2)
+            .take(n / 2)
+            .for_each(|(i, _)| print!("{} ", i + 1));
+    }
+}
+
+fn dfs(edge: &Vec<Vec<usize>>, v: usize, color: &mut Vec<usize>, prev: usize) {
+    let next = if prev == 1 { 2 } else { 1 };
+    for &u in &edge[v] {
+        if color[u] != 0 {
             continue;
         }
-        visited[node] = true;
-        groups[node] = group;
-        group_count[group] += 1;
-        let next_group = if group == 1 { 0 } else { 1 };
-        for &next in graph.get(&node).unwrap() {
-            stack.push((next, next_group));
-        }
+        color[u] = next;
+        dfs(edge, u, color, next);
     }
-    let major = if group_count[0] < group_count[1] {
-        1
-    } else {
-        0
-    };
-
-    let mut count = 0;
-    let mut ans = vec![];
-    for i in 1..=n {
-        if groups[i] == major {
-            ans.push(i);
-            count += 1;
-            if count == n / 2 {
-                break;
-            }
-        }
-    }
-    println!(
-        "{}",
-        ans.iter()
-            .map(|x| x.to_string())
-            .collect::<Vec<_>>()
-            .join(" ")
-    );
 }
