@@ -1,60 +1,74 @@
+use std::{cmp::Reverse, collections::BinaryHeap};
+
 use proconio::input;
 
 fn main() {
     input! {
         n: usize,
-        ab: [[usize; 2]; n as usize - 1]
+        ab: [(usize, usize); n - 1]
     };
 
-    // edges に隣接リストを作る
-    let mut edges = vec![vec![]; n];
-    for e in ab {
-        edges[e[0] - 1].push(e[1] - 1);
-        edges[e[1] - 1].push(e[0] - 1);
+    let mut edges = vec![vec![]; n + 1];
+    for &(a, b) in &ab {
+        edges[a].push(b);
+        edges[b].push(a);
     }
 
-    // dist に各頂点の深さを入れる
-    let mut dist = vec![0; n];
-
-    // 0 番目の頂点から dfs をする
-    dfs(&edges, 0, n, &mut dist);
-
-    // 0 番目の頂点から最も遠い頂点を探す
-    let mut max_dist = 0;
-    let mut max_dist_idx = 0;
-    for i in 0..n {
-        if dist[i] > max_dist {
-            max_dist = dist[i];
-            max_dist_idx = i;
-        }
-    }
-
-    // dist に各頂点の深さを入れる
-    let mut dist = vec![0; n];
-
-    // 最も遠い頂点から dfs をする
-    dfs(&edges, max_dist_idx, n, &mut dist);
-
-    // 最も遠い頂点から最も遠い頂点を探す
-    let mut max_dist = 0;
-    let mut max_dist_idx = 0;
-    for i in 0..n {
-        if dist[i] > max_dist {
-            max_dist = dist[i];
-            max_dist_idx = i;
-        }
-    }
-
-    // 答えは最も遠い頂点から最も遠い頂点の距離 + 1
-    println!("{}", max_dist + 1);
-}
-
-fn dfs(edges: &Vec<Vec<usize>>, curr: usize, prev: usize, dist: &mut Vec<usize>) {
-    for next in edges[curr].iter() {
-        if *next == prev {
+    // dijkstra で頂点1からの距離を求める
+    let mut dist = vec![std::usize::MAX; n + 1];
+    dist[1] = 0;
+    let mut heap = BinaryHeap::new();
+    heap.push((Reverse(0), 1));
+    while let Some((Reverse(d), v)) = heap.pop() {
+        if d > dist[v] {
             continue;
         }
-        dist[*next] = dist[curr] + 1;
-        dfs(edges, *next, curr, dist);
+        for &u in &edges[v] {
+            if dist[u] <= d + 1 {
+                continue;
+            }
+            dist[u] = d + 1;
+            heap.push((Reverse(d + 1), u));
+        }
     }
+    // println!("{:?}", dist);
+
+    // 一番遠い頂点を求める
+    let mut max = 0;
+    let mut max_i = 0;
+    for i in 1..=n {
+        if dist[i] > max {
+            max = dist[i];
+            max_i = i;
+        }
+    }
+
+    // max_i からの距離を求める
+    let mut dist = vec![std::usize::MAX; n + 1];
+    dist[max_i] = 0;
+    let mut heap = BinaryHeap::new();
+    heap.push((Reverse(0), max_i));
+    while let Some((Reverse(d), v)) = heap.pop() {
+        if d > dist[v] {
+            continue;
+        }
+        for &u in &edges[v] {
+            if dist[u] <= d + 1 {
+                continue;
+            }
+            dist[u] = d + 1;
+            heap.push((Reverse(d + 1), u));
+        }
+    }
+    // println!("{:?}", dist);
+
+    // 一番遠い頂点からの距離を求める
+    let mut max = 0;
+    for i in 1..=n {
+        if dist[i] > max {
+            max = dist[i];
+        }
+    }
+
+    println!("{}", max + 1);
 }
