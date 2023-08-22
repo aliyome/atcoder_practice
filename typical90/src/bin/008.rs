@@ -1,25 +1,29 @@
 use proconio::{input, marker::Chars};
 
+const MOD: usize = 1_000_000_007;
+
 fn main() {
     input! {
         n: usize,
-        s: Chars
+        mut s: Chars
     }
 
-    let m = "atcoder".len();
-    let mut dp = vec![vec![0; n + 1]; m + 1];
-    dp[0] = vec![1; n + 1];
+    let atcoder = "atcoder".chars().collect::<Vec<_>>();
 
-    let t: Vec<char> = "atcoder".chars().collect();
-    for i in 1..=m {
-        for j in 1..=n {
-            dp[i][j] += dp[i][j - 1] % 1_000_000_007;
-            if t[i - 1] == s[j - 1] {
-                dp[i][j] += dp[i - 1][j - 1] % 1_000_000_007;
+    // dp[i][j] := i文字目まで見た時に、j文字目までの文字列を作る場合の数
+    let mut dp = vec![vec![0; atcoder.len() + 1]; n + 1];
+    dp[0][0] = 1;
+
+    // 配るDP
+    for i in 0..n {
+        dp[i + 1] = dp[i].clone();
+        for j in 0..atcoder.len() {
+            if s[i] == atcoder[j] {
+                dp[i + 1][j + 1] += dp[i][j];
+                dp[i + 1][j + 1] %= MOD;
             }
         }
-        // println!("{:?}", dp[i]);
     }
 
-    println!("{}", dp[m][n]);
+    println!("{}", dp[n][atcoder.len()]);
 }
