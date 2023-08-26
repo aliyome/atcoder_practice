@@ -21,9 +21,12 @@ function scrapeData() {
   let problemStatementSection = Array.from(
     langContainer.querySelectorAll('.part > section > h3')
   ).find((h3) => h3.textContent.trim() === 'Problem Statement');
-  data.problemStatement = problemStatementSection
-    ? cleanText(problemStatementSection.nextElementSibling.textContent.trim())
-    : 'Not found';
+
+  let problemParagraph = problemStatementSection.nextElementSibling;
+  while (['P', 'UL'].includes(problemParagraph?.tagName)) {
+    data.problemStatement += cleanText(problemParagraph.textContent.trim());
+    problemParagraph = problemParagraph.nextElementSibling;
+  }
 
   // 条件の取得
   data.constraints = [];
@@ -100,10 +103,10 @@ function toMarkdown(data) {
 
   markdown += `\n## Output\n\n${data.output.description}\n\n`;
 
-  data.samples.forEach((sample) => {
-    markdown += '### Sample Input\n\n';
+  data.samples.forEach((sample, i) => {
+    markdown += `### Sample Input ${i + 1}\n\n`;
     markdown += '```\n' + sample.input + '\n```\n';
-    markdown += '### Sample Output\n\n';
+    markdown += `### Sample Output ${i + 1}\n\n`;
     markdown += '```\n' + sample.output + '\n```\n';
   });
 
