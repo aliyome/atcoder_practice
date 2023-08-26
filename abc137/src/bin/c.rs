@@ -8,17 +8,19 @@ fn main() {
         s: [Chars; n]
     };
 
-    let mut map = HashMap::new();
+    let mut count = vec![HashMap::new(); n];
     for i in 0..n {
-        let mut x = s[i].clone();
-        x.sort();
-        *map.entry(x).or_insert(0usize) += 1;
+        for &c in &s[i] {
+            *count[i].entry(c).or_insert(0) += 1;
+        }
     }
 
     let mut ans = 0;
-    for (_, v) in map {
-        if v > 1 {
-            ans += v * (v - 1) / 2;
+    for i in 0..n {
+        for j in i + 1..n {
+            if count[i] == count[j] {
+                ans += 1;
+            }
         }
     }
 
