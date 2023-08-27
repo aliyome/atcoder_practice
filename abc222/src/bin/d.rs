@@ -12,12 +12,16 @@ fn main() {
     let mut dp = vec![vec![0; 3001]; n + 1];
     dp[0][0] = 1;
 
+    // 数列のi番目の要素を見るとき
     for i in 0..n {
+        // 累積和
+        let mut acc = vec![0; 3001];
         for j in 0..=3000 {
-            for k in a[i].max(j)..=b[i] {
-                dp[i + 1][k] += dp[i][j];
-                dp[i + 1][k] %= MOD;
-            }
+            acc[j] = if j < 1 { 0 } else { acc[j - 1] } + dp[i][j];
+            acc[j] %= MOD;
+        }
+        for j in a[i]..=b[i] {
+            dp[i + 1][j] = acc[j];
         }
     }
 
