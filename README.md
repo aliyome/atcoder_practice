@@ -502,6 +502,20 @@ n 個の要素を k 個のグループに分ける場合の数
 1 4 6 4 1
 ```
 
+```rust
+fn nck(n: usize) -> Vec<Vec<usize>> {
+    let mut c = vec![vec![0; n + 1]; n + 1];
+    c[0][0] = 1;
+    for i in 1..n {
+        c[i][0] = 1;
+        for j in 1..n {
+            c[i][j] = c[i - 1][j - 1] + c[i - 1][j];
+        }
+    }
+    c
+}
+```
+
 ## bit 判断
 
 以下は等価
