@@ -5,38 +5,26 @@ fn main() {
         n: usize,
         l: isize,
         r: isize,
-        mut a: [isize; n]
+        a: [isize; n]
     };
 
-    // 1-indexed
-    a.insert(0, 0);
-
-    // aの累積和
-    let mut acc = vec![0; n + 1];
-    for i in 1..=n {
-        acc[i] = acc[i - 1] + a[i];
+    // dp[i] := 要素iまで見た時に、最後に選んだ要素がjの時の最小値。j := 0:L, 1:A, 2:R
+    let mut dp = vec![vec![std::isize::MAX; 3]; n + 1];
+    dp[0][0] = 0;
+    dp[0][1] = 0;
+    dp[0][2] = 0;
+    for i in 0..n {
+        // l を使う場合
+        dp[i + 1][0] = dp[i + 1][0].min(dp[i][0].saturating_add(l));
+        // a を使う場合
+        dp[i + 1][1] = dp[i + 1][1]
+            .min(dp[i][0].saturating_add(a[i]))
+            .min(dp[i][1].saturating_add(a[i]));
+        // r を使う場合
+        dp[i + 1][2] = dp[i + 1][2]
+            .min(dp[i][0].saturating_add(r))
+            .min(dp[i][1].saturating_add(r))
+            .min(dp[i][2].saturating_add(r));
     }
-
-    // 全探索
-    let mut ans = std::isize::MAX;
-    // 左側の区間の長さ
-    for il in 0..=n {
-        // 左側の区間の総和
-        let sum_l = l * il as isize;
-
-        // 右側の区間の開始位置
-        for ir in il + 1..=n {
-            // 中間区間の総和
-            let sum_m = acc[ir] - acc[il];
-            // 右側区間の総和
-            let sum_r = r * (n - ir) as isize;
-            // 全体の総和
-            let sum = sum_l + sum_m + sum_r;
-
-            // 最小値を更新
-            ans = ans.min(sum);
-        }
-    }
-
-    println!("{}", ans);
+    println!("{}", dp[n][0].min(dp[n][1]).min(dp[n][2]));
 }
