@@ -1191,3 +1191,20 @@ pub fn homogeneous(n: usize, r: usize) -> ModInt {
 // 数値をアルファベットに変換
 print!("{}", (b'a' + p as u8 - 1) as char);
 ```
+
+インタラクティブ問題
+
+```rust
+use std::io::{stdin, BufReader};
+use proconio::{input, source::line::LineSource};
+
+fn main() {
+    let stdin = stdin();
+    let mut source = LineSource::new(BufReader::new(stdin.lock()));
+
+    input! {
+        from &mut source,
+        n: usize,
+    };
+}
+```
