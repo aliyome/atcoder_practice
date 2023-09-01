@@ -2,43 +2,43 @@ use proconio::{input, marker::Chars};
 
 fn main() {
     input! {
-        mut n: Chars,
+        n: Chars,
     };
+
+    let n = n
+        .into_iter()
+        .map(|a| a.to_digit(10).unwrap() as usize)
+        .collect::<Vec<usize>>();
     if n.len() == 1 {
         println!("{}", n[0]);
         return;
     }
 
-    let mut x = vec![];
+    let mut candidates = vec![];
+    candidates.push(n.clone());
+
+    // i文字目を-1してi+1文字目以降を9にする
     for i in 0..n.len() {
-        if i == n.len() - 1 {
-            x.push(n[i]);
-        } else if n[i] == '9' {
-            x.push('9');
-        } else {
-            let d = n[i].to_digit(10).unwrap() - 1;
-            x.push(d.to_string().chars().next().unwrap());
-            for _ in i + 1..n.len() {
-                x.push('9');
+        let mut x = vec![];
+        for j in 0..n.len() {
+            if j < i {
+                x.push(n[j]);
+            } else if j == i && n[j] != 0 {
+                x.push(n[j] - 1);
+                for _ in j + 1..n.len() {
+                    x.push(9);
+                }
+                break;
             }
-            break;
+        }
+        if x.len() == n.len() {
+            candidates.push(x);
         }
     }
 
-    let mut y = vec![];
-    let d = n[0].to_digit(10).unwrap() - 1;
-    y.push(d.to_string().chars().next().unwrap());
-    for _ in 1..n.len() {
-        y.push('9');
+    let mut ans = 0;
+    for c in candidates {
+        ans = ans.max(c.iter().sum());
     }
-
-    let x = x
-        .into_iter()
-        .map(|a| a.to_digit(10).unwrap() as usize)
-        .sum::<usize>();
-    let y = y
-        .into_iter()
-        .map(|a| a.to_digit(10).unwrap() as usize)
-        .sum::<usize>();
-    println!("{}", x.max(y));
+    println!("{}", ans);
 }
