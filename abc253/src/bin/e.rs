@@ -15,20 +15,37 @@ fn main() {
     }
 
     // iまでみて
-    for i in 1..n {
-        // 最後がjの時
+    for i in 2..=n {
+        // i-1の累積和
+        let mut acc = vec![0; m + 1];
         for j in 1..=m {
-            // 次がlだとして
-            for l in 1..=m {
-                // 条件を満たす場合
-                if (j as isize - l as isize).abs() >= k as isize {
-                    // それまでの場合の数を足す
-                    dp[i + 1][l] += dp[i][j];
-                    dp[i + 1][l] %= MOD;
+            acc[j] = (acc[j - 1] + dp[i - 1][j]) % MOD;
+        }
+
+        // 次がjの時
+        for j in 1..=m {
+            let mut x = 0;
+            let mut y = 0;
+            if k == 0 {
+                dp[i][j] += acc[m];
+                dp[i][j] %= MOD;
+            } else {
+                // [1, j - k]までの累積和
+                if j >= k {
+                    x = acc[j - k];
                 }
+                // [j + k, m]までの累積和
+                if j + k <= m {
+                    y = (MOD + acc[m] - acc[j + k - 1]) % MOD;
+                }
+                dp[i][j] = (x + y) % MOD;
             }
         }
     }
 
-    println!("{}", dp[n].iter().sum::<usize>());
+    let mut ans = 0;
+    for j in 1..=m {
+        ans = (ans + dp[n][j]) % MOD;
+    }
+    println!("{}", ans);
 }
