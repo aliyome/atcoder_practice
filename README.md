@@ -1056,8 +1056,6 @@ set.iter().last(); // 最大値
 仕組みは a^b は鉄則本 5.3 を参照
 
 ```rust
-use std::ops;
-
 const MOD: usize = 1000000007;
 
 use std::ops;
