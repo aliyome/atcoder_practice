@@ -1,33 +1,42 @@
 use proconio::input;
+use std::collections::BinaryHeap;
 
 fn main() {
     input! {
         n: usize,
         d: usize,
         p: usize,
-        fares: [usize; n]
+        f: [usize; n],
     }
 
-    let mut fares = fares;
-    fares.sort_by(|a, b| b.cmp(a));
+    let mut heap = BinaryHeap::new();
+
+    for &f in f.iter() {
+        heap.push(f);
+    }
 
     let mut total_cost = 0;
-    let mut i = 0;
-
-    while i < n {
-        let mut sum = 0;
-        for j in i..i + d {
-            if j < n {
-                sum += fares[j];
-            }
+    while heap.len() >= d {
+        let mut temp = 0;
+        for _ in 0..d {
+            temp += heap.pop().unwrap();
         }
-        if sum > p {
+        if temp > p {
             total_cost += p;
-            i += d;
         } else {
-            total_cost += fares[i];
-            i += 1;
+            total_cost += temp;
         }
+    }
+
+    let mut temp = 0;
+    while let Some(f) = heap.pop() {
+        temp += f;
+    }
+
+    if temp > p {
+        total_cost += p;
+    } else {
+        total_cost += temp;
     }
 
     println!("{}", total_cost);
