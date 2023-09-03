@@ -3,25 +3,35 @@ use proconio::input;
 fn main() {
     input! {
         n: usize,
-        sheets: [(usize, usize, usize, usize); n]
+        abcd: [(usize, usize, usize, usize); n]
     }
 
-    let mut area = 0;
-    for y in 0..=100 {
-        let mut x_count = vec![0; 101];
-        for &(a, b, c, d) in &sheets {
-            if c <= y && y < d {
-                x_count[a] += 1;
-                x_count[b] -= 1;
-            }
+    let mut imos = vec![vec![0; 102]; 102];
+    for &(a, b, c, d) in &abcd {
+        imos[a][c] += 1;
+        imos[b][c] -= 1;
+        imos[b][d] += 1;
+        imos[a][d] -= 1;
+    }
+    for i in 0..=100 {
+        for j in 0..=100 {
+            imos[i][j + 1] += imos[i][j];
         }
-        let mut cnt = 0;
-        for x in 0..=100 {
-            cnt += x_count[x];
-            if cnt > 0 {
-                area += 1;
+    }
+    for j in 0..=100 {
+        for i in 0..=100 {
+            imos[i + 1][j] += imos[i][j];
+        }
+    }
+
+    let mut ans = 0;
+    for i in 0..=100 {
+        for j in 0..=100 {
+            if imos[i][j] > 0 {
+                ans += 1;
             }
         }
     }
-    println!("{}", area);
+
+    println!("{}", ans);
 }
