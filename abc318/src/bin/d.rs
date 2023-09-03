@@ -1,3 +1,5 @@
+use std::vec;
+
 use proconio::input;
 
 fn main() {
@@ -18,41 +20,49 @@ fn main() {
     }
 
     let mut ans = 0;
-    dfs(&edge, &mut vec![false; n + 1], 0, n, 0, &mut ans);
+    if n % 2 == 0 {
+        dfs(&edge, &mut vec![false; n + 1], n, 0, &mut ans);
+    } else {
+        for i in 1..=n {
+            let mut visited = vec![false; n + 1];
+            visited[i] = true;
+            dfs(&edge, &mut visited, n, 0, &mut ans);
+        }
+    }
 
     println!("{}", ans);
 }
 
-fn dfs(
-    edge: &Vec<Vec<usize>>,
-    visited: &mut Vec<bool>,
-    v: usize,
-    n: usize,
-    sum: usize,
-    ans: &mut usize,
-) {
-    if v + 2 > n {
+fn dfs(edge: &Vec<Vec<usize>>, visited: &mut Vec<bool>, n: usize, sum: usize, ans: &mut usize) {
+    // 全頂点を訪れたら終了
+    if visited.iter().skip(1).all(|&x| x) {
         *ans = (*ans).max(sum);
         return;
     }
-    for i in 1..=n {
-        if visited[i] {
+    // 訪れていない一番若い頂点iを探す
+    let mut i = 0;
+    for ii in 1..=n {
+        if visited[ii] {
             continue;
         }
-        visited[i] = true;
-
-        for j in i + 1..=n {
-            if visited[j] {
-                continue;
-            }
-            visited[j] = true;
-
-            let sum = sum + edge[i][j];
-            dfs(edge, visited, v + 2, n, sum, ans);
-
-            visited[j] = false;
-        }
-
-        visited[i] = false;
+        i = ii;
+        break;
     }
+    visited[i] = true;
+
+    // ペアとなる頂点j
+    for j in i + 1..=n {
+        if visited[j] {
+            continue;
+        }
+        visited[j] = true;
+
+        // コスト加算
+        let sum = sum + edge[i][j];
+        dfs(edge, visited, n, sum, ans);
+
+        visited[j] = false;
+    }
+
+    visited[i] = false;
 }
