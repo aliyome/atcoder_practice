@@ -10,34 +10,30 @@ fn main() {
     }
 
     let mut heap = BinaryHeap::new();
-
-    for &f in f.iter() {
+    for &f in &f {
         heap.push(f);
     }
 
-    let mut total_cost = 0;
-    while heap.len() >= d {
-        let mut temp = 0;
+    let mut ans = 0usize;
+    while heap.len() > d {
+        // 運賃の高い方からd日分popする
+        let mut temp = 0usize;
         for _ in 0..d {
             temp += heap.pop().unwrap();
         }
         if temp > p {
-            total_cost += p;
+            ans += p;
         } else {
-            total_cost += temp;
+            ans += temp;
         }
     }
 
-    let mut temp = 0;
-    while let Some(f) = heap.pop() {
-        temp += f;
-    }
-
-    if temp > p {
-        total_cost += p;
+    let rest = heap.iter().sum::<usize>();
+    if rest > p {
+        ans += p;
     } else {
-        total_cost += temp;
+        ans += rest;
     }
 
-    println!("{}", total_cost);
+    println!("{}", ans);
 }
