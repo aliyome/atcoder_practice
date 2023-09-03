@@ -1,33 +1,5 @@
 use proconio::input;
 
-fn dfs(current_mask: usize, n: usize, edge: &Vec<Vec<usize>>, memo: &mut Vec<i64>) -> i64 {
-    if current_mask == (1 << n) - 1 {
-        return 0; // All vertices are visited
-    }
-
-    if memo[current_mask] != -1 {
-        return memo[current_mask];
-    }
-
-    let mut max_weight = 0;
-    for i in 0..n {
-        // if vertex i is not visited yet
-        if current_mask & (1 << i) == 0 {
-            for j in i + 1..n {
-                // if vertex j is also not visited yet
-                if current_mask & (1 << j) == 0 {
-                    let next_mask = current_mask | (1 << i) | (1 << j);
-                    let weight = edge[i + 1][j + 1];
-                    max_weight = max_weight.max(weight as i64 + dfs(next_mask, n, edge, memo));
-                }
-            }
-        }
-    }
-
-    memo[current_mask] = max_weight;
-    max_weight
-}
-
 fn main() {
     input! {
         n: usize,
@@ -45,8 +17,42 @@ fn main() {
         }
     }
 
-    let mut memo = vec![-1; 1 << n];
-    let result = dfs(0, n, &edge, &mut memo);
+    let mut ans = 0;
+    dfs(&edge, &mut vec![false; n + 1], 0, n, 0, &mut ans);
 
-    println!("{}", result);
+    println!("{}", ans);
+}
+
+fn dfs(
+    edge: &Vec<Vec<usize>>,
+    visited: &mut Vec<bool>,
+    v: usize,
+    n: usize,
+    sum: usize,
+    ans: &mut usize,
+) {
+    if v + 2 > n {
+        *ans = (*ans).max(sum);
+        return;
+    }
+    for i in 1..=n {
+        if visited[i] {
+            continue;
+        }
+        visited[i] = true;
+
+        for j in i + 1..=n {
+            if visited[j] {
+                continue;
+            }
+            visited[j] = true;
+
+            let sum = sum + edge[i][j];
+            dfs(edge, visited, v + 2, n, sum, ans);
+
+            visited[j] = false;
+        }
+
+        visited[i] = false;
+    }
 }
