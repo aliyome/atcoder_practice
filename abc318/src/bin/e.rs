@@ -1,5 +1,6 @@
+use std::collections::{BTreeMap, BTreeSet};
+
 use proconio::input;
-use std::collections::HashMap;
 
 fn main() {
     input! {
@@ -7,27 +8,28 @@ fn main() {
         a: [usize; n],
     }
 
-    let mut prefix_sum = HashMap::new();
-    let mut suffix_sum = HashMap::new();
-    let mut ans = 0;
-
-    for &x in a.iter() {
-        *suffix_sum.entry(x).or_insert(0) += 1;
+    let mut indices = BTreeMap::new();
+    for i in 0..n {
+        indices.entry(a[i]).or_insert(vec![]).push(i);
     }
 
-    for i in 0..n {
-        let current_element = a[i];
-        if let Some(count) = suffix_sum.get_mut(&current_element) {
-            *count -= 1;
+    // println!("{:?}", indices);
+
+    let mut ans = 0;
+    for (k, v) in &indices {
+        if v.len() < 2 {
+            continue;
         }
-        for (&x, &count_prefix) in prefix_sum.iter() {
-            if x != current_element {
-                if let Some(&count_suffix) = suffix_sum.get(&x) {
-                    ans += count_prefix * count_suffix;
-                }
+        for i in 0..v.len() {
+            for j in i + 1..v.len() {
+                let x = v[j] - v[i] - 1;
+                let y = v[i + 1..j].len();
+                // let x = v.range(j..).next().unwrap() - v.range(i).unwrap() - 1;
+                // let y = v.range(i + 1..j).count();
+                ans += x - y;
+                // println!("{} {} {} {} {}", k, i, j, x, y);
             }
         }
-        *prefix_sum.entry(current_element).or_insert(0) += 1;
     }
 
     println!("{}", ans);
