@@ -1,5 +1,3 @@
-use std::collections::HashSet;
-
 use proconio::input;
 
 fn main() {
@@ -12,29 +10,17 @@ fn main() {
     // 1-indexed
     a.insert(0, 0);
 
-    // 子から親に辿れるようにする
-    let mut parent = vec![0; n + 1];
-    let mut leaf = HashSet::new();
-    for i in 1..=n {
-        leaf.insert(i);
-    }
+    let mut to = vec![vec![]; n + 1];
     for &(x, y) in &xy {
-        parent[y] = x;
-        leaf.remove(&x);
+        to[x].push(y);
     }
 
     let mut ans = std::isize::MIN;
-
-    // 葉から順に親を辿っていく
-    for i in leaf {
-        let mut curr = i;
-        while parent[curr] != 0 {
-            // 親との差分を計算する
-            let diff = a[curr] - a[parent[curr]];
-            ans = ans.max(diff);
-            // 親に伝播する
-            a[parent[curr]] = a[parent[curr]].max(a[curr]);
-            curr = parent[curr];
+    let mut dp = vec![std::isize::MAX; n + 1];
+    for i in 1..=n {
+        ans = ans.max(a[i] - dp[i]);
+        for &j in &to[i] {
+            dp[j] = dp[j].min(dp[i]).min(a[i]);
         }
     }
 
