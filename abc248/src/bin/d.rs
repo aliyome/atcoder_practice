@@ -6,15 +6,19 @@ use proconio::input;
 fn main() {
     input! {
         n: usize,
-        a: [usize; n],
+        mut a: [usize; n],
         q: usize,
         lrx: [(usize, usize, usize); q],
     };
 
-    let mut map = HashMap::new();
+    // 1-indexed
+    a.insert(0, 0);
 
-    for i in 0..n {
-        map.entry(a[i]).or_insert(vec![]).push(i + 1);
+    // map[c] := c が出現する位置の配列
+    let mut map = HashMap::new();
+    for i in 1..=n {
+        let c = a[i];
+        map.entry(c).or_insert(vec![]).push(i);
     }
 
     for &(l, r, x) in &lrx {
@@ -23,8 +27,8 @@ fn main() {
             continue;
         }
         let list = map.get(&x).unwrap();
-        let i = list.lower_bound(&l);
-        let j = list.upper_bound(&r);
-        println!("{}", j - i);
+        let lc = list.lower_bound(&l);
+        let rc = list.upper_bound(&r);
+        println!("{}", rc - lc);
     }
 }
