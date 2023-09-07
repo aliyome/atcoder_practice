@@ -1,0 +1,43 @@
+---
+type: Batch
+timelimit: 2s
+match: Lines
+
+cases:
+  - name: sample1
+    in: |
+      abc aaa ababa abcba abc
+      2
+      abc
+      **a**
+    out: |
+      *** aaa ***** abcba ***
+  - name: sample2
+    in: |
+      aaaa aaa aaaaaa aaaa
+      3
+      a
+      aa
+      aaa
+    out: |
+      aaaa *** aaaaaa aaaa
+  - name: sample3
+    in: |
+      i have a pen
+      1
+      *
+    out: |
+      * have * pen
+  - name: sample4
+    in: |
+      digital arts
+      1
+      digital*arts
+    out: |
+      digital arts
+
+extend:
+  - type: Text
+    path: "./a"
+    in: /in/*.txt
+    out: /out/*.txt
