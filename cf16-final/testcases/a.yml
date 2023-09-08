@@ -1,0 +1,38 @@
+---
+type: Batch
+timelimit: 2s
+match: Lines
+
+cases:
+  - name: sample1
+    in: |
+      15 10
+      snake snake snake snake snake snake snake snake snake snake
+      snake snake snake snake snake snake snake snake snake snake
+      snake snake snake snake snake snake snake snake snake snake
+      snake snake snake snake snake snake snake snake snake snake
+      snake snake snake snake snake snake snake snake snake snake
+      snake snake snake snake snake snake snake snuke snake snake
+      snake snake snake snake snake snake snake snake snake snake
+      snake snake snake snake snake snake snake snake snake snake
+      snake snake snake snake snake snake snake snake snake snake
+      snake snake snake snake snake snake snake snake snake snake
+      snake snake snake snake snake snake snake snake snake snake
+      snake snake snake snake snake snake snake snake snake snake
+      snake snake snake snake snake snake snake snake snake snake
+      snake snake snake snake snake snake snake snake snake snake
+      snake snake snake snake snake snake snake snake snake snake
+    out: |
+      H6
+  - name: sample2
+    in: |
+      1 1
+      snuke
+    out: |
+      A1
+
+extend:
+  - type: Text
+    path: "./a"
+    in: /in/*.txt
+    out: /out/*.txt
