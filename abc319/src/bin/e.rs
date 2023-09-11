@@ -10,27 +10,24 @@ fn main() {
         queries: [u64; q],
     }
 
-    for query in queries {
-        // Takahashi's initial time
-        let mut cur_time = query;
+    // Process the queries
+    for &query in &queries {
+        let mut dp = vec![0u64; n];
+        dp[0] = x + query; // Start time to reach first bus stop
 
-        // Walk to the first bus stop
-        cur_time += x;
-
-        // Process each bus stop
-        for &(p, t) in &bus_data {
-            // Wait for the bus
-            let wait_time = if cur_time % p == 0 {
+        // Compute the minimum time required to reach each bus stop
+        for i in 1..n {
+            let (p, t) = bus_data[i - 1];
+            // Calculate wait time
+            let wait_time = if dp[i - 1] % p == 0 {
                 0
             } else {
-                p - cur_time % p
+                p - dp[i - 1] % p
             };
-            cur_time += wait_time + t;
+            dp[i] = dp[i - 1] + wait_time + t;
         }
 
-        // Walk to Aoki's house
-        cur_time += y;
-
-        println!("{}", cur_time);
+        let final_time = dp[n - 1] + y; // Add time required to reach Aoki's house
+        println!("{}", final_time);
     }
 }
