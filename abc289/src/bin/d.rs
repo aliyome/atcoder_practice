@@ -20,13 +20,17 @@ fn main() {
     dp[0] = true;
 
     for i in 0..x {
-        for j in 0..n {
-            if !dp[i] {
+        if !dp[i] {
+            continue;
+        }
+        for &a in &a {
+            if mochi.contains(&(i + a)) {
                 continue;
             }
-            if i + a[j] <= x && !mochi.contains(&(i + a[j])) {
-                dp[i + a[j]] = true;
+            if i + a > x {
+                continue;
             }
+            dp[i + a] = true;
         }
     }
 
