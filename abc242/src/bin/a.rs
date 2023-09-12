@@ -2,8 +2,17 @@ use proconio::input;
 
 fn main() {
     input! {
-        n: usize,
+        a: usize,
+        b: usize,
+        c: usize,
+        x: usize,
     };
 
-    println!("{}", n);
+    if x <= a {
+        println!("{}", 1.0f64);
+    } else if x <= b {
+        println!("{}", c as f64 / (b - a) as f64);
+    } else {
+        println!("{}", 0.0f64);
+    }
 }
