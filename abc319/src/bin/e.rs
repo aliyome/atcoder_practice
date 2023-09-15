@@ -3,31 +3,31 @@ use proconio::input;
 fn main() {
     input! {
         n: usize,
-        x: u64,
-        y: u64,
-        bus_data: [(u64, u64); n - 1],
+        x: usize,
+        y: usize,
+        bus_data: [(usize, usize); n - 1],
         q: usize,
-        queries: [u64; q],
+        queries: [usize; q],
     }
 
-    // Process the queries
-    for &query in &queries {
-        let mut dp = vec![0u64; n];
-        dp[0] = x + query; // Start time to reach first bus stop
-
-        // Compute the minimum time required to reach each bus stop
-        for i in 1..n {
-            let (p, t) = bus_data[i - 1];
-            // Calculate wait time
-            let wait_time = if dp[i - 1] % p == 0 {
-                0
-            } else {
-                p - dp[i - 1] % p
-            };
-            dp[i] = dp[i - 1] + wait_time + t;
+    let m = 840;
+    let mut time = vec![0; m];
+    for i in 0..m {
+        let mut curr = i + x;
+        for j in 0..n - 1 {
+            let (p, t) = bus_data[j];
+            for k in curr.. {
+                if k % p == 0 {
+                    curr = k + t;
+                    break;
+                }
+            }
         }
+        time[i] = curr + y;
+        time[i] -= i;
+    }
 
-        let final_time = dp[n - 1] + y; // Add time required to reach Aoki's house
-        println!("{}", final_time);
+    for &query in &queries {
+        println!("{}", query + time[query % m]);
     }
 }
