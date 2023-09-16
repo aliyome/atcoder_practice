@@ -1,5 +1,4 @@
 use proconio::input;
-use std::collections::HashMap;
 
 fn main() {
     input! {
@@ -8,44 +7,46 @@ fn main() {
         s2: String,
         s3: String,
     }
+    let s1: Vec<_> = s1.chars().collect();
+    let s2: Vec<_> = s2.chars().collect();
+    let s3: Vec<_> = s3.chars().collect();
 
-    let s1 = s1.chars().collect::<Vec<char>>();
-    let s2 = s2.chars().collect::<Vec<char>>();
-    let s3 = s3.chars().collect::<Vec<char>>();
+    let mut ans = std::usize::MAX;
 
-    let mut map1 = HashMap::new();
-    let mut map2 = HashMap::new();
-    let mut map3 = HashMap::new();
-
-    for (i, &ch) in s1.iter().enumerate() {
-        map1.entry(ch).or_insert(vec![]).push(i);
-    }
-    for (i, &ch) in s2.iter().enumerate() {
-        map2.entry(ch).or_insert(vec![]).push(i);
-    }
-    for (i, &ch) in s3.iter().enumerate() {
-        map3.entry(ch).or_insert(vec![]).push(i);
-    }
-
-    let mut answer = std::usize::MAX;
-    for (&key, val1) in &map1 {
-        if let Some(val2) = map2.get(&key) {
-            if let Some(val3) = map3.get(&key) {
-                for &i in val1 {
-                    for &j in val2 {
-                        for &k in val3 {
-                            let total_time = i + j + k;
-                            answer = std::cmp::min(answer, total_time);
-                        }
-                    }
+    for t1 in 0..m {
+        for t2 in t1 + 1..m * 2 {
+            for t3 in t2 + 1..m * 3 {
+                if s1[t1] == s2[t2 % m] && s2[t2 % m] == s3[t3 % m] {
+                    let time = t1.max(t2).max(t3);
+                    ans = ans.min(time);
+                }
+                if s1[t1] == s3[t2 % m] && s3[t2 % m] == s2[t3 % m] {
+                    let time = t1.max(t2).max(t3);
+                    ans = ans.min(time);
+                }
+                if s2[t1] == s1[t2 % m] && s1[t2 % m] == s3[t3 % m] {
+                    let time = t1.max(t2).max(t3);
+                    ans = ans.min(time);
+                }
+                if s2[t1] == s3[t2 % m] && s3[t2 % m] == s1[t3 % m] {
+                    let time = t1.max(t2).max(t3);
+                    ans = ans.min(time);
+                }
+                if s3[t1] == s1[t2 % m] && s1[t2 % m] == s2[t3 % m] {
+                    let time = t1.max(t2).max(t3);
+                    ans = ans.min(time);
+                }
+                if s3[t1] == s2[t2 % m] && s2[t2 % m] == s1[t3 % m] {
+                    let time = t1.max(t2).max(t3);
+                    ans = ans.min(time);
                 }
             }
         }
     }
 
-    if answer == std::usize::MAX {
+    if ans == std::usize::MAX {
         println!("-1");
     } else {
-        println!("{}", answer);
+        println!("{}", ans);
     }
 }
