@@ -186,15 +186,16 @@ set.range(..7).last();
 
 範囲を 3 分することで、最小値がある範囲を狭めていく。
 
-```cpp
-  double left = -5;
-  double right = 5;
-  while(right-left>0.00000001) {
-    double mid_l = left*2.0/3.0+right/3.0;
-    double mid_r = left/3.0+right*2.0/3.0;
-    if(func(mid_l)<func(mid_r)){
+```rs
+    let mut left = 0.0;
+    let mut right = 1e9;
+    for _ in 0..100 {
+        // 計算の回数を固定して、確実に収束させる
+        let mid_l = left + (right - left) / 3.0;
+        let mid_r = right - (right - left) / 3.0;
+        if f(mid_l) < f(mid_r) {
             right = mid_r;
-        }else {
+        } else {
             left = mid_l;
         }
     }
