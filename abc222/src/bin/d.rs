@@ -8,28 +8,27 @@ fn main() {
         b: [usize; n]
     };
 
-    // dp[i][j] := i番目の要素まで見たときに、末尾がjであるような条件を満たす数列の個数
-    let mut dp = vec![vec![0; 3001]; n + 1];
+    // dp[i][j] := i番目までの数列で、jが作れる通り数
+    let m = 3000;
+    let mut dp = vec![vec![0; m + 1]; n + 1];
     dp[0][0] = 1;
 
-    // 数列のi番目の要素を見るとき
     for i in 0..n {
-        // 累積和
-        let mut acc = vec![0; 3001];
-        for j in 0..=3000 {
-            acc[j] = if j < 1 { 0 } else { acc[j - 1] } + dp[i][j];
-            acc[j] %= MOD;
+        let mut acc = vec![0; m + 2];
+        for j in 0..=m {
+            acc[j + 1] = acc[j] + dp[i][j];
+            acc[j + 1] %= MOD;
         }
         for j in a[i]..=b[i] {
-            dp[i + 1][j] = acc[j];
+            dp[i + 1][j] = acc[j + 1];
+            dp[i + 1][j] %= MOD;
         }
     }
 
     let mut ans = 0;
-    for j in 0..=3000 {
-        ans += dp[n][j];
+    for i in 0..=m {
+        ans += dp[n][i];
         ans %= MOD;
     }
-
     println!("{}", ans);
 }
