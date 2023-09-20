@@ -5,10 +5,10 @@ fn main() {
     input! {
         n: usize,
         q: usize,
-        a: [usize; n],
+        a: [isize; n],
     };
 
-    let mut seg_max = Segtree::<Max<_>>::new(n + 1);
+    let mut seg_max = Segtree::<Max<isize>>::new(n + 1);
     for i in 0..n {
         seg_max.set(i + 1, a[i]);
     }
@@ -17,7 +17,7 @@ fn main() {
         input! { t: usize };
         match t {
             1 => {
-                input! { x: usize, v: usize };
+                input! { x: usize, v: isize };
                 seg_max.set(x, v);
             }
             2 => {
@@ -25,7 +25,7 @@ fn main() {
                 println!("{}", seg_max.prod(l..=r));
             }
             3 => {
-                input! { x: usize, v: usize };
+                input! { x: usize, v: isize };
                 println!("{}", seg_max.max_right(x, |&a| a < v));
             }
             _ => unreachable!(),
