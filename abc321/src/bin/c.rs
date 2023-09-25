@@ -6,30 +6,19 @@ fn main() {
     }
 
     let mut ans = vec![];
-    for i in 1..=9 {
-        ans.push(i);
-        dfs(&mut vec![i], &mut ans);
+    for i in 0..1 << 10 {
+        let mut x = 0;
+        for j in (0..=9).rev() {
+            if i >> j & 1 == 1 {
+                x = x * 10 + j;
+            }
+        }
+        if x == 0 {
+            continue;
+        }
+        ans.push(x);
     }
+
     ans.sort();
-    println!("{:?}", ans[k - 1]);
-}
-
-fn dfs(curr: &mut Vec<usize>, ans: &mut Vec<usize>) {
-    let last = *curr.last().unwrap();
-    if last == 0 {
-        return;
-    }
-
-    for i in (0..=last - 1).rev() {
-        curr.push(i);
-        ans.push(
-            curr.iter()
-                .map(|&x| x.to_string())
-                .collect::<String>()
-                .parse()
-                .unwrap(),
-        );
-        dfs(curr, ans);
-        curr.pop();
-    }
+    println!("{}", ans[k - 1]);
 }
