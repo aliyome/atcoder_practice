@@ -6,11 +6,9 @@ fn main() {
     };
 
     let mut dp = vec![std::usize::MAX; 100011];
-    dp[1] = 1;
-    dp[6] = 1;
-    dp[9] = 1;
+    dp[0] = 0;
 
-    for i in 1..=100000 {
+    for i in 0..=100000 {
         if dp[i] == std::usize::MAX {
             continue;
         }
