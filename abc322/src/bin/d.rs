@@ -6,6 +6,28 @@ fn main() {
         polyominoes: [Chars; 12],
     }
 
+    // ポリオミノが合計16マスじゃなかったら敷き詰められない
+    let mut count = 0;
+    for i in 0..12 {
+        for j in 0..4 {
+            if polyominoes[i][j] == '#' {
+                count += 1;
+            }
+        }
+    }
+    if count != 16 {
+        println!("No");
+        return;
+    }
+
+    // 最終的な形
+    let mut reference = HashSet::new();
+    for i in 0..4 {
+        for j in 0..4 {
+            reference.insert((i as isize, j as isize));
+        }
+    }
+
     // 各ポリオミノの座標をHashSet<(isize, isize)>で表現し、正規化します。
     let mut shapes = Vec::new();
     for p in 0..3 {
@@ -45,12 +67,7 @@ fn main() {
                                         for &(r, c) in
                                             &rotate_and_translate(&shapes[0], rotation1, row1, col1)
                                         {
-                                            if !grid.insert((r, c))
-                                                || r < 0
-                                                || r >= 4
-                                                || c < 0
-                                                || c >= 4
-                                            {
+                                            if !grid.insert((r, c)) {
                                                 valid = false;
                                                 break;
                                             }
@@ -60,12 +77,7 @@ fn main() {
                                         for &(r, c) in
                                             &rotate_and_translate(&shapes[1], rotation2, row2, col2)
                                         {
-                                            if !grid.insert((r, c))
-                                                || r < 0
-                                                || r >= 4
-                                                || c < 0
-                                                || c >= 4
-                                            {
+                                            if !grid.insert((r, c)) {
                                                 valid = false;
                                                 break;
                                             }
@@ -75,19 +87,14 @@ fn main() {
                                         for &(r, c) in
                                             &rotate_and_translate(&shapes[2], rotation3, row3, col3)
                                         {
-                                            if !grid.insert((r, c))
-                                                || r < 0
-                                                || r >= 4
-                                                || c < 0
-                                                || c >= 4
-                                            {
+                                            if !grid.insert((r, c)) {
                                                 valid = false;
                                                 break;
                                             }
                                         }
 
                                         // グリッドが全て埋まっているか確認します。
-                                        if valid && grid.len() == 16 {
+                                        if valid && grid == reference {
                                             println!("Yes");
                                             return;
                                         }
