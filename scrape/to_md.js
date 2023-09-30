@@ -85,9 +85,25 @@ function scrapeData() {
     let outputPre =
       outputSampleSections[index].parentElement.querySelector('pre');
 
+    let inputNextSibling = inputPre.nextElementSibling;
+    let inputDetail = '';
+    while (inputNextSibling) {
+      inputDetail += cleanText(inputNextSibling.textContent.trim()) + '\n';
+      inputNextSibling = inputNextSibling.nextElementSibling;
+    }
+
+    let outputNextSibling = outputPre.nextElementSibling;
+    let outputDetail = '';
+    while (outputNextSibling) {
+      outputDetail += cleanText(outputNextSibling.textContent.trim()) + '\n';
+      outputNextSibling = outputNextSibling.nextElementSibling;
+    }
+
     let sampleData = {
       input: inputPre ? cleanText(inputPre.textContent.trim()) : 'Not found',
+      inputDetail,
       output: outputPre ? cleanText(outputPre.textContent.trim()) : 'Not found',
+      outputDetail,
     };
     data.samples.push(sampleData);
   });
@@ -116,8 +132,10 @@ function toMarkdown(data) {
   data.samples.forEach((sample, i) => {
     markdown += `### Sample Input ${i + 1}\n\n`;
     markdown += '```\n' + sample.input + '\n```\n';
+    markdown += sample.inputDetail + '\n';
     markdown += `### Sample Output ${i + 1}\n\n`;
     markdown += '```\n' + sample.output + '\n```\n';
+    markdown += sample.outputDetail + '\n';
   });
 
   return markdown;
