@@ -2,7 +2,7 @@ function removeKatexTag() {
   document.querySelectorAll('.katex-mathml').forEach((e) => e.remove());
 }
 function cleanText(text) {
-  return text.replace(/\u200b/g, '').replace(/\=/g, '≠');
+  return text?.replace(/\u200b/g, '')?.replace(/\=/g, '≠');
 }
 
 function scrapeData() {
@@ -15,7 +15,7 @@ function scrapeData() {
   // KaTeXタグを削除
   removeKatexTag();
 
-  let data = {};
+  let data = { problemStatement: '' };
 
   // 問題文の取得
   let problemStatementSection = Array.from(
@@ -60,9 +60,16 @@ function scrapeData() {
   let outputSection = Array.from(
     langContainer.querySelectorAll('.io-style .part > section > h3')
   ).find((h3) => h3.textContent.trim() === 'Output');
-  data.output = outputSection
-    ? cleanText(outputSection.nextElementSibling.textContent.trim())
-    : 'Not found';
+  data.output = {
+    description: outputSection
+      ? cleanText(outputSection.nextElementSibling.textContent.trim())
+      : 'Not found',
+    detail: outputSection
+      ? cleanText(
+          outputSection.nextElementSibling?.nextElementSibling?.textContent?.trim()
+        )
+      : 'Not found',
+  };
 
   // サンプルの入力と出力を取得
   data.samples = [];
@@ -102,6 +109,9 @@ function toMarkdown(data) {
   markdown += '```\n' + data.input.detail + '\n```\n';
 
   markdown += `\n## Output\n\n${data.output.description}\n\n`;
+  if (data.output.detail) {
+    markdown += '```\n' + data.output.detail + '\n```\n';
+  }
 
   data.samples.forEach((sample, i) => {
     markdown += `### Sample Input ${i + 1}\n\n`;
