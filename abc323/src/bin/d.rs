@@ -7,29 +7,32 @@ fn main() {
         slimes: [(u64, u64); n],
     }
 
-    let mut count = HashMap::new();
+    let mut slimes_map = HashMap::new();
 
-    for (size, num) in slimes {
-        let mut num = num;
-        let mut size = size;
-        while num > 0 {
-            if num & 1 == 1 {
-                *count.entry(size).or_insert(0usize) += 1;
+    for (s, c) in slimes {
+        *slimes_map.entry(s).or_insert(0) += c;
+    }
+
+    let mut keys: Vec<_> = slimes_map.keys().cloned().collect();
+    keys.sort_unstable();
+
+    let mut idx = 0;
+    while idx < keys.len() {
+        let size = keys[idx];
+        if let Some(&count) = slimes_map.get(&size) {
+            if count >= 2 {
+                let combined = count / 2;
+                *slimes_map.entry(size * 2).or_insert_with(|| {
+                    keys.push(size * 2);
+                    0
+                }) += combined;
+                *slimes_map.entry(size).or_insert(0) -= combined * 2;
             }
-            size *= 2;
-            num >>= 1;
         }
+        idx += 1;
     }
 
-    let mut result = 0;
-
-    for &val in count.values() {
-        let mut bits = val;
-        while bits > 0 {
-            result += bits & 1;
-            bits >>= 1;
-        }
-    }
+    let result: u64 = slimes_map.values().sum();
 
     println!("{}", result);
 }
