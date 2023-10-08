@@ -8,17 +8,13 @@ fn main() {
         t: String,
     }
 
-    // SがTのprefixかどうかをチェックします。
-    let is_prefix = &t[0..n] == s;
-    // SがTのsuffixかどうかをチェックします。
-    let is_suffix = &t[(m - n)..] == s;
-
-    // 条件に基づいて結果を出力します。
-    if is_prefix && is_suffix {
+    let is_head = s == t[0..n];
+    let is_tail = s == t[m - n..m];
+    if is_head && is_tail {
         println!("0");
-    } else if is_prefix {
+    } else if is_head {
         println!("1");
-    } else if is_suffix {
+    } else if is_tail {
         println!("2");
     } else {
         println!("3");
