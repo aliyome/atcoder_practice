@@ -1,68 +1,101 @@
-use proconio::{input, marker::Chars};
 use std::collections::HashSet;
+
+use proconio::{input, marker::Chars};
 
 fn main() {
     input! {
-        polyominoes: [Chars; 12],
+        p: [[Chars; 4]; 3],
     }
 
     // ポリオミノが合計16マスじゃなかったら敷き詰められない
-    let mut count = 0;
-    for i in 0..12 {
-        for j in 0..4 {
-            if polyominoes[i][j] == '#' {
-                count += 1;
-            }
-        }
-    }
-    if count != 16 {
+    if p.iter().flatten().flatten().filter(|&&c| c == '#').count() != 16 {
         println!("No");
         return;
     }
 
-    // 各ポリオミノの座標をHashSet<(isize, isize)>で表現し、正規化します。
-    let mut shapes = Vec::new();
-    for p in 0..3 {
-        let mut shape = HashSet::new();
+    // ポリオミノ
+    let mut minos = vec![];
+
+    // 範囲外エラーを対処しないでいいように集合に変換する
+    for p in &p {
+        let mut set = HashSet::new();
         for i in 0..4 {
             for j in 0..4 {
-                if polyominoes[i + 4 * p][j] == '#' {
-                    shape.insert((i as isize, j as isize));
+                if p[i][j] == '#' {
+                    set.insert((i as isize, j as isize));
                 }
             }
         }
-        shapes.push(shape);
+        // 0 度回転したポリオミノ
+        minos.push(vec![set]);
     }
 
-    // 最終的な形
-    let reference = (0..4)
-        .flat_map(|i| (0..4).map(move |j| (i as isize, j as isize)))
-        .collect::<HashSet<_>>();
+    // それぞれのポリオミノが 0, 90, 180, 270度回転したポリオミノを作る
+    for i in 0..3 {
+        let mut mino = minos[i][0].clone();
+        for _ in 1..=3 {
+            mino = rotate(&mino);
+            minos[i].push(mino.clone());
+        }
+    }
 
-    // すべてのポリオミノの配置と回転を試します。
-    for &rotation1 in &[0, 1, 2, 3] {
-        let shape1 = normalize(&shapes[0], rotation1);
-        for &rotation2 in &[0, 1, 2, 3] {
-            let shape2 = normalize(&shapes[1], rotation2);
-            for &rotation3 in &[0, 1, 2, 3] {
-                let shape3 = normalize(&shapes[2], rotation3);
-                for row1 in 0..4 {
-                    for col1 in 0..4 {
-                        for row2 in 0..4 {
-                            for col2 in 0..4 {
-                                for row3 in 0..4 {
-                                    for col3 in 0..4 {
-                                        let mut grid = HashSet::new();
-                                        let shape1 = translate(&shape1, row1, col1);
-                                        grid.extend(shape1);
+    // それぞれのポリオミノの座標を左上に隙間がなくなるように正規化する
+    let mut normalized_minos = vec![];
+    for list in &minos {
+        let mut normalized_list = vec![];
+        for mino in list {
+            let mut normalized = HashSet::new();
+            let mut min_i = 10;
+            let mut min_j = 10;
+            for (i, j) in mino.iter() {
+                min_i = min_i.min(*i);
+                min_j = min_j.min(*j);
+            }
+            for (i, j) in mino.iter() {
+                normalized.insert((*i - min_i, *j - min_j));
+            }
+            normalized_list.push(normalized);
+        }
+        normalized_minos.push(normalized_list);
+    }
 
-                                        let shape2 = translate(&shape2, row2, col2);
-                                        grid.extend(shape2);
+    // 全組み合わせを試す
+    for mino1 in &normalized_minos[0] {
+        for mino2 in &normalized_minos[1] {
+            for mino3 in &normalized_minos[2] {
+                // 全位置を試す
+                for di1 in 0..4 {
+                    for dj1 in 0..4 {
+                        for di2 in 0..4 {
+                            for dj2 in 0..4 {
+                                for di3 in 0..4 {
+                                    for dj3 in 0..4 {
+                                        // 3つのポリオミノを敷き詰める
+                                        let mut set = HashSet::new();
+                                        for &(i, j) in mino1 {
+                                            set.insert((i + di1, j + dj1));
+                                        }
+                                        for &(i, j) in mino2 {
+                                            set.insert((i + di2, j + dj2));
+                                        }
+                                        for &(i, j) in mino3 {
+                                            set.insert((i + di3, j + dj3));
+                                        }
 
-                                        let shape3 = translate(&shape3, row3, col3);
-                                        grid.extend(shape3);
+                                        // 範囲外にミノが出たらダメ
+                                        let mut out_of_range = false;
+                                        for &(i, j) in &set {
+                                            if i < 0 || i > 3 || j < 0 || j > 3 {
+                                                out_of_range = true;
+                                                break;
+                                            }
+                                        }
+                                        if out_of_range {
+                                            continue;
+                                        }
 
-                                        if grid == reference {
+                                        // 敷き詰められたら Yes を出力して終了
+                                        if set.len() == 16 {
                                             println!("Yes");
                                             return;
                                         }
@@ -76,41 +109,14 @@ fn main() {
         }
     }
 
-    // 全ての配置を試した結果、条件を満たす配置がなかった場合
     println!("No");
 }
 
-// 指定された回転と移動を適用してポリオミノの座標を計算します。
-fn translate(shape: &HashSet<(isize, isize)>, row: isize, col: isize) -> HashSet<(isize, isize)> {
-    let mut ret = HashSet::new();
-    for &(r, c) in shape {
-        ret.insert((r + row, c + col));
+// 90 度回転
+fn rotate(mino: &HashSet<(isize, isize)>) -> HashSet<(isize, isize)> {
+    let mut new_mino = HashSet::new();
+    for (i, j) in mino {
+        new_mino.insert((*j, -*i));
     }
-    ret
-}
-
-fn rotation(shape: &HashSet<(isize, isize)>) -> HashSet<(isize, isize)> {
-    let mut rotated = HashSet::new();
-    for &(r, c) in shape {
-        rotated.insert((c, -r));
-    }
-    rotated
-}
-
-fn n_rotation(shape: &HashSet<(isize, isize)>, n: usize) -> HashSet<(isize, isize)> {
-    let mut rotated = shape.clone();
-    for _ in 0..n {
-        rotated = rotation(&rotated);
-    }
-    rotated
-}
-
-fn normalize(shape: &HashSet<(isize, isize)>, rot: i32) -> HashSet<(isize, isize)> {
-    let shape = n_rotation(shape, rot as usize);
-    let min_row = shape.iter().map(|&(r, _)| r).min().unwrap_or(0);
-    let min_col = shape.iter().map(|&(_, c)| c).min().unwrap_or(0);
-    shape
-        .iter()
-        .map(|&(r, c)| (r - min_row, c - min_col))
-        .collect()
+    new_mino
 }
