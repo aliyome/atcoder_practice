@@ -1,38 +1,49 @@
 use proconio::input;
-use std::{cmp::min, collections::HashMap};
+use std::collections::HashMap;
 
 fn main() {
     input! {
-        n: usize, // 開発計画の数
-        k: usize, // パラメータの数
-        p: usize, // 目標値
-        plans: [(usize, [usize; k]); n], // 各開発計画のコストとパラメータの増加量
+        n: usize,
+        k: usize,
+        p: usize,
+        ca: [(usize, [usize; k]); n],
     }
 
-    // DPテーブルの初期化
+    let add = |a: &Vec<usize>, b: &Vec<usize>| {
+        let mut res = vec![0; k];
+        for i in 0..k {
+            res[i] = (a[i] + b[i]).min(p);
+        }
+        res
+    };
+
     let mut dp = HashMap::new();
     dp.insert(vec![0; k], 0);
 
-    // 各開発計画に対して
-    for (cost, params) in plans {
+    for (c, a) in &ca {
         let mut next_dp = dp.clone();
-        for (kvs, &current_cost) in dp.iter() {
-            let mut new_kvs = kvs.clone();
-            for (i, &param) in params.iter().enumerate() {
-                new_kvs[i] = std::cmp::min(new_kvs[i] + param, p);
+        for (ks, cost) in dp.iter() {
+            let added = add(ks, a);
+            if next_dp.contains_key(&added) {
+                let prev = *next_dp.get(&added).unwrap();
+                next_dp.insert(added, prev.min(cost + c));
+            } else {
+                next_dp.insert(added, cost + c);
             }
-            let new_cost = current_cost + cost;
-            let entry = next_dp.entry(new_kvs).or_insert(usize::MAX);
-            *entry = std::cmp::min(*entry, new_cost);
         }
         dp = next_dp;
     }
 
-    // 目標を達成できるかどうかを判定し、可能であれば最小コストを出力
-    let target = vec![p; k];
-    if let Some(&min_cost) = dp.get(&target) {
-        println!("{}", min_cost);
-    } else {
+    let mut min = std::usize::MAX;
+    for (k, v) in dp.iter() {
+        if k.iter().all(|&x| x >= p) {
+            min = min.min(*v);
+        }
+    }
+
+    if min == std::usize::MAX {
         println!("-1");
+    } else {
+        println!("{}", min);
     }
 }
