@@ -16,10 +16,13 @@ fn main() {
     }
 
     println!("{}", ans.len());
-    for a in ans.iter() {
-        print!("{} ", a);
-    }
-    println!("");
+    println!(
+        "{}",
+        ans.iter()
+            .map(|x| x.to_string())
+            .collect::<Vec<String>>()
+            .join(" ")
+    );
 }
 
 fn check_possible(t: &String, s: &String) -> bool {
@@ -29,18 +32,18 @@ fn check_possible(t: &String, s: &String) -> bool {
     }
 
     // 条件2
-    if t.len() == s.len() + 1 {
-        for i in 0..=s.len() {
-            if &t[0..i] == &s[0..i] && &t[i + 1..] == &s[i..] {
+    if t.len() + 1 == s.len() {
+        for i in 0..=t.len() {
+            if &t[0..i] == &s[0..i] && &t[i..] == &s[i + 1..] {
                 return true;
             }
         }
     }
 
     // 条件3
-    if t.len() + 1 == s.len() {
-        for i in 0..t.len() {
-            if &t[0..i] == &s[0..i] && &t[i..] == &s[i + 1..] {
+    if t.len() == s.len() + 1 {
+        for i in 0..=s.len() {
+            if &t[0..i] == &s[0..i] && &t[i + 1..] == &s[i..] {
                 return true;
             }
         }
