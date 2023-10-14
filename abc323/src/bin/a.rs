@@ -5,13 +5,14 @@ fn main() {
         s: String
     }
 
-    for i in (2..=16).step_by(2) {
-        if s.chars().nth(i - 1).unwrap() != '0' {
-            // 0でない場合、"No"を出力して終了
-            println!("No");
-            return;
-        }
+    if s.chars()
+        .map(|c| c.to_digit(10).unwrap())
+        .enumerate()
+        .filter(|(i, _)| (*i + 1) != 0 && (*i + 1) % 2 == 0)
+        .all(|(_, c)| c == 0)
+    {
+        println!("Yes");
+    } else {
+        println!("No");
     }
-
-    println!("Yes");
 }
