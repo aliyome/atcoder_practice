@@ -22,6 +22,12 @@ cases:
       8694027811503
     out: |
       840
+  - name: add1
+    in: |
+      10
+      1234567890
+    out: |
+      10
 
 extend:
   - type: Text
