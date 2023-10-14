@@ -1,23 +1,20 @@
-use proconio::input;
+use std::{cmp::Reverse, collections::BinaryHeap};
+
+use proconio::{input, marker::Chars};
 
 fn main() {
     input! {
         n: usize,
-        s: [String; n],
+        s: [Chars; n],
     }
 
-    // 各プレイヤーの勝利数をカウントする
-    let mut win_counts = vec![];
+    let mut heap = BinaryHeap::new();
     for i in 0..n {
-        let count = s[i].chars().filter(|&c| c == 'o').count();
-        win_counts.push((count, -(i as isize))); // 勝利数と-index（indexは昇順でのソートを保証するため）
+        let win = s[i].iter().filter(|&c| *c == 'o').count();
+        heap.push((win, Reverse(i)));
     }
 
-    // 勝利数で降順にソート
-    win_counts.sort_by(|a, b| b.cmp(a));
-
-    // ソート後のプレイヤーの順番を表示
-    for (_, index) in win_counts {
-        print!("{} ", (-index) + 1); // indexを元の正の値に戻して出力
+    while let Some((_, Reverse(i))) = heap.pop() {
+        print!("{} ", i + 1);
     }
 }
