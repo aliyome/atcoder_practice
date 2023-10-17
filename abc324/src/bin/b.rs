@@ -2,22 +2,26 @@ use proconio::input;
 
 fn main() {
     input! {
-        n: i64,
+        n: u128,
     }
 
-    let mut n = n;
-
-    while n % 2 == 0 {
-        n /= 2;
-    }
-
-    while n % 3 == 0 {
-        n /= 3;
-    }
-
-    if n == 1 {
+    if [1, 2, 3].contains(&n) {
         println!("Yes");
-    } else {
-        println!("No");
+        return;
     }
+
+    let mut x = 1;
+    for _ in 1..=60 {
+        let mut y = 1;
+        for _ in 1..=40 {
+            if x * y == n {
+                println!("Yes");
+                return;
+            }
+            y *= 3;
+        }
+        x *= 2;
+    }
+
+    println!("No");
 }
