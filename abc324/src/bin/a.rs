@@ -6,9 +6,7 @@ fn main() {
         a: [usize; n],
     }
 
-    let first = a[0];
-
-    if a.iter().all(|&x| x == first) {
+    if a.iter().all(|&x| x == a[0]) {
         println!("Yes");
     } else {
         println!("No");
