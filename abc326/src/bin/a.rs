@@ -6,9 +6,9 @@ fn main() {
         y: i32,
     }
 
-    let diff = (x - y).abs();
-
-    if diff <= 2 || (diff <= 3 && (x > y)) {
+    if 0 <= y - x && y - x <= 2 {
+        println!("Yes");
+    } else if 0 <= x - y && x - y <= 3 {
         println!("Yes");
     } else {
         println!("No");
