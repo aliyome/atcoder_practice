@@ -3,25 +3,24 @@ use proconio::input;
 fn main() {
     input! {
         n: usize,
-        m: i64,
+        m: usize,
+        mut a: [usize; n]
     }
 
-    // ギフトの座標を入力し、ソート
-    input! {
-        mut a: [i64; n],
-    }
     a.sort();
 
-    // しゃくとり法で最大のギフト数を求める
-    let mut max_gifts = 0;
-    let mut left = 0;
-    for right in 0..n {
-        while a[right] - a[left] >= m {
-            left += 1;
+    let mut r = 0;
+    let mut ans = 0;
+    for l in 0..n {
+        for next_r in r..n {
+            if a[next_r] < a[l] + m {
+                r = next_r;
+            } else {
+                break;
+            }
         }
-        max_gifts = max_gifts.max(right - left + 1);
+        ans = ans.max(r - l + 1);
     }
 
-    // 結果を出力
-    println!("{}", max_gifts);
+    println!("{}", ans);
 }
