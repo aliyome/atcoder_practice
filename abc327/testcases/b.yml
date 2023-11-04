@@ -19,6 +19,11 @@ cases:
       10000000000
     out: |
       10
+  - name: sample_x
+    in: |
+      1
+    out: |
+      1
 
 extend:
   - type: Text
