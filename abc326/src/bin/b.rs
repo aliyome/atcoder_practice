@@ -2,21 +2,19 @@ use proconio::input;
 
 fn main() {
     input! {
-        n: u32,
+        n: usize,
     }
 
-    // Nから始めて1ずつ増やしながら326-like numberを探す
-    for num in n..=919 {
-        // 整数を文字列に変換
-        let num_str = num.to_string();
-        // 各桁の値を取得
-        let hundreds_digit = num_str.chars().nth(0).unwrap().to_digit(10).unwrap();
-        let tens_digit = num_str.chars().nth(1).unwrap().to_digit(10).unwrap();
-        let ones_digit = num_str.chars().nth(2).unwrap().to_digit(10).unwrap();
+    let f = |n: usize| {
+        let hyaku = n / 100;
+        let ju = (n / 10) % 10;
+        let ichi = n % 10;
+        hyaku * ju == ichi
+    };
 
-        // 326-like numberか判断
-        if hundreds_digit * tens_digit == ones_digit {
-            println!("{}", num);
+    for i in n..=999 {
+        if f(i) {
+            println!("{}", i);
             return;
         }
     }
