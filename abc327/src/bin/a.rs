@@ -1,17 +1,16 @@
-use proconio::input;
+use proconio::{input, marker::Chars};
 
 fn main() {
     input! {
         n: usize,
-        s: String,
+        s: Chars,
     }
-    let has_adjacent_ab = s.chars().collect::<Vec<char>>().windows(2).any(|window| {
-        (window[0] == 'a' && window[1] == 'b') || (window[0] == 'b' && window[1] == 'a')
-    });
 
-    if has_adjacent_ab {
-        println!("Yes");
-    } else {
-        println!("No");
+    for i in 1..n {
+        if (s[i - 1] == 'a' && s[i] == 'b') || (s[i - 1] == 'b' && s[i] == 'a') {
+            println!("Yes");
+            return;
+        }
     }
+    println!("No");
 }
