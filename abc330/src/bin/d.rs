@@ -7,9 +7,8 @@ fn main() {
         grid: [Chars; n],
     }
 
-    // 各行と各列の'o'の数をカウントする
-    let mut row_counts = vec![0; n];
-    let mut col_counts = vec![0; n];
+    let mut row_counts = vec![0usize; n];
+    let mut col_counts = vec![0usize; n];
     for i in 0..n {
         for j in 0..n {
             if grid[i][j] == 'o' {
@@ -19,12 +18,14 @@ fn main() {
         }
     }
 
-    // 条件を満たすトリプルの数をカウントする
     let mut count = 0;
     for i in 0..n {
         for j in 0..n {
             if grid[i][j] == 'o' {
-                count += (row_counts[i] - 1) * (col_counts[j] - 1);
+                // 各行と各列で「o」が2つ以上ある場合のみカウント
+                if row_counts[i] > 1 && col_counts[j] > 1 {
+                    count += (row_counts[i] - 1) * (col_counts[j] - 1);
+                }
             }
         }
     }
