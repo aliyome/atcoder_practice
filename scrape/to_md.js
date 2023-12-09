@@ -1,6 +1,11 @@
 function removeKatexTag() {
   document.querySelectorAll('.katex-mathml').forEach((e) => e.remove());
 }
+function processMultiplier() {
+  document
+    .querySelectorAll('.msupsub .vlist-t:not(.vlist-t2) .mord')
+    .forEach((e) => (e.innerHTML = '^' + e.innerHTML));
+}
 function cleanText(text) {
   return text?.replace(/\u200b/g, '')?.replace(/\=/g, '≠');
 }
@@ -14,6 +19,9 @@ function scrapeData() {
 
   // KaTeXタグを削除
   removeKatexTag();
+
+  // 乗数を加工
+  processMultiplier();
 
   let data = { problemStatement: '' };
 
@@ -114,6 +122,14 @@ function scrapeData() {
 function toMarkdown(data) {
   let markdown = '';
 
+  markdown += `あなたはプログラミングコンテストに参加しています。
+あなたはアルゴリズムとデータ構造に非常に詳しいシニアプログラマです。
+
+あなたは以下の問題を解こうとしています。
+
+"""
+`;
+
   markdown += `# Problem Statement\n\n${data.problemStatement}\n\n`;
 
   markdown += `## Constraints\n\n`;
@@ -137,6 +153,16 @@ function toMarkdown(data) {
     markdown += '```\n' + sample.output + '\n```\n';
     markdown += sample.outputDetail + '\n';
   });
+
+  markdown += `"""
+
+
+それでは Rust で実装してください。
+入力のハンドリングは proconio クレートを使ってください。
+コメントは日本語で記述してください。
+
+まずはこの問題を解く実装のアイディアをいくつか挙げて、それぞれを簡潔に説明して計算量を見積もってください。
+`;
 
   return markdown;
 }
