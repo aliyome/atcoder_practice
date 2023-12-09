@@ -3,11 +3,16 @@ use proconio::input;
 fn main() {
     input! {
         n: usize,
-        l: i32,
-        a: [i32; n],
+        l: usize,
+        a: [usize; n],
     }
 
-    let count = a.iter().filter(|&&score| score >= l).count();
+    let mut cnt = 0;
+    for a in a {
+        if a >= l {
+            cnt += 1;
+        }
+    }
 
-    println!("{}", count);
+    println!("{}", cnt);
 }
