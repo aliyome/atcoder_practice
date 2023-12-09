@@ -3,12 +3,17 @@ use proconio::input;
 fn main() {
     input! {
         n: usize,
-        a: [i32; n],
+        mut a: [usize; n],
     }
 
-    let max_value = *a.iter().max().unwrap();
+    a.sort();
+    a.reverse();
 
-    let second_max = a.iter().filter(|&&x| x != max_value).max().unwrap();
-
-    println!("{}", second_max);
+    let first = a[0];
+    for a in a {
+        if a != first {
+            println!("{}", a);
+            return;
+        }
+    }
 }
