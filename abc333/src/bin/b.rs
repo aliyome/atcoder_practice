@@ -6,22 +6,23 @@ fn main() {
         t: String,
     }
 
-    // 頂点間の距離を比較する関数
-    fn is_equal_distance(s: &str, t: &str) -> bool {
-        // 頂点のラベルを数値に変換する
+    // 頂点間の距離の種類を判断する関数
+    fn distance_type(s: &str) -> i32 {
         let to_int = |c: char| -> i32 { c as i32 - 'A' as i32 };
+        let a = to_int(s.chars().nth(0).unwrap());
+        let b = to_int(s.chars().nth(1).unwrap());
+        let diff = (a - b).abs();
 
-        let s1 = to_int(s.chars().nth(0).unwrap());
-        let s2 = to_int(s.chars().nth(1).unwrap());
-        let t1 = to_int(t.chars().nth(0).unwrap());
-        let t2 = to_int(t.chars().nth(1).unwrap());
-
-        // 正五角形の頂点間の距離は、ラベルの差の絶対値に依存する
-        (s1 - s2).abs() % 5 == (t1 - t2).abs() % 5
+        // 頂点間の距離が1または4（隣接する頂点）なら1、そうでなければ2（2つ離れた頂点）
+        if diff == 1 || diff == 4 {
+            1
+        } else {
+            2
+        }
     }
 
-    // 結果を出力
-    if is_equal_distance(&s, &t) {
+    // 両方のペアの距離の種類が同じかどうかを判断する
+    if distance_type(&s) == distance_type(&t) {
         println!("Yes");
     } else {
         println!("No");
