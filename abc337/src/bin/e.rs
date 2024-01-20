@@ -1,4 +1,4 @@
-use proconio::{input, source::line::LineSource};
+use proconio::{input, marker::Chars, source::line::LineSource};
 use std::io::{stdin, BufReader};
 
 fn main() {
@@ -37,12 +37,25 @@ fn main() {
     // 標準入力から友達の反応を受け取る。
     input! {
         from &mut source,
-        response: String,
+        response: Chars,
+    }
+
+    if m == 1 {
+        if response[0] == '1' {
+            println!("1");
+        } else {
+            println!("2");
+        }
+        return;
+    }
+    if response.iter().all(|&c| c == '0') {
+        println!("{}", n);
+        return;
     }
 
     // 悪いボトルの番号を特定する。
     let mut bad_bottle = 0;
-    for (i, c) in response.chars().enumerate() {
+    for (i, &c) in response.iter().enumerate() {
         if c == '1' {
             bad_bottle |= 1 << i;
         }
