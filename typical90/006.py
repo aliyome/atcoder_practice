@@ -1,3 +1,4 @@
+import string
 from os import getenv
 
 
@@ -8,21 +9,33 @@ def solve(N: int, K: int, S: str):
     >>> solve(14,5,"kittyonyourlap")
     inlap
     """
+    next_pos = calc_next_pos(S)
 
-    ans = ""
-
-    # 全探索 O(KNlogN)
-    rest = S
-    for k in range(K):
-        # 辞書順でもっとも早い文字を選ぶ
-        for c in sorted(rest):
-            # 選んだ文字以降に K-k-1 文字以上残っているか
-            if len(rest) - rest.index(c) >= K - k:
-                ans += c
-                rest = rest[rest.index(c) + 1 :]
+    # 貪欲法
+    res = ""
+    current_pos = 0  # Sのcurrent_pos文字目以降から選ぶ
+    for i in range(K):
+        for c in string.ascii_lowercase:
+            p = next_pos[current_pos][c]
+            if p + (K - i) <= N:
+                res += c
+                current_pos = p + 1
                 break
 
-    print(ans)
+    print(res)
+
+
+# pos[i][c] := Sのi文字目以降で文字cが最初に出現するindex
+# 以下のように後ろ向きのDPで計算できる。
+# pos[i][c] = pos[i+1][c] if S[i] != c else i
+def calc_next_pos(S: str):
+    N = len(S)
+    res = [{c: 10**9 for c in string.ascii_lowercase} for _ in range(N + 1)]
+    for i in range(N - 1, -1, -1):
+        for c in string.ascii_lowercase:
+            res[i][c] = res[i + 1][c]
+        res[i][S[i]] = i
+    return res
 
 
 def binary_search_max(ok, ng, is_ok):
