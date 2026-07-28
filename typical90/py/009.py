@@ -1,38 +1,41 @@
 import string
+from bisect import bisect_left
 from math import atan2, degrees
 from os import getenv
+
+# bisect_left(arr, target): arrの中でtarget以上の最小のindexを返す
 
 
 def solve(N: int, P: list[list[int]]):
     """
     >>> solve(3, [[0, 0], [0, 10], [10, 10]])
-    90
+    90.0
     """
 
-    # O(N^2 logN)
     max_angle = -1
-    # 1点(Pi)は固定
-    for i in range(N):
-        # 偏角を計算してソートする
-        angles = [(j, degrees(atan2(x, y))) for j, [x, y] in enumerate(P) if j != i]
-        sorted_angles = sorted(angles, key=lambda x: x[1])
+    # 中心点(Pa)は固定
+    for a in range(N):
+        ax, ay = P[a]
+        # Paから見た各点への偏角を計算してソートする
+        angles = [
+            (degrees(atan2(ay - by, ax - bx)) + 360) % 360
+            for b, [bx, by] in enumerate(P)
+            if b != a
+        ]
+        sorted_angles = sorted(angles)
+        M = len(sorted_angles)
 
-        # 2点目(Pj)を固定
-        for j, angle in sorted_angles:
+        # 視点(Pb)を固定
+        for angle in sorted_angles:
             # 偏角が最大になる点を二分探索で求める
-            ok = 0
-            ng = len(sorted_angles)
-            calc_angle = -1
-            while abs(ok - ng) > 1:
-                mid = (ok + ng) // 2
-                calc_angle = (angle - sorted_angles[mid][1] + 360) % 360
-                if calc_angle < 180:
-                    ok = mid
-                    max_angle = max(max_angle, calc_angle)
-                else:
-                    ng = mid
-            if calc_angle < max_angle:
-                print(i, j, sorted_angles[ok][0])
+            # 最も大きい角度は angle + 180
+            target = (angle + 180) % 360
+            idx = bisect_left(sorted_angles, target)
+            # idxがMを超える場合は0に戻す
+            for i in [idx % M, (idx - 1) % M]:
+                diff = abs(sorted_angles[i] - angle)
+                diff = 360 - diff if diff > 180 else diff
+                max_angle = max(max_angle, diff)
 
     print(max_angle)
 
