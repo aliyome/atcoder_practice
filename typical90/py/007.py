@@ -9,12 +9,32 @@ def solve(N: int, A: list[int], Q: int, B: list[int]):
     208
     171
     """
-    # 素朴に全探索 O(NQ): 3x10^5 * 3x10^5 = 9x10^10
+    # # 素朴に全探索 O(NQ): 3x10^5 * 3x10^5 = 9x10^10
+    # for b in B:
+    #     min_score = 10**9
+    #     for a in A:
+    #         min_score = min(min_score, abs(a - b))
+    #     print(min_score)
+
+    # 二分探索 O((N+Q)logN): NlogN + QlogN
+    A_sorted = sorted(A)
+
     for b in B:
-        min_score = 10**9
-        for a in A:
-            min_score = min(min_score, abs(a - b))
-        print(min_score)
+        ok = -1
+        ng = N
+        while abs(ok - ng) > 1:
+            mid = (ok + ng) // 2
+            if A_sorted[mid] < b:
+                ok = mid
+            else:
+                ng = mid
+
+        if ok == -1:
+            print(abs(A_sorted[0] - b))
+        elif ok == N - 1:
+            print(abs(A_sorted[N - 1] - b))
+        else:
+            print(min(abs(A_sorted[ok] - b), abs(A_sorted[ok + 1] - b)))
 
 
 # pos[i][c] := Sのi文字目以降で文字cが最初に出現するindex
