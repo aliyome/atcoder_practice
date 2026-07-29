@@ -71,43 +71,30 @@ def binary_search_max(ok, ng, is_ok):
 
 
 class UnionFind:
-    # 初期化
-    def __init__(self, n):
-        self.par = [-1] * n
-        self.rank = [0] * n
-        self.siz = [1] * n
+    def __init__(self, n: int):
+        self.parent = [-1] * n  # 親ノードのindex。根の場合は-1
+        self.rank = [0] * n  # 木の高さ
+        self.size = [1] * n  # ノード数
 
-    # 根を求める
-    def root(self, x):
-        if self.par[x] == -1:
-            return x  # x が根の場合は x を返す
-        else:
-            self.par[x] = self.root(self.par[x])  # 経路圧縮
-            return self.par[x]
+    def root(self, a: int) -> int:
+        if self.parent[a] == -1:
+            return a
+        self.parent[a] = self.root(self.parent[a])  # 経路圧縮
+        return self.parent[a]
 
-    # x と y が同じグループに属するか (根が一致するか)
-    def issame(self, x, y):
-        return self.root(x) == self.root(y)
+    def issame(self, a: int, b: int) -> bool:
+        return self.root(a) == self.root(b)
 
-    # x を含むグループと y を含むグループを併合する
-    def unite(self, x, y):
-        # x 側と y 側の根を取得する
-        rx = self.root(x)
-        ry = self.root(y)
-        if rx == ry:
-            return False  # すでに同じグループのときは何もしない
-        # union by rank
-        if self.rank[rx] < self.rank[ry]:  # ry 側の rank が小さくなるようにする
-            rx, ry = ry, rx
-        self.par[ry] = rx  # ry を rx の子とする
-        if self.rank[rx] == self.rank[ry]:  # rx 側の rank を調整する
-            self.rank[rx] += 1
-        self.siz[rx] += self.siz[ry]  # rx 側の siz を調整する
+    def unite(self, a: int, b: int) -> bool:
+        ra, rb = self.root(a), self.root(b)
+        if ra == rb:
+            return False
+        if self.rank[rb] < self.rank[ra]:
+            ra, rb = rb, ra
+        self.parent[ra] = rb
+        self.rank[rb] = max(self.rank[rb], self.rank[ra] + 1)
+        self.size[rb] += self.size[ra]
         return True
-
-    # x を含む根付き木のサイズを求める
-    def size(self, x):
-        return self.siz[self.root(x)]
 
 
 if getenv("DOCTEST"):
