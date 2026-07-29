@@ -1,6 +1,4 @@
 import string
-from bisect import bisect_left
-from math import atan2, degrees
 from os import getenv
 
 
