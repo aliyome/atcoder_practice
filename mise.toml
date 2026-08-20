@@ -1,2 +1,8 @@
 [env]
 DOCTEST = "true"
+
+[tasks.test]
+usage = '''
+arg "<filepath>" help="Path to the solve file"
+'''
+run = "bun task-runner.ts {{usage.filepath}}"
